@@ -58,6 +58,29 @@ class Settings:
         )
     )
 
+    # 每次聊天最多读取多少条历史记录
+    #
+    # 一条 ChatHistory 包含：
+    # - 一次 user 提问
+    # - 一次 assistant 回答
+    chat_history_limit: int = int(
+        os.getenv(
+            "CHAT_HISTORY_LIMIT",
+            "5",
+        )
+    )
+
+    # 历史聊天内容允许使用的最大字符数
+    #
+    # 这里只是简单字符预算，不等同于精确 Token 数。
+    # 后续可以接入模型对应的 tokenizer。
+    chat_history_max_chars: int = int(
+        os.getenv(
+            "CHAT_HISTORY_MAX_CHARS",
+            "12000",
+        )
+    )
+
 
 # 创建全局配置对象
 settings = Settings()

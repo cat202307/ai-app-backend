@@ -14,7 +14,11 @@ from services.llm_service import (
     call_llm_detail,
     stream_llm,
 )
-from services.prompt_service import build_chat_system_message
+
+from services.context_service import (
+    build_chat_messages,
+    get_context_statistics,
+)
 
 
 router = APIRouter(
@@ -22,74 +26,6 @@ router = APIRouter(
     tags=["chat"],
 )
 
-
-# ============================================================
-# 上下文构建
-# ============================================================
-
-def build_chat_messages(
-    req: ChatRequest,
-    db: Session,
-) -> list[dict[str, str]]:
-    """
-    构造发送给大模型的 messages。
-
-    流程：
-    1. 添加统一的 System Message
-    2. 根据 session_id 查询最近聊天记录
-    3. 按照旧到新的顺序拼接历史对话
-    4. 添加用户当前问题
-
-    当前策略：
-        最多读取最近 5 条 ChatHistory。
-
-    一条 ChatHistory 包含：
-        - 一条 user 消息
-        - 一条 assistant 消息
-
-    所以最多会向模型加入 10 条历史消息。
-    """
-
-    messages: list[dict[str, str]] = [
-        build_chat_system_message()
-    ]
-
-    if req.session_id:
-        history_records = (
-            db.query(ChatHistory)
-            .filter(
-                ChatHistory.session_id == req.session_id
-            )
-            .order_by(
-                ChatHistory.created_at.desc()
-            )
-            .limit(5)
-            .all()
-        )
-
-        # 数据库查询结果是最新记录在前。
-        # 模型上下文需要按照旧记录到新记录排列。
-        history_records = list(
-            reversed(history_records)
-        )
-
-        for item in history_records:
-            messages.append({
-                "role": "user",
-                "content": item.user_message,
-            })
-
-            messages.append({
-                "role": "assistant",
-                "content": item.ai_answer,
-            })
-
-    messages.append({
-        "role": "user",
-        "content": req.message,
-    })
-
-    return messages
 
 
 # ============================================================
@@ -174,8 +110,9 @@ def chat(
     """
 
     messages = build_chat_messages(
-        req=req,
         db=db,
+        user_message=req.message,
+        session_id=req.session_id,
     )
 
     # 如果模型调用失败，call_llm() 会抛出 AppError。
@@ -225,8 +162,13 @@ def chat_detail(
     """
 
     messages = build_chat_messages(
-        req=req,
         db=db,
+        user_message=req.message,
+        session_id=req.session_id,
+    )
+
+    context_statistics = get_context_statistics(
+        messages
     )
 
     result = call_llm_detail(
@@ -267,6 +209,8 @@ def chat_detail(
             },
             "latency_ms": result.latency_ms,
             "temperature": req.temperature,
+            # 本次上下文的基础统计
+            "context": context_statistics,
         },
     }
 
@@ -308,8 +252,9 @@ def chat_stream(
     # 在开始流式响应前查询历史消息，
     # 避免在生成过程中反复使用请求 Session。
     messages = build_chat_messages(
-        req=req,
         db=db,
+        user_message=req.message,
+        session_id=req.session_id,
     )
 
     def generate():

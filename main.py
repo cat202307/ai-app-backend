@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from core.exceptions import AppError
 from database import Base, engine
-from routers import chat, history, rag, upload
+from routers import chat, history, rag, upload, agent
 
 
 # 创建当前项目中尚不存在的数据库表
@@ -107,3 +107,4 @@ app.include_router(chat.router)
 app.include_router(upload.router)
 app.include_router(history.router)
 app.include_router(rag.router)
+app.include_router(agent.router)

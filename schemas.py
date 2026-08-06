@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Literal, Optional
 
 from pydantic import BaseModel, Field
 
@@ -58,4 +58,34 @@ class RagAskRequest(BaseModel):
         ...,
         gt=0,
         description="上传文件 ID",
+    )
+
+class ToolCallingRequest(BaseModel):
+    """
+    单轮 Tool Calling 请求。
+    """
+
+    message: str = Field(
+        ...,
+        min_length=1,
+        max_length=10000,
+        description="用户任务",
+    )
+
+    temperature: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=2.0,
+        description="非思考模式下的生成随机性",
+    )
+
+    tool_choice: Literal[
+        "auto",
+        "required",
+    ] = Field(
+        default="auto",
+        description=(
+            "auto 表示模型自行决定是否调用工具；"
+            "required 表示模型必须调用工具。"
+        ),
     )

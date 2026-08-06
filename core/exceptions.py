@@ -109,3 +109,50 @@ class LLMServiceError(AppError):
             message=message,
             status_code=502,
         )
+
+class ToolNotFoundError(AppError):
+    """
+    模型请求调用的工具不存在。
+    """
+
+    def __init__(
+        self,
+        tool_name: str,
+    ):
+        super().__init__(
+            code="TOOL_NOT_FOUND",
+            message=f"工具不存在或未注册：{tool_name}",
+            status_code=400,
+        )
+
+
+class ToolArgumentsError(AppError):
+    """
+    工具参数无法解析或没有通过 Schema 校验。
+    """
+
+    def __init__(
+        self,
+        message: str = "工具参数不合法。",
+    ):
+        super().__init__(
+            code="TOOL_ARGUMENTS_ERROR",
+            message=message,
+            status_code=400,
+        )
+
+
+class ToolExecutionError(AppError):
+    """
+    工具真实执行过程中发生异常。
+    """
+
+    def __init__(
+        self,
+        message: str = "工具执行失败。",
+    ):
+        super().__init__(
+            code="TOOL_EXECUTION_ERROR",
+            message=message,
+            status_code=500,
+        )

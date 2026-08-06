@@ -85,6 +85,24 @@ class LLMResult:
     latency_ms: int
 
 
+@dataclass
+class ToolLLMResult:
+    """
+    支持 Tool Calling 的模型调用结果。
+
+    message 中可能包含：
+
+    - content
+    - tool_calls
+    - reasoning_content
+    """
+
+    message: Any
+    model: str
+    finish_reason: str | None
+    usage: LLMUsage
+    latency_ms: int
+
 # ============================================================
 # 公共校验函数
 # ============================================================
@@ -462,3 +480,122 @@ def stream_llm(
                 f"异常类型：{type(exc).__name__}。"
             )
         ) from exc
+
+def call_llm_with_tools(
+    messages: list[dict[str, Any]],
+    tools: list[dict[str, Any]],
+    temperature: float = 0.0,
+    tool_choice: str = "auto",
+) -> ToolLLMResult:
+    """
+    调用支持 Tool Calling 的模型接口。
+
+    tool_choice:
+
+    auto:
+        模型自行判断是直接回答还是调用工具。
+
+    required:
+        模型必须调用至少一个工具。
+
+    本阶段显式关闭思考模式，
+    先集中学习 Tool Calling 基础流程。
+    """
+
+    validate_llm_configuration()
+
+    if not messages:
+        raise LLMServiceError(
+            message="模型消息列表不能为空。"
+        )
+
+    if not tools:
+        raise LLMServiceError(
+            message="工具列表不能为空。"
+        )
+
+    client = get_llm_client()
+    start_time = time.perf_counter()
+
+    try:
+        response = client.chat.completions.create(
+            model=cast(
+                Any,
+                settings.deepseek_model,
+            ),
+            messages=cast(
+                Any,
+                messages,
+            ),
+            tools=cast(
+                Any,
+                tools,
+            ),
+            tool_choice=cast(
+                Any,
+                tool_choice,
+            ),
+            temperature=temperature,
+            stream=False,
+            timeout=settings.llm_timeout,
+
+            # 当前阶段关闭思考模式，
+            # 避免额外处理 reasoning_content。
+            extra_body={
+                "thinking": {
+                    "type": "disabled"
+                }
+            },
+        )
+
+    except APITimeoutError as exc:
+        raise LLMTimeoutError() from exc
+
+    except AuthenticationError as exc:
+        raise LLMAuthenticationError() from exc
+
+    except RateLimitError as exc:
+        raise LLMRateLimitError() from exc
+
+    except APIConnectionError as exc:
+        raise LLMServiceError(
+            message="无法连接大模型服务。"
+        ) from exc
+
+    except APIStatusError as exc:
+        raise LLMServiceError(
+            message=(
+                "大模型工具调用接口返回异常，"
+                f"HTTP 状态码：{exc.status_code}。"
+            )
+        ) from exc
+
+    except Exception as exc:
+        raise LLMServiceError(
+            message=(
+                "大模型工具调用发生未知异常，"
+                f"异常类型：{type(exc).__name__}。"
+            )
+        ) from exc
+
+    latency_ms = int(
+        (time.perf_counter() - start_time) * 1000
+    )
+
+    if not response.choices:
+        raise LLMServiceError(
+            message="大模型没有返回 choices。"
+        )
+
+    choice = response.choices[0]
+
+    return ToolLLMResult(
+        message=choice.message,
+        model=(
+            response.model
+            or settings.deepseek_model
+        ),
+        finish_reason=choice.finish_reason,
+        usage=build_usage(response.usage),
+        latency_ms=latency_ms,
+    )

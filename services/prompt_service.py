@@ -92,3 +92,34 @@ def build_rag_messages(
             "content": user_prompt
         }
     ]
+
+def build_tool_calling_messages(
+    user_message: str,
+) -> list[dict[str, str]]:
+    """
+    构造单轮 Tool Calling 消息。
+
+    当前阶段不接入聊天历史，
+    先单独验证工具调用流程。
+    """
+
+    return [
+        {
+            "role": "system",
+            "content": (
+                "你是一个企业文档管理助手。"
+                "当用户询问系统中文档的真实名称、"
+                "类型、保存路径、上传时间或是否存在时，"
+                "必须使用提供的工具查询数据库，"
+                "不得猜测或编造文档信息。"
+                "工具执行后，请根据工具返回结果，"
+                "使用简洁、准确的中文回答用户。"
+                "如果工具返回文档不存在，"
+                "应明确说明没有找到该文档。"
+            ),
+        },
+        {
+            "role": "user",
+            "content": user_message,
+        },
+    ]

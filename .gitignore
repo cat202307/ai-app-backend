@@ -15,7 +15,16 @@ __pycache__/
 
 # 本地数据库
 *.db
+*.db-shm
+*.db-wal
 ai_app.db
+
+# 前端依赖与构建产物
+node_modules/
+frontend/dist/
+
+# 日志
+logs/
 
 # 上传文件
 uploads/*

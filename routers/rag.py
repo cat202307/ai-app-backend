@@ -4,21 +4,38 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
+from core.config import settings
 from database import get_db
 from models import UploadedFile, RagQueryLog
 from schemas import RagAskRequest
-from services.llm_service import call_llm, stream_llm
+from services.llm_service import (
+    call_llm,
+    stream_llm,
+)
+
+from services.prompt_service import (
+    build_rag_messages,
+)
+
 from services.rag_service import (
     read_document_file,
     split_text,
     simple_search,
-    clean_text
-)
-from services.vector_service import (
-    build_vector_index,
-    search_similar_chunks
+    clean_text,
 )
 
+from services.vector_service import (
+    build_vector_index,
+    search_similar_chunks,
+)
+
+from services.chunking_service import (
+    build_parent_child_chunks,
+)
+
+from services.advanced_rag_answer_service import (
+    answer_with_advanced_rag,
+)
 
 router = APIRouter(
     prefix="/rag",
@@ -92,20 +109,10 @@ def rag_ask(req: RagAskRequest, db: Session = Depends(get_db)):
     context = "\n\n".join(related_chunks)
 
     # 构造大模型 messages
-    messages = [
-        {
-            "role": "system",
-            "content": (
-                "你是一个知识库问答助手。"
-                "请严格根据给定的文档内容回答问题。"
-                "如果文档中没有相关信息，请回答：文档中没有找到相关内容。"
-            )
-        },
-        {
-            "role": "user",
-            "content": f"文档内容如下：\n{context}\n\n用户问题：{req.question}"
-        }
-    ]
+    messages = build_rag_messages(
+        context=context,
+        question=req.question,
+    )
 
     # 调用大模型
     answer = call_llm(messages)
@@ -176,20 +183,19 @@ def rag_index(file_id: int, db: Session = Depends(get_db)):
             detail="文件内容为空或读取失败"
         )
 
-    # 文本切分
-    # chunk_size：每个片段最大长度
-    # chunk_overlap：相邻片段重叠长度，避免语义被切断
-    chunks = split_text(
+    # 父子块切分（只对子块建立向量索引）
+    chunk_result = build_parent_child_chunks(
         text,
-        chunk_size=800,
-        chunk_overlap=100
+        file_id=uploaded_file.id,
+        child_max=settings.rag_child_chunk_size,
+        children_per_parent=settings.rag_children_per_parent,
     )
 
     # 建立向量索引
     chunk_count = build_vector_index(
         file_id=uploaded_file.id,
         filename=uploaded_file.filename,
-        chunks=chunks
+        children=chunk_result["children"],
     )
 
     return {
@@ -244,7 +250,7 @@ def rag_search(req: RagAskRequest, db: Session = Depends(get_db)):
     # 设置相似度距离阈值
     # distance 越小，表示越相似
     # 这个值需要根据实际测试调整
-    MAX_DISTANCE = 17.0
+    max_distance = settings.rag_max_distance
 
     # 取第一个结果，也就是最相似的 chunk
     best_distance = related_items[0].get("distance")
@@ -252,7 +258,7 @@ def rag_search(req: RagAskRequest, db: Session = Depends(get_db)):
     retrieval_status = "matched"
 
     # 如果最相似的结果距离都很大，说明文档里可能没有相关内容
-    if best_distance is not None and best_distance > MAX_DISTANCE:
+    if best_distance is not None and best_distance > max_distance:
         answer = "文档中没有找到相关内容。"
 
         rag_log = RagQueryLog(
@@ -261,7 +267,7 @@ def rag_search(req: RagAskRequest, db: Session = Depends(get_db)):
             question=req.question,
             answer=answer,
             best_distance=best_distance,
-            max_distance=MAX_DISTANCE,
+            max_distance=max_distance,
             retrieval_status="not_matched"
         )
 
@@ -278,7 +284,7 @@ def rag_search(req: RagAskRequest, db: Session = Depends(get_db)):
                 "answer": answer,
                 "retrieval_info": {
                     "best_distance": best_distance,
-                    "max_distance": MAX_DISTANCE,
+                    "max_distance": max_distance,
                     "retrieval_status": "not_matched"
                 },
                 "related_chunks": [
@@ -298,22 +304,10 @@ def rag_search(req: RagAskRequest, db: Session = Depends(get_db)):
 
     context = "\n\n".join(related_chunks)
 
-    messages = [
-        {
-            "role": "system",
-            "content": (
-                "你是一个严谨的知识库问答助手。"
-                "你只能根据用户提供的文档片段回答问题。"
-                "不能使用文档片段之外的知识进行补充。"
-                "如果文档片段中没有明确提到相关信息，请回答：文档中没有找到相关内容。"
-                "回答时要简洁、准确，不要编造不存在的信息。"
-            )
-        },
-        {
-            "role": "user",
-            "content": f"文档内容如下：\n{context}\n\n用户问题：{req.question}"
-        }
-    ]
+    messages = build_rag_messages(
+        context=context,
+        question=req.question,
+    )
 
     answer = call_llm(messages)
 
@@ -323,7 +317,7 @@ def rag_search(req: RagAskRequest, db: Session = Depends(get_db)):
         question=req.question,
         answer=answer,
         best_distance=best_distance,
-        max_distance=MAX_DISTANCE,
+        max_distance=max_distance,
         retrieval_status=retrieval_status
     )
 
@@ -340,7 +334,7 @@ def rag_search(req: RagAskRequest, db: Session = Depends(get_db)):
             "answer": answer,
             "retrieval_info": {
                 "best_distance": best_distance,
-                "max_distance": MAX_DISTANCE,
+                "max_distance": max_distance,
                 "retrieval_status": retrieval_status
             },
             "related_chunks": [
@@ -516,13 +510,13 @@ def rag_search_stream(req: RagAskRequest, db: Session = Depends(get_db)):
             detail="没有检索到相关内容，请先调用 /rag/index/{file_id} 建立索引"
         )
 
-    MAX_DISTANCE = 17.0
+    max_distance = settings.rag_max_distance
 
     best_distance = related_items[0].get("distance")
 
     retrieval_status = "matched"
 
-    if best_distance is not None and best_distance > MAX_DISTANCE:
+    if best_distance is not None and best_distance > max_distance:
         retrieval_status = "not_matched"
 
     related_chunks = [
@@ -533,7 +527,7 @@ def rag_search_stream(req: RagAskRequest, db: Session = Depends(get_db)):
 
     retrieval_info = {
         "best_distance": best_distance,
-        "max_distance": MAX_DISTANCE,
+        "max_distance": max_distance,
         "retrieval_status": retrieval_status
     }
 
@@ -546,22 +540,10 @@ def rag_search_stream(req: RagAskRequest, db: Session = Depends(get_db)):
         for index, item in enumerate(related_items)
     ]
 
-    messages = [
-        {
-            "role": "system",
-            "content": (
-                "你是一个严谨的知识库问答助手。"
-                "你只能根据用户提供的文档片段回答问题。"
-                "不能使用文档片段之外的知识进行补充。"
-                "如果文档片段中没有明确提到相关信息，请回答：文档中没有找到相关内容。"
-                "回答时要简洁、准确，不要编造不存在的信息。"
-            )
-        },
-        {
-            "role": "user",
-            "content": f"文档内容如下：\n{context}\n\n用户问题：{req.question}"
-        }
-    ]
+    messages = build_rag_messages(
+        context=context,
+        question=req.question,
+    )
 
     def generate():
         answer_parts = []
@@ -596,7 +578,7 @@ def rag_search_stream(req: RagAskRequest, db: Session = Depends(get_db)):
                     question=req.question,
                     answer=answer,
                     best_distance=best_distance,
-                    max_distance=MAX_DISTANCE,
+                    max_distance=max_distance,
                     retrieval_status="not_matched"
                 )
 
@@ -626,7 +608,7 @@ def rag_search_stream(req: RagAskRequest, db: Session = Depends(get_db)):
                 question=req.question,
                 answer=full_answer,
                 best_distance=best_distance,
-                max_distance=MAX_DISTANCE,
+                max_distance=max_distance,
                 retrieval_status=retrieval_status
             )
 
@@ -650,3 +632,126 @@ def rag_search_stream(req: RagAskRequest, db: Session = Depends(get_db)):
         generate(),
         media_type="text/event-stream"
     )
+
+@router.post("/advanced/ask")
+def advanced_rag_ask(
+    req: RagAskRequest,
+    db: Session = Depends(get_db),
+):
+    """
+    Advanced RAG 完整问答接口。
+
+    Advanced
+        = 高级的
+
+    当前完整流程：
+
+        Query Rewrite
+            ↓
+        Multi Query
+            ↓
+        Vector + Keyword
+            ↓
+        RRF
+            ↓
+        Rerank
+            ↓
+        Threshold
+            ↓
+        Citation
+            ↓
+        LLM Answer
+    """
+
+    # ============================================================
+    # 1. 查询文件
+    # ============================================================
+
+    uploaded_file = (
+        db.query(UploadedFile)
+        .filter(
+            UploadedFile.id
+            == req.file_id
+        )
+        .first()
+    )
+
+    if uploaded_file is None:
+        raise HTTPException(
+            status_code=404,
+            detail="文件不存在",
+        )
+
+    # ============================================================
+    # 2. Advanced RAG
+    # ============================================================
+
+    result = (
+        answer_with_advanced_rag(
+            question=req.question,
+            file_id=uploaded_file.id,
+            filename=uploaded_file.filename,
+        )
+    )
+
+    # ============================================================
+    # 3. 返回
+    # ============================================================
+
+    return {
+        "code": 200,
+        "message": "success",
+
+        "data": {
+            "file_id": (
+                uploaded_file.id
+            ),
+
+            "filename": (
+                uploaded_file.filename
+            ),
+
+            "question": (
+                req.question
+            ),
+
+            "answer": (
+                result["answer"]
+            ),
+
+            "retrieval_status": (
+                result[
+                    "retrieval_status"
+                ]
+            ),
+
+            "queries": (
+                result["queries"]
+            ),
+
+            "rerank_info": {
+                "threshold": (
+                    result[
+                        "rerank_threshold"
+                    ]
+                ),
+
+                "best_score": (
+                    result[
+                        "best_rerank_score"
+                    ]
+                ),
+            },
+
+            "citations": (
+                result["citations"]
+            ),
+
+            # 学习和调试阶段保留
+            "reranked_results": (
+                result[
+                    "reranked_results"
+                ]
+            ),
+        },
+    }

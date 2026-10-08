@@ -1,0 +1,69 @@
+<html style="margin:0;padding:0;">
+<title>跨文档对比检索流水线（v1.2.0 修复机制）</title>
+<div style="width:100%;box-sizing:border-box;padding:18px 14px;font-family:'Segoe UI','Microsoft YaHei',sans-serif;background:#f6f7f9;color:#2b2f36;">
+
+  <div style="max-width:760px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:6px;font-size:18px;font-weight:700;">跨文档对比 · 检索流水线</div>
+    <div style="text-align:center;font-size:13px;color:#6b7280;margin-bottom:16px;">问题示例：“论文和 test02 有什么区别” —— v1.2.0 修复机制（标注 <b>NEW</b> 的为本轮新增 / 修复）</div>
+
+    <!-- 图例 -->
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;font-size:12px;margin-bottom:18px;">
+      <span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:16px;height:16px;border:1.5px solid #9aa4b2;border-radius:4px;background:#fff;display:inline-block;"></span>原有环节</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:16px;height:16px;border:2px solid #2563eb;border-radius:4px;background:#eff4ff;display:inline-block;"></span>本轮新增 / 修复</span>
+    </div>
+
+    <!-- 阶段一 -->
+    <div style="border:1px solid #e2e6ec;border-radius:12px;background:#fff;padding:14px 14px 6px;">
+      <div style="font-size:12px;font-weight:700;letter-spacing:1px;color:#2563eb;margin-bottom:10px;">① 查询理解</div>
+
+      <div class="node">用户问题（对比 / 区别类）</div>
+      <div class="arrow"></div>
+      <div class="node">查询改写门控 <code>_should_skip_rewrite</code><br><span style="font-size:12px;color:#6b7280;">识别“区别 / 差异 / 对比”等信号，不再误判为技术锚点</span></div>
+      <div class="arrow"></div>
+      <div class="node new">强制改写（rewrite_count ≥ 2）＋ Prompt 为每个对象拆分独立查询<span class="tag">NEW</span><br><span style="font-size:12px;color:#6b7280;">生成“论文的主要内容”“test02 的主要内容”，明确技术问题仍跳过、不增 LLM 开销</span></div>
+    </div>
+
+    <div class="arrow big"></div>
+
+    <!-- 阶段二 -->
+    <div style="border:1px solid #e2e6ec;border-radius:12px;background:#fff;padding:14px 14px 6px;">
+      <div style="font-size:12px;font-weight:700;letter-spacing:1px;color:#2563eb;margin-bottom:10px;">② 检索融合（Hybrid Search）</div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+        <div class="node half">向量检索<br><span style="font-size:12px;color:#6b7280;">语义相似（多路查询）</span></div>
+        <div class="node half">关键词检索（jieba）<br><span style="font-size:12px;color:#6b7280;">精确术语命中 ×5.0</span></div>
+      </div>
+      <div class="arrow"></div>
+      <div class="node new">RRF 融合 ＋ 文档多样性 <code>diversify_by_file</code><span class="tag">NEW</span><br><span style="font-size:12px;color:#6b7280;">按文件分组轮转，每个文档保留候选，小文档不再被挤出</span></div>
+    </div>
+
+    <div class="arrow big"></div>
+
+    <!-- 阶段三 -->
+    <div style="border:1px solid #e2e6ec;border-radius:12px;background:#fff;padding:14px 14px 6px;">
+      <div style="font-size:12px;font-weight:700;letter-spacing:1px;color:#2563eb;margin-bottom:10px;">③ 重排与组装</div>
+
+      <div class="node">Cross-Encoder Rerank（阈值 50）</div>
+      <div class="arrow"></div>
+      <div class="node new">文件覆盖回填<span class="tag">NEW</span><br><span style="font-size:12px;color:#6b7280;">被 RRF 选中却卡在阈值附近的文件，回填其最高分片段（≥40），消除波动</span></div>
+      <div class="arrow"></div>
+      <div class="node">子块提升为父块 <code>promote_children_to_parents</code></div>
+      <div class="arrow"></div>
+      <div class="node">Citations → LLM → 流式答案<br><span style="font-size:12px;color:#6b7280;">输出论文 vs test02 的对比表格，引用同时覆盖两个文档</span></div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .node{position:relative;max-width:520px;margin:0 auto;box-sizing:border-box;background:#fff;border:1.5px solid #9aa4b2;border-radius:10px;padding:10px 14px;font-size:14px;text-align:center;line-height:1.5;}
+  .node.half{flex:1;min-width:200px;max-width:250px;margin:0;}
+  .node.new{border:2px solid #2563eb;background:#eff4ff;font-weight:600;}
+  .tag{position:absolute;top:-9px;right:-8px;background:#2563eb;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;letter-spacing:.5px;}
+  .arrow{height:26px;width:2px;background:#b6bdc7;margin:0 auto;position:relative;}
+  .arrow::after{content:"";position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid #b6bdc7;}
+  .arrow.big{height:30px;}
+  code{background:#eef1f5;border-radius:4px;padding:1px 5px;font-size:12.5px;}
+  .node.new code{background:#dbe6fd;}
+</style>
+</html>

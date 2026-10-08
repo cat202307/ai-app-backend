@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, Float
+from sqlalchemy import Column, Integer, String, DateTime, Float, Text
 
 from database import Base
 
@@ -13,6 +13,10 @@ class ChatHistory(Base):
     ai_answer = Column(String, nullable=False)
     session_id = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.now)
+    tool_name = Column(String, nullable=True)
+    tool_call_count = Column(Integer, default=0)
+    duration_ms = Column(Integer, default=0)
+    citations_json = Column(Text, nullable=True)
 
 
 class UploadedFile(Base):

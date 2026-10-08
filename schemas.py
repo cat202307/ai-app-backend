@@ -89,3 +89,38 @@ class ToolCallingRequest(BaseModel):
             "required 表示模型必须调用工具。"
         ),
     )
+
+class AgentRunRequest(BaseModel):
+    """
+    多步骤 Agent 请求。
+    """
+
+    message: str = Field(
+        ...,
+        min_length=1,
+        max_length=10000,
+        description="需要 Agent 完成的任务",
+    )
+
+    max_steps: Optional[int] = Field(
+        default=None,
+        ge=1,
+        le=10,
+        description=(
+            "Agent 最大执行步骤。"
+            "为空时使用系统默认配置。"
+        ),
+    )
+
+    history: Optional[list[dict[str, str]]] = Field(
+        default=None,
+        description=(
+            "历史对话消息列表，用于多轮对话。"
+            "每条消息包含 role 和 content。"
+        ),
+    )
+
+    session_id: Optional[str] = Field(
+        default=None,
+        description="会话 ID，用于标识同一个对话",
+    )

@@ -1,0 +1,517 @@
+{
+  "top_k": 3,
+  "variants": {
+    "basic_vector": {
+      "summary": {
+        "case_count": 9,
+        "hit_at_3": 1.0,
+        "recall_at_3": 1.0,
+        "mrr": 0.9444444444444444,
+        "top1_accuracy": 0.8888888888888888
+      },
+      "cases": [
+        {
+          "case_id": "rag_001",
+          "question": "FastAPI 有什么特点？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_0",
+            "file_5_chunk_1",
+            "file_5_chunk_2"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_002",
+          "question": "什么是混合检索？它为什么要同时使用向量检索和关键词检索？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_1",
+            "file_5_chunk_0",
+            "file_5_chunk_2"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_003",
+          "question": "AI Agent 是什么？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_0",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_004",
+          "question": "Tool Calling 是什么？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_0",
+            "file_5_chunk_2",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 0.5,
+          "top1_correct": false
+        },
+        {
+          "case_id": "rag_005",
+          "question": "Docker 在 AI 应用工程化中有什么作用？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_0",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_009",
+          "question": "FastAPI 为什么适合用于 AI 应用后端？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_0",
+            "file_5_chunk_2",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_010",
+          "question": "向量检索和关键词检索分别擅长解决什么问题？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_1",
+            "file_5_chunk_0",
+            "file_5_chunk_2"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_011",
+          "question": "为什么 Agent 需要限制最大执行步骤？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_1",
+            "file_5_chunk_0"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_012",
+          "question": "在 AI 应用中应该监控哪些指标？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_0",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        }
+      ]
+    },
+    "multi_query": {
+      "summary": {
+        "case_count": 9,
+        "hit_at_3": 1.0,
+        "recall_at_3": 1.0,
+        "mrr": 0.9444444444444444,
+        "top1_accuracy": 0.8888888888888888
+      },
+      "cases": [
+        {
+          "case_id": "rag_001",
+          "question": "FastAPI 有什么特点？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_0",
+            "file_5_chunk_1",
+            "file_5_chunk_2"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_002",
+          "question": "什么是混合检索？它为什么要同时使用向量检索和关键词检索？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_1",
+            "file_5_chunk_0",
+            "file_5_chunk_2"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_003",
+          "question": "AI Agent 是什么？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_0",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_004",
+          "question": "Tool Calling 是什么？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_0",
+            "file_5_chunk_2",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 0.5,
+          "top1_correct": false
+        },
+        {
+          "case_id": "rag_005",
+          "question": "Docker 在 AI 应用工程化中有什么作用？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_0",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_009",
+          "question": "FastAPI 为什么适合用于 AI 应用后端？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_0",
+            "file_5_chunk_2",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_010",
+          "question": "向量检索和关键词检索分别擅长解决什么问题？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_1",
+            "file_5_chunk_0",
+            "file_5_chunk_2"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_011",
+          "question": "为什么 Agent 需要限制最大执行步骤？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_1",
+            "file_5_chunk_0"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_012",
+          "question": "在 AI 应用中应该监控哪些指标？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_0",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        }
+      ]
+    },
+    "hybrid": {
+      "summary": {
+        "case_count": 9,
+        "hit_at_3": 1.0,
+        "recall_at_3": 1.0,
+        "mrr": 1.0,
+        "top1_accuracy": 1.0
+      },
+      "cases": [
+        {
+          "case_id": "rag_001",
+          "question": "FastAPI 有什么特点？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_0",
+            "file_5_chunk_1",
+            "file_5_chunk_2"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_002",
+          "question": "什么是混合检索？它为什么要同时使用向量检索和关键词检索？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_1",
+            "file_5_chunk_0",
+            "file_5_chunk_2"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_003",
+          "question": "AI Agent 是什么？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_0",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_004",
+          "question": "Tool Calling 是什么？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_0",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_005",
+          "question": "Docker 在 AI 应用工程化中有什么作用？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_0",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_009",
+          "question": "FastAPI 为什么适合用于 AI 应用后端？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_0",
+            "file_5_chunk_2",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_010",
+          "question": "向量检索和关键词检索分别擅长解决什么问题？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_1",
+            "file_5_chunk_0",
+            "file_5_chunk_2"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_011",
+          "question": "为什么 Agent 需要限制最大执行步骤？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_1",
+            "file_5_chunk_0"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_012",
+          "question": "在 AI 应用中应该监控哪些指标？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_0",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        }
+      ]
+    },
+    "hybrid_rerank": {
+      "summary": {
+        "case_count": 9,
+        "hit_at_3": 1.0,
+        "recall_at_3": 1.0,
+        "mrr": 1.0,
+        "top1_accuracy": 1.0
+      },
+      "cases": [
+        {
+          "case_id": "rag_001",
+          "question": "FastAPI 有什么特点？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_0",
+            "file_5_chunk_1",
+            "file_5_chunk_2"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_002",
+          "question": "什么是混合检索？它为什么要同时使用向量检索和关键词检索？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_1",
+            "file_5_chunk_0",
+            "file_5_chunk_2"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_003",
+          "question": "AI Agent 是什么？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_1",
+            "file_5_chunk_0"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_004",
+          "question": "Tool Calling 是什么？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_1",
+            "file_5_chunk_0"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_005",
+          "question": "Docker 在 AI 应用工程化中有什么作用？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_0",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_009",
+          "question": "FastAPI 为什么适合用于 AI 应用后端？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_0",
+            "file_5_chunk_2",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_010",
+          "question": "向量检索和关键词检索分别擅长解决什么问题？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_1",
+            "file_5_chunk_0",
+            "file_5_chunk_2"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_011",
+          "question": "为什么 Agent 需要限制最大执行步骤？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_1",
+            "file_5_chunk_0"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        },
+        {
+          "case_id": "rag_012",
+          "question": "在 AI 应用中应该监控哪些指标？",
+          "ranked_chunk_ids": [
+            "file_5_chunk_2",
+            "file_5_chunk_0",
+            "file_5_chunk_1"
+          ],
+          "hit": true,
+          "recall": 1.0,
+          "reciprocal_rank": 1.0,
+          "top1_correct": true
+        }
+      ]
+    }
+  }
+}

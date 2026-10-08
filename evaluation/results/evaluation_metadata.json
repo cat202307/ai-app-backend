@@ -1,0 +1,7 @@
+{
+  "generated_at": "2026-08-24T19:02:25.365995",
+  "dataset_path": "D:\\python-projects\\ai-app-backend\\evaluation\\rag_eval_dataset.json",
+  "rerank_threshold": 70.0,
+  "retrieval_top_k": 3,
+  "stability_repeat_count": 2
+}

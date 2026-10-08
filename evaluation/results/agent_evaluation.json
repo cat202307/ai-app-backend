@@ -1,0 +1,168 @@
+{
+  "summary": {
+    "total_cases": 8,
+    "tool_selection_accuracy": 0.75,
+    "completion_accuracy": 1.0,
+    "completed_count": 8,
+    "error_count": 0,
+    "avg_steps": 2.25,
+    "avg_tool_calls": 1.25,
+    "avg_tokens": 3975.4,
+    "avg_duration_ms": 25917.9,
+    "tools_correct": 6,
+    "completion_correct": 8
+  },
+  "cases": [
+    {
+      "case_id": "agent_001",
+      "user_message": "系统里有没有 test02.txt 这个文件？",
+      "expected_tools": [
+        "get_document_info"
+      ],
+      "actual_tools": [
+        "get_document_info"
+      ],
+      "tools_match": true,
+      "completed": true,
+      "completion_match": true,
+      "steps": 2,
+      "tool_call_count": 1,
+      "total_tokens": 2932,
+      "total_duration_ms": 3634,
+      "answer_preview": "系统里确实有 **test02.txt** 这个文件，详细信息如下：\n\n- **文件名**：test02.txt\n- **文件类型**：.txt\n- **保存路径**：uploads\\test02.txt\n- **上传时间**：2026-08-24 15:27:34\n- **文档 ID**：5\n\n需要我帮你查看这个文件的具体内容吗？",
+      "error": null
+    },
+    {
+      "case_id": "agent_002",
+      "user_message": "document_id 为 2 的文件叫什么名字？",
+      "expected_tools": [
+        "get_document_info"
+      ],
+      "actual_tools": [
+        "get_document_info"
+      ],
+      "tools_match": true,
+      "completed": true,
+      "completion_match": true,
+      "steps": 2,
+      "tool_call_count": 1,
+      "total_tokens": 2864,
+      "total_duration_ms": 2619,
+      "answer_preview": "document_id 为 2 的文件叫 **test01.txt**。",
+      "error": null
+    },
+    {
+      "case_id": "agent_003",
+      "user_message": "test02.txt 里讲了什么内容？",
+      "expected_tools": [
+        "ask_advanced_rag",
+        "get_document_info"
+      ],
+      "actual_tools": [
+        "ask_advanced_rag",
+        "get_document_info"
+      ],
+      "tools_match": true,
+      "completed": true,
+      "completion_match": true,
+      "steps": 3,
+      "tool_call_count": 2,
+      "total_tokens": 6623,
+      "total_duration_ms": 47802,
+      "answer_preview": "test02.txt 的标题是 **《企业 AI 应用开发知识说明》**，主要介绍了四部分内容：\n\n## 一、FastAPI\n- 一个现代、高性能的 Python Web 框架，主要用于开发 API 服务\n- 与 Pydantic 深度结合，可自动进行参数校验\n- 能自动生成 OpenAPI 文档和 Swagger UI\n- 通常配合 Uvicorn（ASGI 服务器）运行\n\n## 二、RAG（检",
+      "error": null
+    },
+    {
+      "case_id": "agent_004",
+      "user_message": "帮我查一下 document_id 为 3 的文件的内容",
+      "expected_tools": [
+        "ask_advanced_rag"
+      ],
+      "actual_tools": [
+        "ask_advanced_rag",
+        "get_document_info"
+      ],
+      "tools_match": false,
+      "completed": true,
+      "completion_match": true,
+      "steps": 3,
+      "tool_call_count": 2,
+      "total_tokens": 5941,
+      "total_duration_ms": 50625,
+      "answer_preview": "document_id 为 3 的文件是 **《胡家浩_计算机教师岗位_个人简历.pdf》**，上传于 2026-07-03。以下是简历的主要内容：\n\n## 个人基本信息\n- **姓名**：胡家浩\n- **出生**：1999.11\n- **工作年限**：应届\n- **求职意向**：计算机专业教师\n- **手机**：18775481072\n- **邮箱**：554127907@qq.com\n\n## ",
+      "error": null
+    },
+    {
+      "case_id": "agent_005",
+      "user_message": "你好，你是谁？",
+      "expected_tools": [],
+      "actual_tools": [],
+      "tools_match": true,
+      "completed": true,
+      "completion_match": true,
+      "steps": 1,
+      "tool_call_count": 0,
+      "total_tokens": 1402,
+      "total_duration_ms": 2242,
+      "answer_preview": "你好！我是企业知识库智能助手，可以帮你查询和解答文档相关的问题。\n\n具体来说，我可以帮你：\n- 📄 查询系统中有哪些文档、文档的名称、类型、上传时间等信息\n- 🔍 检索文档中的具体内容\n- 💡 基于文档内容回答你的问题，并提供来源引用\n\n请问有什么可以帮你的吗？",
+      "error": null
+    },
+    {
+      "case_id": "agent_006",
+      "user_message": "今天天气怎么样？",
+      "expected_tools": [],
+      "actual_tools": [],
+      "tools_match": true,
+      "completed": true,
+      "completion_match": true,
+      "steps": 1,
+      "tool_call_count": 0,
+      "total_tokens": 1382,
+      "total_duration_ms": 2355,
+      "answer_preview": "抱歉，我无法查询实时天气信息。我是一个企业知识库助手，主要帮助您查询和解答系统中文档相关的内容。\n\n如果您需要了解天气，建议使用专门的天气应用或网站。如果您有关于知识库中文档的问题，我很乐意帮您解答。",
+      "error": null
+    },
+    {
+      "case_id": "agent_007",
+      "user_message": "先列出所有文件，再告诉我 test02.txt 的内容",
+      "expected_tools": [
+        "ask_advanced_rag",
+        "get_document_info"
+      ],
+      "actual_tools": [
+        "ask_advanced_rag",
+        "list_all_documents",
+        "search_knowledge_base"
+      ],
+      "tools_match": false,
+      "completed": true,
+      "completion_match": true,
+      "steps": 4,
+      "tool_call_count": 3,
+      "total_tokens": 7839,
+      "total_duration_ms": 95454,
+      "answer_preview": "查询结果如下：\n\n**系统中共有 5 个文档**（见上表）。\n\n**关于 test02.txt 的内容**：很抱歉，我无法获取到 test02.txt 的具体内容。该文档（ID 为 5）虽然存在于系统中，但知识库检索未能匹配到相关内容——可能该文档尚未建立有效的向量索引，或文档内容为空/无法解析。\n\n如果您需要了解该文件的具体内容，建议：\n1. 确认该文件是否已正确上传并完成索引；\n2. 直接打开",
+      "error": null
+    },
+    {
+      "case_id": "agent_008",
+      "user_message": "document_id 为 100 的文件存在吗？",
+      "expected_tools": [
+        "get_document_info"
+      ],
+      "actual_tools": [
+        "get_document_info"
+      ],
+      "tools_match": true,
+      "completed": true,
+      "completion_match": true,
+      "steps": 2,
+      "tool_call_count": 1,
+      "total_tokens": 2820,
+      "total_duration_ms": 2612,
+      "answer_preview": "根据查询结果，document_id 为 100 的文件**不存在**。系统中没有找到对应文档。",
+      "error": null
+    }
+  ],
+  "generated_at": "2026-09-23T22:37:29.066159"
+}

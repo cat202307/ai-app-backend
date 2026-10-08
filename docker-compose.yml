@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  ai-app:
+    build: .
+    container_name: ai-app-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # 持久化 SQLite 数据库
+      - ./ai_app.db:/app/ai_app.db
+      # 持久化向量数据库
+      - ./vector_db:/app/vector_db
+      # 持久化上传文件
+      - ./uploads:/app/uploads
+      # 环境变量文件
+      - ./.env:/app/.env:ro
+    environment:
+      - HF_HUB_OFFLINE=0
+      - TRANSFORMERS_OFFLINE=0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s

@@ -156,3 +156,40 @@ class ToolExecutionError(AppError):
             message=message,
             status_code=500,
         )
+
+class AgentMaxStepsError(AppError):
+    """
+    Agent 超过最大执行步骤。
+    """
+
+    def __init__(
+        self,
+        max_steps: int,
+    ):
+        super().__init__(
+            code="AGENT_MAX_STEPS_EXCEEDED",
+            message=(
+                f"Agent 已达到最大执行步骤 "
+                f"{max_steps}，任务仍未完成。"
+            ),
+            status_code=500,
+        )
+
+
+class AgentRepeatedToolCallError(AppError):
+    """
+    Agent 重复调用完全相同的工具和参数。
+    """
+
+    def __init__(
+        self,
+        tool_name: str,
+    ):
+        super().__init__(
+            code="AGENT_REPEATED_TOOL_CALL",
+            message=(
+                f"检测到 Agent 重复调用工具："
+                f"{tool_name}。"
+            ),
+            status_code=500,
+        )

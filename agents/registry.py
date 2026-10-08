@@ -4,6 +4,15 @@ from agents.base_tool import BaseTool
 from agents.tools.document_info import (
     GetDocumentInfoTool,
 )
+from agents.tools.knowledge_search import (
+    SearchKnowledgeBaseTool,
+)
+from agents.tools.advanced_rag_search import (
+    AskAdvancedRagTool,
+)
+from agents.tools.list_documents import (
+    ListAllDocumentsTool,
+)
 from core.exceptions import ToolNotFoundError
 
 
@@ -77,4 +86,16 @@ tool_registry = ToolRegistry()
 # 注册当前第一个工具
 tool_registry.register(
     GetDocumentInfoTool()
+)
+
+tool_registry.register(
+    SearchKnowledgeBaseTool()
+)
+
+tool_registry.register(
+    AskAdvancedRagTool()
+)
+
+tool_registry.register(
+    ListAllDocumentsTool()
 )

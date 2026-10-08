@@ -1,0 +1,375 @@
+{
+  "repeat_count": 2,
+  "worst_case_scores": {
+    "worst_positive_score": 85.0,
+    "worst_negative_score": 50.0,
+    "robust_margin": 35.0
+  },
+  "best_threshold": 55,
+  "case_stability": [
+    {
+      "case_id": "rag_001",
+      "question": "FastAPI 有什么特点？",
+      "expected_answerable": true,
+      "scores": [
+        95.0,
+        95.0
+      ],
+      "average_score": 95.0,
+      "min_score": 95.0,
+      "max_score": 95.0,
+      "score_range": 0.0,
+      "score_std": 0.0
+    },
+    {
+      "case_id": "rag_002",
+      "question": "什么是混合检索？它为什么要同时使用向量检索和关键词检索？",
+      "expected_answerable": true,
+      "scores": [
+        95.0,
+        95.0
+      ],
+      "average_score": 95.0,
+      "min_score": 95.0,
+      "max_score": 95.0,
+      "score_range": 0.0,
+      "score_std": 0.0
+    },
+    {
+      "case_id": "rag_003",
+      "question": "AI Agent 是什么？",
+      "expected_answerable": true,
+      "scores": [
+        98.0,
+        95.0
+      ],
+      "average_score": 96.5,
+      "min_score": 95.0,
+      "max_score": 98.0,
+      "score_range": 3.0,
+      "score_std": 1.5
+    },
+    {
+      "case_id": "rag_004",
+      "question": "Tool Calling 是什么？",
+      "expected_answerable": true,
+      "scores": [
+        98.0,
+        98.0
+      ],
+      "average_score": 98.0,
+      "min_score": 98.0,
+      "max_score": 98.0,
+      "score_range": 0.0,
+      "score_std": 0.0
+    },
+    {
+      "case_id": "rag_005",
+      "question": "Docker 在 AI 应用工程化中有什么作用？",
+      "expected_answerable": true,
+      "scores": [
+        95.0,
+        95.0
+      ],
+      "average_score": 95.0,
+      "min_score": 95.0,
+      "max_score": 95.0,
+      "score_range": 0.0,
+      "score_std": 0.0
+    },
+    {
+      "case_id": "rag_006",
+      "question": "Java Spring Boot 的 Bean 生命周期是什么？",
+      "expected_answerable": false,
+      "scores": [
+        0.0,
+        0.0
+      ],
+      "average_score": 0.0,
+      "min_score": 0.0,
+      "max_score": 0.0,
+      "score_range": 0.0,
+      "score_std": 0.0
+    },
+    {
+      "case_id": "rag_007",
+      "question": "Redis 的持久化机制有哪些？",
+      "expected_answerable": false,
+      "scores": [
+        0.0,
+        0.0
+      ],
+      "average_score": 0.0,
+      "min_score": 0.0,
+      "max_score": 0.0,
+      "score_range": 0.0,
+      "score_std": 0.0
+    },
+    {
+      "case_id": "rag_008",
+      "question": "Vue 的组件生命周期是什么？",
+      "expected_answerable": false,
+      "scores": [
+        0.0,
+        0.0
+      ],
+      "average_score": 0.0,
+      "min_score": 0.0,
+      "max_score": 0.0,
+      "score_range": 0.0,
+      "score_std": 0.0
+    },
+    {
+      "case_id": "rag_009",
+      "question": "FastAPI 为什么适合用于 AI 应用后端？",
+      "expected_answerable": true,
+      "scores": [
+        85.0,
+        95.0
+      ],
+      "average_score": 90.0,
+      "min_score": 85.0,
+      "max_score": 95.0,
+      "score_range": 10.0,
+      "score_std": 5.0
+    },
+    {
+      "case_id": "rag_010",
+      "question": "向量检索和关键词检索分别擅长解决什么问题？",
+      "expected_answerable": true,
+      "scores": [
+        95.0,
+        95.0
+      ],
+      "average_score": 95.0,
+      "min_score": 95.0,
+      "max_score": 95.0,
+      "score_range": 0.0,
+      "score_std": 0.0
+    },
+    {
+      "case_id": "rag_011",
+      "question": "为什么 Agent 需要限制最大执行步骤？",
+      "expected_answerable": true,
+      "scores": [
+        95.0,
+        95.0
+      ],
+      "average_score": 95.0,
+      "min_score": 95.0,
+      "max_score": 95.0,
+      "score_range": 0.0,
+      "score_std": 0.0
+    },
+    {
+      "case_id": "rag_012",
+      "question": "在 AI 应用中应该监控哪些指标？",
+      "expected_answerable": true,
+      "scores": [
+        98.0,
+        95.0
+      ],
+      "average_score": 96.5,
+      "min_score": 95.0,
+      "max_score": 98.0,
+      "score_range": 3.0,
+      "score_std": 1.5
+    },
+    {
+      "case_id": "rag_013",
+      "question": "FastAPI 默认使用什么数据库？",
+      "expected_answerable": false,
+      "scores": [
+        15.0,
+        20.0
+      ],
+      "average_score": 17.5,
+      "min_score": 15.0,
+      "max_score": 20.0,
+      "score_range": 5.0,
+      "score_std": 2.5
+    },
+    {
+      "case_id": "rag_014",
+      "question": "ChromaDB 使用的索引算法是什么？",
+      "expected_answerable": false,
+      "scores": [
+        40.0,
+        30.0
+      ],
+      "average_score": 35.0,
+      "min_score": 30.0,
+      "max_score": 40.0,
+      "score_range": 10.0,
+      "score_std": 5.0
+    },
+    {
+      "case_id": "rag_015",
+      "question": "RRF 的最佳 K 参数应该设置成多少？",
+      "expected_answerable": false,
+      "scores": [
+        50.0,
+        20.0
+      ],
+      "average_score": 35.0,
+      "min_score": 20.0,
+      "max_score": 50.0,
+      "score_range": 30.0,
+      "score_std": 15.0
+    },
+    {
+      "case_id": "rag_016",
+      "question": "Kubernetes 默认会创建几个 Pod 副本？",
+      "expected_answerable": false,
+      "scores": [
+        15.0,
+        10.0
+      ],
+      "average_score": 12.5,
+      "min_score": 10.0,
+      "max_score": 15.0,
+      "score_range": 5.0,
+      "score_std": 2.5
+    },
+    {
+      "case_id": "rag_017",
+      "question": "FastAPI 的性能为什么比所有 Python Web 框架都高？",
+      "expected_answerable": false,
+      "scores": [
+        45.0,
+        45.0
+      ],
+      "average_score": 45.0,
+      "min_score": 45.0,
+      "max_score": 45.0,
+      "score_range": 0.0,
+      "score_std": 0.0
+    },
+    {
+      "case_id": "rag_018",
+      "question": "Docker 如何具体实现容器网络隔离？",
+      "expected_answerable": false,
+      "scores": [
+        10.0,
+        10.0
+      ],
+      "average_score": 10.0,
+      "min_score": 10.0,
+      "max_score": 10.0,
+      "score_range": 0.0,
+      "score_std": 0.0
+    }
+  ],
+  "threshold_stability": [
+    {
+      "threshold": 40,
+      "average_accuracy": 0.8888888888888888,
+      "min_accuracy": 0.8333333333333334,
+      "max_accuracy": 0.9444444444444444,
+      "average_precision": 0.825,
+      "average_recall": 1.0,
+      "average_f1": 0.9022556390977443,
+      "total_false_positive": 4,
+      "total_false_negative": 0
+    },
+    {
+      "threshold": 50,
+      "average_accuracy": 0.9722222222222222,
+      "min_accuracy": 0.9444444444444444,
+      "max_accuracy": 1.0,
+      "average_precision": 0.95,
+      "average_recall": 1.0,
+      "average_f1": 0.9736842105263158,
+      "total_false_positive": 1,
+      "total_false_negative": 0
+    },
+    {
+      "threshold": 55,
+      "average_accuracy": 1.0,
+      "min_accuracy": 1.0,
+      "max_accuracy": 1.0,
+      "average_precision": 1.0,
+      "average_recall": 1.0,
+      "average_f1": 1.0,
+      "total_false_positive": 0,
+      "total_false_negative": 0
+    },
+    {
+      "threshold": 60,
+      "average_accuracy": 1.0,
+      "min_accuracy": 1.0,
+      "max_accuracy": 1.0,
+      "average_precision": 1.0,
+      "average_recall": 1.0,
+      "average_f1": 1.0,
+      "total_false_positive": 0,
+      "total_false_negative": 0
+    },
+    {
+      "threshold": 65,
+      "average_accuracy": 1.0,
+      "min_accuracy": 1.0,
+      "max_accuracy": 1.0,
+      "average_precision": 1.0,
+      "average_recall": 1.0,
+      "average_f1": 1.0,
+      "total_false_positive": 0,
+      "total_false_negative": 0
+    },
+    {
+      "threshold": 70,
+      "average_accuracy": 1.0,
+      "min_accuracy": 1.0,
+      "max_accuracy": 1.0,
+      "average_precision": 1.0,
+      "average_recall": 1.0,
+      "average_f1": 1.0,
+      "total_false_positive": 0,
+      "total_false_negative": 0
+    },
+    {
+      "threshold": 75,
+      "average_accuracy": 1.0,
+      "min_accuracy": 1.0,
+      "max_accuracy": 1.0,
+      "average_precision": 1.0,
+      "average_recall": 1.0,
+      "average_f1": 1.0,
+      "total_false_positive": 0,
+      "total_false_negative": 0
+    },
+    {
+      "threshold": 80,
+      "average_accuracy": 1.0,
+      "min_accuracy": 1.0,
+      "max_accuracy": 1.0,
+      "average_precision": 1.0,
+      "average_recall": 1.0,
+      "average_f1": 1.0,
+      "total_false_positive": 0,
+      "total_false_negative": 0
+    },
+    {
+      "threshold": 85,
+      "average_accuracy": 1.0,
+      "min_accuracy": 1.0,
+      "max_accuracy": 1.0,
+      "average_precision": 1.0,
+      "average_recall": 1.0,
+      "average_f1": 1.0,
+      "total_false_positive": 0,
+      "total_false_negative": 0
+    },
+    {
+      "threshold": 90,
+      "average_accuracy": 0.9722222222222222,
+      "min_accuracy": 0.9444444444444444,
+      "max_accuracy": 1.0,
+      "average_precision": 1.0,
+      "average_recall": 0.9444444444444444,
+      "average_f1": 0.9705882352941176,
+      "total_false_positive": 0,
+      "total_false_negative": 1
+    }
+  ]
+}

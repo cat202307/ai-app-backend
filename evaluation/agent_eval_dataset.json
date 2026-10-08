@@ -1,0 +1,58 @@
+[
+  {
+    "case_id": "agent_001",
+    "user_message": "系统里有没有 test02.txt 这个文件？",
+    "expected_tools": ["get_document_info"],
+    "expected_completed": true,
+    "description": "查文件是否存在，应该调用 get_document_info"
+  },
+  {
+    "case_id": "agent_002",
+    "user_message": "document_id 为 2 的文件叫什么名字？",
+    "expected_tools": ["get_document_info"],
+    "expected_completed": true,
+    "description": "按 ID 查文件名，应该调用 get_document_info"
+  },
+  {
+    "case_id": "agent_003",
+    "user_message": "test02.txt 里讲了什么内容？",
+    "expected_tools": ["get_document_info", "ask_advanced_rag"],
+    "expected_completed": true,
+    "description": "先查文件 ID，再用 Advanced RAG 回答内容"
+  },
+  {
+    "case_id": "agent_004",
+    "user_message": "帮我查一下 document_id 为 3 的文件的内容",
+    "expected_tools": ["ask_advanced_rag"],
+    "expected_completed": true,
+    "description": "直接用 Advanced RAG 回答文档内容"
+  },
+  {
+    "case_id": "agent_005",
+    "user_message": "你好，你是谁？",
+    "expected_tools": [],
+    "expected_completed": true,
+    "description": "不需要调用工具，直接回答"
+  },
+  {
+    "case_id": "agent_006",
+    "user_message": "今天天气怎么样？",
+    "expected_tools": [],
+    "expected_completed": true,
+    "description": "和知识库无关的问题，不需要调用工具"
+  },
+  {
+    "case_id": "agent_007",
+    "user_message": "先列出所有文件，再告诉我 test02.txt 的内容",
+    "expected_tools": ["get_document_info", "ask_advanced_rag"],
+    "expected_completed": true,
+    "description": "多工具协作：先查文件，再查内容"
+  },
+  {
+    "case_id": "agent_008",
+    "user_message": "document_id 为 100 的文件存在吗？",
+    "expected_tools": ["get_document_info"],
+    "expected_completed": true,
+    "description": "查询不存在的文件，工具应该返回失败但 Agent 正常完成"
+  }
+]

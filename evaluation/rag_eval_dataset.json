@@ -1,0 +1,146 @@
+[
+  {
+    "case_id": "rag_001",
+    "question": "FastAPI 有什么特点？",
+    "file_id": 5,
+    "expected_answerable": true,
+    "relevant_chunk_ids": [
+      "file_5_chunk_0"
+    ]
+  },
+  {
+    "case_id": "rag_002",
+    "question": "什么是混合检索？它为什么要同时使用向量检索和关键词检索？",
+    "file_id": 5,
+    "expected_answerable": true,
+    "relevant_chunk_ids": [
+      "file_5_chunk_1"
+    ]
+  },
+  {
+    "case_id": "rag_003",
+    "question": "AI Agent 是什么？",
+    "file_id": 5,
+    "expected_answerable": true,
+    "relevant_chunk_ids": [
+      "file_5_chunk_2"
+    ]
+  },
+  {
+    "case_id": "rag_004",
+    "question": "Tool Calling 是什么？",
+    "file_id": 5,
+    "expected_answerable": true,
+    "relevant_chunk_ids": [
+      "file_5_chunk_2"
+    ]
+  },
+  {
+    "case_id": "rag_005",
+    "question": "Docker 在 AI 应用工程化中有什么作用？",
+    "file_id": 5,
+    "expected_answerable": true,
+    "relevant_chunk_ids": [
+      "file_5_chunk_2"
+    ]
+  },
+  {
+    "case_id": "rag_006",
+    "question": "Java Spring Boot 的 Bean 生命周期是什么？",
+    "file_id": 5,
+    "expected_answerable": false,
+    "relevant_chunk_ids": []
+  },
+  {
+    "case_id": "rag_007",
+    "question": "Redis 的持久化机制有哪些？",
+    "file_id": 5,
+    "expected_answerable": false,
+    "relevant_chunk_ids": []
+  },
+  {
+    "case_id": "rag_008",
+    "question": "Vue 的组件生命周期是什么？",
+    "file_id": 5,
+    "expected_answerable": false,
+    "relevant_chunk_ids": []
+  },
+  {
+  "case_id": "rag_009",
+  "question": "FastAPI 为什么适合用于 AI 应用后端？",
+  "file_id": 5,
+  "expected_answerable": true,
+  "relevant_chunk_ids": [
+    "file_5_chunk_0"
+  ]
+},
+{
+  "case_id": "rag_010",
+  "question": "向量检索和关键词检索分别擅长解决什么问题？",
+  "file_id": 5,
+  "expected_answerable": true,
+  "relevant_chunk_ids": [
+    "file_5_chunk_1"
+  ]
+},
+{
+  "case_id": "rag_011",
+  "question": "为什么 Agent 需要限制最大执行步骤？",
+  "file_id": 5,
+  "expected_answerable": true,
+  "relevant_chunk_ids": [
+    "file_5_chunk_2"
+  ]
+},
+{
+  "case_id": "rag_012",
+  "question": "在 AI 应用中应该监控哪些指标？",
+  "file_id": 5,
+  "expected_answerable": true,
+  "relevant_chunk_ids": [
+    "file_5_chunk_2"
+  ]
+},
+  {
+  "case_id": "rag_013",
+  "question": "FastAPI 默认使用什么数据库？",
+  "file_id": 5,
+  "expected_answerable": false,
+  "relevant_chunk_ids": []
+},
+{
+  "case_id": "rag_014",
+  "question": "ChromaDB 使用的索引算法是什么？",
+  "file_id": 5,
+  "expected_answerable": false,
+  "relevant_chunk_ids": []
+},
+{
+  "case_id": "rag_015",
+  "question": "RRF 的最佳 K 参数应该设置成多少？",
+  "file_id": 5,
+  "expected_answerable": false,
+  "relevant_chunk_ids": []
+},
+{
+  "case_id": "rag_016",
+  "question": "Kubernetes 默认会创建几个 Pod 副本？",
+  "file_id": 5,
+  "expected_answerable": false,
+  "relevant_chunk_ids": []
+},
+  {
+  "case_id": "rag_017",
+  "question": "FastAPI 的性能为什么比所有 Python Web 框架都高？",
+  "file_id": 5,
+  "expected_answerable": false,
+  "relevant_chunk_ids": []
+},
+{
+  "case_id": "rag_018",
+  "question": "Docker 如何具体实现容器网络隔离？",
+  "file_id": 5,
+  "expected_answerable": false,
+  "relevant_chunk_ids": []
+}
+]

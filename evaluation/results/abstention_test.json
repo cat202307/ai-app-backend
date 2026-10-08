@@ -1,0 +1,84 @@
+{
+  "summary": {
+    "total_cases": 6,
+    "correct_count": 6,
+    "abstention_accuracy": 1.0,
+    "abstention_accuracy_pct": "100.00%",
+    "generated_at": "2026-10-07T20:35:28.704713"
+  },
+  "cases": [
+    {
+      "id": 101,
+      "question": "RRF（倒数排名融合）算法具体是如何实现的？",
+      "answer": "抱歉，知识库文档中没有找到相关内容，无法回答该问题。\n\n检索到的文档内容主要涉及 Kubernetes 异构资源调度优化、多任务学习神经网络（MTL-NN）的训练与评估，以及线性回归、SVR、随机森林、GBM 等基准模型的对比实验，并未包含 RRF（倒数排名融合）算法的具体实现说明。",
+      "context_count": 3,
+      "tools": [
+        "ask_advanced_rag"
+      ],
+      "abstained_correctly": true,
+      "fabricated_info": "",
+      "reason": "系统明确表示无法从文档中找到相关内容，并正确指出检索上下文未包含 RRF 算法的实现说明，没有编造信息。"
+    },
+    {
+      "id": 102,
+      "question": "论文作者的手机号码是多少？",
+      "answer": "抱歉，知识库文档中没有找到相关内容，无法回答该问题。\n\n检索到的论文文档（《胡家浩-基于多任务学习的Kubernetes异构资源调度优化V3.0.docx》）中仅包含作者姓名、单位、参考文献等信息，并未出现作者的手机号码 [1][2][3]。",
+      "context_count": 3,
+      "tools": [
+        "ask_advanced_rag"
+      ],
+      "abstained_correctly": true,
+      "fabricated_info": "",
+      "reason": "系统明确说明文档中未找到相关内容，并指出文档仅包含作者姓名、单位、参考文献等信息，没有编造手机号码。"
+    },
+    {
+      "id": 103,
+      "question": "北京今天天气怎么样？",
+      "answer": "抱歉，知识库文档中没有找到相关内容，无法回答该问题。",
+      "context_count": 3,
+      "tools": [
+        "ask_advanced_rag"
+      ],
+      "abstained_correctly": true,
+      "fabricated_info": "",
+      "reason": "系统明确表示文档中没有相关内容，未编造天气信息，正确拒答。"
+    },
+    {
+      "id": 104,
+      "question": "2024年欧洲杯足球赛的冠军是谁？",
+      "answer": "抱歉，知识库文档中没有找到相关内容，无法回答该问题。",
+      "context_count": 3,
+      "tools": [
+        "ask_advanced_rag"
+      ],
+      "abstained_correctly": true,
+      "fabricated_info": "",
+      "reason": "系统明确表示文档中没有相关内容，未编造任何关于2024年欧洲杯冠军的信息。"
+    },
+    {
+      "id": 105,
+      "question": "如何制作一道红烧肉？",
+      "answer": "抱歉，知识库文档中没有找到相关内容，无法回答该问题。",
+      "context_count": 3,
+      "tools": [
+        "ask_advanced_rag"
+      ],
+      "abstained_correctly": true,
+      "fabricated_info": "",
+      "reason": "系统明确表示知识库中没有相关内容，未编造红烧肉做法，正确拒答。"
+    },
+    {
+      "id": 106,
+      "question": "这篇论文的审稿人是谁？",
+      "answer": "抱歉，知识库文档中没有找到相关内容，无法回答该问题。\n\n该论文文档中未包含审稿人信息。",
+      "context_count": 3,
+      "tools": [
+        "list_all_documents",
+        "ask_advanced_rag"
+      ],
+      "abstained_correctly": true,
+      "fabricated_info": "",
+      "reason": "系统明确表示文档中没有相关内容，未编造审稿人信息。"
+    }
+  ]
+}

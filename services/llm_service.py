@@ -1,8 +1,15 @@
 import time
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Any, Iterator, cast
+from typing import Any, Callable, Iterator, cast
 
+from core.logging_config import get_logger
+from tenacity import (
+    retry,
+    retry_if_exception,
+    stop_after_attempt,
+    wait_exponential,
+)
 from openai import (
     APIConnectionError,
     APIStatusError,
@@ -163,30 +170,79 @@ def build_usage(response_usage: Any) -> LLMUsage:
     """
 
     if response_usage is None:
-        return LLMUsage()
+        result_usage = LLMUsage()
+    else:
+        result_usage = LLMUsage(
+            prompt_tokens=getattr(
+                response_usage,
+                "prompt_tokens",
+                0,
+            ) or 0,
+            completion_tokens=getattr(
+                response_usage,
+                "completion_tokens",
+                0,
+            ) or 0,
+            total_tokens=getattr(
+                response_usage,
+                "total_tokens",
+                0,
+            ) or 0,
+        )
 
-    return LLMUsage(
-        prompt_tokens=getattr(
-            response_usage,
-            "prompt_tokens",
-            0,
-        ) or 0,
-        completion_tokens=getattr(
-            response_usage,
-            "completion_tokens",
-            0,
-        ) or 0,
-        total_tokens=getattr(
-            response_usage,
-            "total_tokens",
-            0,
-        ) or 0,
-    )
+    # 上报全局 token / 成本统计（覆盖所有 LLM 调用）
+    try:
+        from core.metrics import metrics
+
+        metrics.record_llm_usage(
+            prompt_tokens=result_usage.prompt_tokens,
+            completion_tokens=result_usage.completion_tokens,
+        )
+    except Exception:
+        pass
+
+    return result_usage
 
 
 # ============================================================
 # 普通模型调用：返回完整结果
 # ============================================================
+
+def _is_retryable_llm_error(exc: BaseException) -> bool:
+    """
+    判断哪些 LLM 异常值得重试（临时性故障）。
+
+    可重试：超时、限流(429)、连接错误、5xx 服务端错误。
+    不可重试：鉴权失败(401)、其他 4xx 客户端错误。
+    """
+    if isinstance(exc, (APITimeoutError, RateLimitError, APIConnectionError)):
+        return True
+    if isinstance(exc, APIStatusError):
+        return exc.status_code == 429 or exc.status_code >= 500
+    return False
+
+
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(min=1, max=10),
+    retry=retry_if_exception(_is_retryable_llm_error),
+    reraise=True,
+)
+def _create_chat_completion(client, model, messages, timeout, **kwargs):
+    """
+    带重试的 chat.completions.create 包装。
+
+    对超时 / 限流 / 连接错误 / 5xx 自动指数退避重试最多 3 次，
+    重试耗尽后抛出原始异常，由上层转为业务异常。
+    流式调用不使用此包装。
+    """
+    return client.chat.completions.create(
+        model=model,
+        messages=messages,
+        timeout=timeout,
+        **kwargs,
+    )
+
 
 def call_llm_detail(
     messages: list[dict[str, str]],
@@ -235,6 +291,8 @@ def call_llm_detail(
 
     validate_llm_configuration()
 
+    logger = get_logger(__name__)
+
     if not messages:
         raise LLMServiceError(
             message="模型消息列表不能为空。"
@@ -245,15 +303,10 @@ def call_llm_detail(
     start_time = time.perf_counter()
 
     try:
-        response = client.chat.completions.create(
-            model=cast(
-                Any,
-                settings.deepseek_model,
-            ),
-            messages=cast(
-                Any,
-                messages,
-            ),
+        response = _create_chat_completion(
+            client=client,
+            model=cast(Any, settings.deepseek_model),
+            messages=cast(Any, messages),
             temperature=temperature,
             stream=False,
             timeout=settings.llm_timeout,
@@ -324,7 +377,7 @@ def call_llm_detail(
             message="大模型没有返回有效的文本内容。"
         )
 
-    return LLMResult(
+    result = LLMResult(
         content=answer,
         model=(
             response.model
@@ -334,6 +387,14 @@ def call_llm_detail(
         usage=build_usage(response.usage),
         latency_ms=latency_ms,
     )
+
+    logger.info(
+        f"LLM call | model={result.model} | "
+        f"latency={latency_ms}ms | "
+        f"tokens={result.usage.total_tokens}"
+    )
+
+    return result
 
 
 # ============================================================
@@ -363,6 +424,32 @@ def call_llm(
     )
 
     return result.content
+
+
+def rewrite_standalone_question(
+    history_text: str,
+    question: str,
+) -> str:
+    """
+    结合对话历史，把含指代 / 省略的追问改写为
+    独立完整问题；问题本身完整时原样返回。
+
+    只返回改写后的问题文本。
+    """
+
+    from services.prompt_service import (
+        build_standalone_question_messages,
+    )
+
+    messages = build_standalone_question_messages(
+        history_text=history_text,
+        question=question,
+    )
+    rewritten = call_llm(messages=messages, temperature=0.0)
+    rewritten = (rewritten or "").strip()
+    rewritten = rewritten.strip("\"'“”‘’ ")
+
+    return rewritten or question
 
 
 # ============================================================
@@ -396,6 +483,8 @@ def stream_llm(
     """
 
     validate_llm_configuration()
+
+    logger = get_logger(__name__)
 
     if not messages:
         raise LLMServiceError(
@@ -504,6 +593,8 @@ def call_llm_with_tools(
 
     validate_llm_configuration()
 
+    logger = get_logger(__name__)
+
     if not messages:
         raise LLMServiceError(
             message="模型消息列表不能为空。"
@@ -518,33 +609,17 @@ def call_llm_with_tools(
     start_time = time.perf_counter()
 
     try:
-        response = client.chat.completions.create(
-            model=cast(
-                Any,
-                settings.deepseek_model,
-            ),
-            messages=cast(
-                Any,
-                messages,
-            ),
-            tools=cast(
-                Any,
-                tools,
-            ),
-            tool_choice=cast(
-                Any,
-                tool_choice,
-            ),
+        response = _create_chat_completion(
+            client=client,
+            model=cast(Any, settings.deepseek_model),
+            messages=cast(Any, messages),
+            tools=cast(Any, tools),
+            tool_choice=cast(Any, tool_choice),
             temperature=temperature,
             stream=False,
             timeout=settings.llm_timeout,
-
-            # 当前阶段关闭思考模式，
-            # 避免额外处理 reasoning_content。
             extra_body={
-                "thinking": {
-                    "type": "disabled"
-                }
+                "thinking": {"type": "disabled"}
             },
         )
 
@@ -597,5 +672,185 @@ def call_llm_with_tools(
         ),
         finish_reason=choice.finish_reason,
         usage=build_usage(response.usage),
+        latency_ms=latency_ms,
+    )
+
+
+def stream_llm_with_tools(
+    messages: list[dict[str, Any]],
+    tools: list[dict[str, Any]],
+    temperature: float = 0.0,
+    tool_choice: str = "auto",
+    on_content: Callable[[str], None] | None = None,
+) -> ToolLLMResult:
+    """
+    流式调用支持 Tool Calling 的模型。
+
+    与 call_llm_with_tools 的区别：
+        stream=True，模型每产出一段正文就通过 on_content 回调实时推送，
+        供 SSE 真流式使用；流式返回的 tool_calls 增量片段会被拼接还原。
+    返回值结构与 call_llm_with_tools 一致。
+    """
+
+    validate_llm_configuration()
+
+    logger = get_logger(__name__)
+
+    if not messages:
+        raise LLMServiceError(
+            message="模型消息列表不能为空。"
+        )
+
+    if not tools:
+        raise LLMServiceError(
+            message="工具列表不能为空。"
+        )
+
+    client = get_llm_client()
+    start_time = time.perf_counter()
+
+    try:
+        stream = client.chat.completions.create(
+            model=cast(Any, settings.deepseek_model),
+            messages=cast(Any, messages),
+            tools=cast(Any, tools),
+            tool_choice=cast(Any, tool_choice),
+            temperature=temperature,
+            stream=True,
+            stream_options={"include_usage": True},
+            timeout=settings.llm_stream_timeout,
+            extra_body={
+                "thinking": {
+                    "type": "disabled"
+                }
+            },
+        )
+
+        content_parts: list[str] = []
+        tool_acc: dict[int, dict[str, str]] = {}
+        finish_reason = None
+        model_name = settings.deepseek_model
+        response_usage = None
+
+        for chunk in stream:
+            if getattr(chunk, "usage", None) is not None:
+                response_usage = chunk.usage
+
+            if getattr(chunk, "model", None):
+                model_name = chunk.model or model_name
+
+            choices = getattr(chunk, "choices", None)
+            if not choices:
+                # include_usage 时最后一个 chunk 只有 usage、没有 choices
+                continue
+
+            choice0 = choices[0]
+            if choice0.finish_reason:
+                finish_reason = choice0.finish_reason
+
+            delta = choice0.delta
+
+            if getattr(delta, "content", None):
+                content_parts.append(delta.content)
+                if on_content is not None:
+                    on_content(delta.content)
+
+            if getattr(delta, "tool_calls", None):
+                for tc in delta.tool_calls:
+                    idx = (
+                        tc.index
+                        if tc.index is not None
+                        else 0
+                    )
+                    slot = tool_acc.setdefault(
+                        idx,
+                        {"id": "", "name": "", "arguments": ""},
+                    )
+
+                    if getattr(tc, "id", None):
+                        slot["id"] = tc.id
+
+                    fn = getattr(tc, "function", None)
+                    if fn is not None:
+                        if getattr(fn, "name", None):
+                            slot["name"] += fn.name
+                        if getattr(fn, "arguments", None):
+                            slot["arguments"] += fn.arguments
+
+    except APITimeoutError as exc:
+        raise LLMTimeoutError() from exc
+
+    except AuthenticationError as exc:
+        raise LLMAuthenticationError() from exc
+
+    except RateLimitError as exc:
+        raise LLMRateLimitError() from exc
+
+    except APIConnectionError as exc:
+        raise LLMServiceError(
+            message="无法连接大模型服务。"
+        ) from exc
+
+    except APIStatusError as exc:
+        raise LLMServiceError(
+            message=(
+                "大模型流式工具调用接口返回异常，"
+                f"HTTP 状态码：{exc.status_code}。"
+            )
+        ) from exc
+
+    except LLMServiceError:
+        raise
+
+    except Exception as exc:
+        raise LLMServiceError(
+            message=(
+                "大模型流式调用发生未知异常，"
+                f"异常类型：{type(exc).__name__}。"
+            )
+        ) from exc
+
+    latency_ms = int(
+        (time.perf_counter() - start_time) * 1000
+    )
+
+    from openai.types.chat import (
+        ChatCompletionMessage,
+        ChatCompletionMessageToolCall,
+    )
+
+    full_content = "".join(content_parts)
+
+    tool_calls = []
+    for idx in sorted(tool_acc):
+        slot = tool_acc[idx]
+        tool_calls.append(
+            ChatCompletionMessageToolCall(
+                id=slot["id"] or ("call_%d" % idx),
+                type="function",
+                function={
+                    "name": slot["name"],
+                    "arguments": slot["arguments"],
+                },
+            )
+        )
+
+    message = ChatCompletionMessage(
+        role="assistant",
+        content=full_content or None,
+        tool_calls=tool_calls or None,
+    )
+
+    logger.info(
+        "stream tool call finished | latency=%dms | tool_calls=%d",
+        latency_ms,
+        len(tool_calls),
+    )
+
+    return ToolLLMResult(
+        message=message,
+        model=model_name or settings.deepseek_model,
+        finish_reason=finish_reason,
+        usage=build_usage(response_usage),
         latency_ms=latency_ms,
     )

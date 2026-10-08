@@ -1,0 +1,372 @@
+{
+  "summary": {
+    "total_cases": 18,
+    "positive_cases": 9,
+    "citation_presence_accuracy": 1.0,
+    "citation_reference_accuracy": 1.0,
+    "relevant_citation_hit_rate": 0.8888888888888888,
+    "all_citations_relevant_rate": 0.8888888888888888
+  },
+  "cases": [
+    {
+      "case_id": "rag_001",
+      "question": "FastAPI 有什么特点？",
+      "expected_answerable": true,
+      "retrieval_status": "matched",
+      "answer": "FastAPI 的特点包括：\n\n- 是一个现代、高性能的 Python Web 框架，主要用于开发 API 服务 [1]。\n- 基于 Python 类型提示进行参数声明和数据校验，能够快速构建结构清晰的后端接口 [1]。\n- 与 Pydantic 深度结合，可通过 Pydantic 模型定义请求参数和响应数据结构，自动进行数据类型检查和参数校验；客户端提交的数据格式不符合要求时，能够自动返回错误信息 [1]。\n- 能够根据接口代码自动生成 OpenAPI 文档，并提供 Swagger UI，可通过浏览器直接访问 Swagger 页面查看和测试接口 [1]。\n- 适合用于 AI 应用后端、大模型接口服务以及企业知识库系统 [1]。\n- 通常配合 Uvicorn 使用，Uvicorn 作为 ASGI 服务器负责监听网络端口并运行 FastAPI 应用 [1]。",
+      "answer_citation_ids": [
+        1
+      ],
+      "returned_citation_ids": [
+        1
+      ],
+      "returned_chunk_ids": [
+        "file_5_chunk_0"
+      ],
+      "relevant_chunk_ids": [
+        "file_5_chunk_0"
+      ],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": true,
+      "all_citations_relevant": true
+    },
+    {
+      "case_id": "rag_002",
+      "question": "什么是混合检索？它为什么要同时使用向量检索和关键词检索？",
+      "expected_answerable": true,
+      "retrieval_status": "matched",
+      "answer": "混合检索（Hybrid Search）是同时使用向量检索（Vector Search）和关键词检索（Keyword Search）的检索方式[1]。\n\n它要同时使用这两种检索，是因为两者可以相互补充：向量检索擅长发现语义相关的内容，关键词检索擅长发现文字直接匹配的内容[1]。",
+      "answer_citation_ids": [
+        1
+      ],
+      "returned_citation_ids": [
+        1
+      ],
+      "returned_chunk_ids": [
+        "file_5_chunk_1"
+      ],
+      "relevant_chunk_ids": [
+        "file_5_chunk_1"
+      ],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": true,
+      "all_citations_relevant": true
+    },
+    {
+      "case_id": "rag_003",
+      "question": "AI Agent 是什么？",
+      "expected_answerable": true,
+      "retrieval_status": "matched",
+      "answer": "AI Agent 是一种可以根据任务自主选择工具并执行多个步骤的智能应用。[1]",
+      "answer_citation_ids": [
+        1
+      ],
+      "returned_citation_ids": [
+        1
+      ],
+      "returned_chunk_ids": [
+        "file_5_chunk_1"
+      ],
+      "relevant_chunk_ids": [
+        "file_5_chunk_2"
+      ],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": false,
+      "all_citations_relevant": false
+    },
+    {
+      "case_id": "rag_004",
+      "question": "Tool Calling 是什么？",
+      "expected_answerable": true,
+      "retrieval_status": "matched",
+      "answer": "Tool Calling 是工具调用机制。开发者可以向大模型提供工具名称、工具描述和参数 Schema，模型根据用户任务决定是否调用工具，并生成工具名称和参数。[1]",
+      "answer_citation_ids": [
+        1
+      ],
+      "returned_citation_ids": [
+        1
+      ],
+      "returned_chunk_ids": [
+        "file_5_chunk_2"
+      ],
+      "relevant_chunk_ids": [
+        "file_5_chunk_2"
+      ],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": true,
+      "all_citations_relevant": true
+    },
+    {
+      "case_id": "rag_005",
+      "question": "Docker 在 AI 应用工程化中有什么作用？",
+      "expected_answerable": true,
+      "retrieval_status": "matched",
+      "answer": "根据文档，Docker 在 AI 应用工程化中的作用是：把应用程序、依赖环境以及运行配置封装为统一的容器镜像，从而解决不同机器之间运行环境不一致的问题[1]。",
+      "answer_citation_ids": [
+        1
+      ],
+      "returned_citation_ids": [
+        1
+      ],
+      "returned_chunk_ids": [
+        "file_5_chunk_2"
+      ],
+      "relevant_chunk_ids": [
+        "file_5_chunk_2"
+      ],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": true,
+      "all_citations_relevant": true
+    },
+    {
+      "case_id": "rag_006",
+      "question": "Java Spring Boot 的 Bean 生命周期是什么？",
+      "expected_answerable": false,
+      "retrieval_status": "not_matched",
+      "answer": "文档中没有找到足够的信息回答该问题。",
+      "answer_citation_ids": [],
+      "returned_citation_ids": [],
+      "returned_chunk_ids": [],
+      "relevant_chunk_ids": [],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": null,
+      "all_citations_relevant": null
+    },
+    {
+      "case_id": "rag_007",
+      "question": "Redis 的持久化机制有哪些？",
+      "expected_answerable": false,
+      "retrieval_status": "not_matched",
+      "answer": "文档中没有找到足够的信息回答该问题。",
+      "answer_citation_ids": [],
+      "returned_citation_ids": [],
+      "returned_chunk_ids": [],
+      "relevant_chunk_ids": [],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": null,
+      "all_citations_relevant": null
+    },
+    {
+      "case_id": "rag_008",
+      "question": "Vue 的组件生命周期是什么？",
+      "expected_answerable": false,
+      "retrieval_status": "not_matched",
+      "answer": "文档中没有找到足够的信息回答该问题。",
+      "answer_citation_ids": [],
+      "returned_citation_ids": [],
+      "returned_chunk_ids": [],
+      "relevant_chunk_ids": [],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": null,
+      "all_citations_relevant": null
+    },
+    {
+      "case_id": "rag_009",
+      "question": "FastAPI 为什么适合用于 AI 应用后端？",
+      "expected_answerable": true,
+      "retrieval_status": "matched",
+      "answer": "FastAPI 适合用于 AI 应用后端，原因包括：\n\n- 它是一个现代、高性能的 Python Web 框架，主要用于开发 API 服务 [1]。\n- 基于 Python 类型提示进行参数声明和数据校验，并与 Pydantic 深度结合，能够自动进行数据类型检查和参数校验 [1]。\n- 能够自动生成 OpenAPI 文档和 Swagger UI，开发者可以通过浏览器直接查看和测试接口 [1]。\n\n因此，文档指出 FastAPI 很适合用于 AI 应用后端、大模型接口服务以及企业知识库系统 [1]。",
+      "answer_citation_ids": [
+        1
+      ],
+      "returned_citation_ids": [
+        1
+      ],
+      "returned_chunk_ids": [
+        "file_5_chunk_0"
+      ],
+      "relevant_chunk_ids": [
+        "file_5_chunk_0"
+      ],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": true,
+      "all_citations_relevant": true
+    },
+    {
+      "case_id": "rag_010",
+      "question": "向量检索和关键词检索分别擅长解决什么问题？",
+      "expected_answerable": true,
+      "retrieval_status": "matched",
+      "answer": "向量检索擅长发现语义相关的内容；关键词检索擅长发现文字直接匹配的内容。两者可以相互补充 [1]。",
+      "answer_citation_ids": [
+        1
+      ],
+      "returned_citation_ids": [
+        1
+      ],
+      "returned_chunk_ids": [
+        "file_5_chunk_1"
+      ],
+      "relevant_chunk_ids": [
+        "file_5_chunk_1"
+      ],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": true,
+      "all_citations_relevant": true
+    },
+    {
+      "case_id": "rag_011",
+      "question": "为什么 Agent 需要限制最大执行步骤？",
+      "expected_answerable": true,
+      "retrieval_status": "matched",
+      "answer": "Agent 需要限制最大执行步骤，主要是为了防止 Agent 无限执行。[1]",
+      "answer_citation_ids": [
+        1
+      ],
+      "returned_citation_ids": [
+        1
+      ],
+      "returned_chunk_ids": [
+        "file_5_chunk_2"
+      ],
+      "relevant_chunk_ids": [
+        "file_5_chunk_2"
+      ],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": true,
+      "all_citations_relevant": true
+    },
+    {
+      "case_id": "rag_012",
+      "question": "在 AI 应用中应该监控哪些指标？",
+      "expected_answerable": true,
+      "retrieval_status": "matched",
+      "answer": "在 AI 应用中，应该关注以下指标：模型调用延迟、Token 消耗、RAG 检索效果、Agent 工具调用成功率以及系统错误率等[1]。",
+      "answer_citation_ids": [
+        1
+      ],
+      "returned_citation_ids": [
+        1
+      ],
+      "returned_chunk_ids": [
+        "file_5_chunk_2"
+      ],
+      "relevant_chunk_ids": [
+        "file_5_chunk_2"
+      ],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": true,
+      "all_citations_relevant": true
+    },
+    {
+      "case_id": "rag_013",
+      "question": "FastAPI 默认使用什么数据库？",
+      "expected_answerable": false,
+      "retrieval_status": "not_matched",
+      "answer": "文档中没有找到足够的信息回答该问题。",
+      "answer_citation_ids": [],
+      "returned_citation_ids": [],
+      "returned_chunk_ids": [],
+      "relevant_chunk_ids": [],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": null,
+      "all_citations_relevant": null
+    },
+    {
+      "case_id": "rag_014",
+      "question": "ChromaDB 使用的索引算法是什么？",
+      "expected_answerable": false,
+      "retrieval_status": "not_matched",
+      "answer": "文档中没有找到足够的信息回答该问题。",
+      "answer_citation_ids": [],
+      "returned_citation_ids": [],
+      "returned_chunk_ids": [],
+      "relevant_chunk_ids": [],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": null,
+      "all_citations_relevant": null
+    },
+    {
+      "case_id": "rag_015",
+      "question": "RRF 的最佳 K 参数应该设置成多少？",
+      "expected_answerable": false,
+      "retrieval_status": "not_matched",
+      "answer": "文档中没有找到足够的信息回答该问题。",
+      "answer_citation_ids": [],
+      "returned_citation_ids": [],
+      "returned_chunk_ids": [],
+      "relevant_chunk_ids": [],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": null,
+      "all_citations_relevant": null
+    },
+    {
+      "case_id": "rag_016",
+      "question": "Kubernetes 默认会创建几个 Pod 副本？",
+      "expected_answerable": false,
+      "retrieval_status": "not_matched",
+      "answer": "文档中没有找到足够的信息回答该问题。",
+      "answer_citation_ids": [],
+      "returned_citation_ids": [],
+      "returned_chunk_ids": [],
+      "relevant_chunk_ids": [],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": null,
+      "all_citations_relevant": null
+    },
+    {
+      "case_id": "rag_017",
+      "question": "FastAPI 的性能为什么比所有 Python Web 框架都高？",
+      "expected_answerable": false,
+      "retrieval_status": "not_matched",
+      "answer": "文档中没有找到足够的信息回答该问题。",
+      "answer_citation_ids": [],
+      "returned_citation_ids": [],
+      "returned_chunk_ids": [],
+      "relevant_chunk_ids": [],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": null,
+      "all_citations_relevant": null
+    },
+    {
+      "case_id": "rag_018",
+      "question": "Docker 如何具体实现容器网络隔离？",
+      "expected_answerable": false,
+      "retrieval_status": "not_matched",
+      "answer": "文档中没有找到足够的信息回答该问题。",
+      "answer_citation_ids": [],
+      "returned_citation_ids": [],
+      "returned_chunk_ids": [],
+      "relevant_chunk_ids": [],
+      "citation_presence_correct": true,
+      "citation_reference_valid": true,
+      "invalid_reference_ids": [],
+      "relevant_citation_hit": null,
+      "all_citations_relevant": null
+    }
+  ]
+}

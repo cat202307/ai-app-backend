@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "question": "这篇论文主要研究什么？",
+    "gold_chunks": [0, 3]
+  },
+  {
+    "id": 2,
+    "question": "论文提出的框架要优化哪三个目标？",
+    "gold_chunks": [0, 3]
+  },
+  {
+    "id": 3,
+    "question": "自动化数据预处理管线包含哪些步骤？",
+    "gold_chunks": [4, 5]
+  },
+  {
+    "id": 4,
+    "question": "资源列自动推断是怎么做的？",
+    "gold_chunks": [4]
+  },
+  {
+    "id": 5,
+    "question": "特征增强生成了哪些统计衍生特征？",
+    "gold_chunks": [4, 5]
+  },
+  {
+    "id": 6,
+    "question": "异常值和缺失值是如何处理的？",
+    "gold_chunks": [5]
+  },
+  {
+    "id": 7,
+    "question": "MTL-NN模型由哪些部分组成？",
+    "gold_chunks": [6, 7]
+  },
+  {
+    "id": 8,
+    "question": "共享主干网络的结构是怎样的？",
+    "gold_chunks": [6]
+  },
+  {
+    "id": 9,
+    "question": "模型训练用的什么优化器和学习率？",
+    "gold_chunks": [8]
+  },
+  {
+    "id": 10,
+    "question": "实验数据集有多少样本，任务类型如何分布？",
+    "gold_chunks": [9]
+  },
+  {
+    "id": 11,
+    "question": "MTL-NN达到了什么性能指标？",
+    "gold_chunks": [0, 12]
+  },
+  {
+    "id": 12,
+    "question": "论文和哪些基线模型做了对比？",
+    "gold_chunks": [11, 12]
+  },
+  {
+    "id": 13,
+    "question": "论文认为当前工作有哪些局限？",
+    "gold_chunks": [10, 17]
+  },
+  {
+    "id": 14,
+    "question": "未来工作打算从哪些方向扩展？",
+    "gold_chunks": [17]
+  }
+]

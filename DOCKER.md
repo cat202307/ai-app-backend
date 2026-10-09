@@ -84,11 +84,12 @@ docker exec -it ai-app-backend bash   # 进入容器
 
 ## 注意事项
 
-1. **首次启动较慢**：第一次会下载 Embedding 模型（约 100MB），需要一些时间
-2. **内存占用**：Embedding 模型约占 500MB 内存
+1. **首次启动较慢**：第一次会下载 Embedding（bge-m3，约 2.2GB）与 Reranker（约 0.6GB）模型，合计约 3GB，耗时较长；已通过 `hf-cache` 卷缓存，之后启动不再重复下载
+2. **内存占用**：两个本地模型叠加 torch 约占 1.5–2.5GB 内存，建议服务器至少 4GB 内存
 3. **前端构建已内置**：多阶段构建会在镜像内执行 `npm run build`，无需手动构建
 4. **健康检查**：使用 Python 内置 urllib（slim 镜像不含 curl），通过 `docker ps` 可查看健康状态
 5. **GPU**：当前为 CPU 版本，如需 GPU 加速请改用 CUDA 基础镜像
+6. **国内服务器**：若 HuggingFace 模型下载缓慢或失败，在 `.env` 中加一行 `HF_ENDPOINT=https://hf-mirror.com` 后再启动
 
 ## 生产环境建议
 

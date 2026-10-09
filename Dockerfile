@@ -1,7 +1,7 @@
 # ============================================================
 # Stage 1: 构建 Vue 3 前端
 # ============================================================
-FROM node:20-slim AS frontend-builder
+FROM node:22-slim AS frontend-builder
 
 WORKDIR /fe
 
@@ -23,6 +23,7 @@ WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
+    HF_HOME=/root/.cache/huggingface \
     HF_HUB_OFFLINE=0 \
     TRANSFORMERS_OFFLINE=0
 

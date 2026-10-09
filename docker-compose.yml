@@ -1,8 +1,7 @@
-version: '3.8'
-
 services:
   ai-app:
     build: .
+    image: ai-app-backend:latest
     container_name: ai-app-backend
     ports:
       - "8000:8000"
@@ -15,6 +14,8 @@ services:
       - ./uploads:/app/uploads
       # 环境变量文件
       - ./.env:/app/.env:ro
+      # HuggingFace 模型缓存（命名卷，避免容器重建后重复下载模型）
+      - hf-cache:/root/.cache/huggingface
     environment:
       - HF_HUB_OFFLINE=0
       - TRANSFORMERS_OFFLINE=0
@@ -24,4 +25,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
+      start_period: 180s
+
+volumes:
+  hf-cache:

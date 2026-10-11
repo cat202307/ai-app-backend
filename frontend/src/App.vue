@@ -174,10 +174,25 @@ function exportChat() {
   URL.revokeObjectURL(url)
 }
 
-// 当前时间 HH:MM
+// 格式化时间：
+// 今天 → 「今天 HH:MM」；昨天 → 「昨天 HH:MM」；
+// 今年更早 → 「M月d日 HH:MM」；跨年 → 「yyyy/M/d HH:MM」
+function formatTime(d) {
+  const hhmm = d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0')
+  const now = new Date()
+  const startOfDay = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate())
+  const dayDiff = Math.round((startOfDay(now) - startOfDay(d)) / 86400000)
+  if (dayDiff === 0) return '今天 ' + hhmm
+  if (dayDiff === 1) return '昨天 ' + hhmm
+  if (d.getFullYear() === now.getFullYear()) {
+    return `${d.getMonth() + 1}月${d.getDate()}日 ` + hhmm
+  }
+  return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()} ` + hhmm
+}
+
+// 当前时间（今天 HH:MM）
 function nowTime() {
-  const d = new Date()
-  return d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0')
+  return formatTime(new Date())
 }
 
 // 调用后端流式接口，把结果实时写入指定的 AI 消息
@@ -428,7 +443,7 @@ async function loadConversation(sessionId) {
     messages.length = 0
     data.forEach(item => {
       const createdTime = new Date(item.created_at)
-      const timeStr = `${createdTime.getHours()}:${String(createdTime.getMinutes()).padStart(2, '0')}`
+      const timeStr = formatTime(createdTime)
       
       messages.push({
         role: 'user',

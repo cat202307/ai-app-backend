@@ -23,19 +23,24 @@ WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
+    TZ=Asia/Shanghai \
     HF_HOME=/root/.cache/huggingface \
     HF_HUB_OFFLINE=0 \
     TRANSFORMERS_OFFLINE=0
 
-# 编译相关系统依赖
+# 编译相关系统依赖；tzdata 用于容器内北京时间
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     g++ \
+    tzdata \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone \
     && rm -rf /var/lib/apt/lists/*
 
-# 安装 Python 依赖
+# 安装 Python 依赖（USTC 镜像加速）
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt \
+    -i https://pypi.mirrors.ustc.edu.cn/simple
 
 # 复制后端代码（.dockerignore 已排除 node_modules / dist / 数据目录）
 COPY . .

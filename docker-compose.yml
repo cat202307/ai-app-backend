@@ -14,11 +14,11 @@ services:
       - ./uploads:/app/uploads
       # 环境变量文件
       - ./.env:/app/.env:ro
-      # HuggingFace 模型缓存（命名卷，避免容器重建后重复下载模型）
-      - hf-cache:/root/.cache/huggingface
+      # 直接挂载 Windows 本地已下载的模型缓存，无需重新下载
+      - C:/Users/cat/.cache/huggingface:/root/.cache/huggingface
     environment:
-      - HF_HUB_OFFLINE=0
-      - TRANSFORMERS_OFFLINE=0
+      - HF_HUB_OFFLINE=1
+      - TRANSFORMERS_OFFLINE=1
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
@@ -27,5 +27,3 @@ services:
       retries: 3
       start_period: 180s
 
-volumes:
-  hf-cache:

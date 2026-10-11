@@ -1,3 +1,4 @@
+import os
 import re
 from typing import Any
 
@@ -272,6 +273,15 @@ _OVERVIEW_KEYWORDS = (
     "主要是什么", "主要是啥", "讲的是什么",
 )
 
+# 全局概述（跨所有文档）时，每个文档取多少个开头父块。
+# 大文档（如论文）若取 final_top_k=8 块，会在上下文中占绝对
+# 主导，LLM 容易只概述大文档、遗漏小文档；限制每文档块数可
+# 平衡上下文，配合系统 Prompt 的多文档全覆盖规则。
+# 可用环境变量 GLOBAL_OVERVIEW_OPENING_CHUNKS 调整。
+GLOBAL_OVERVIEW_OPENING_CHUNKS = int(
+    os.getenv("GLOBAL_OVERVIEW_OPENING_CHUNKS", "3")
+)
+
 
 def is_overview_question(question: str) -> bool:
     """
@@ -390,9 +400,16 @@ def retrieve_with_advanced_rag(
     # ----------------------------------------------------
 
     if force_overview or is_overview_question(question):
+        # 全局概述时每个文档只取前 N 个开头父块，避免大文档
+        # 片段垄断上下文；单文档概述仍取 final_top_k 个。
+        opening_per_file = (
+            GLOBAL_OVERVIEW_OPENING_CHUNKS
+            if file_id is None
+            else final_top_k
+        )
         opening_results = get_opening_chunks(
             file_id=file_id,
-            chunks_per_file=final_top_k,
+            chunks_per_file=opening_per_file,
         )
 
         if opening_results:

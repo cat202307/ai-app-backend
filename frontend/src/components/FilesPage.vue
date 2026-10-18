@@ -271,9 +271,9 @@ onMounted(() => {
               </div>
             </td>
             <td><span class="badge type-badge" :class="typeMeta(file.file_type).cls">{{ typeMeta(file.file_type).label }}</span></td>
-            <td class="muted">{{ formatSize(file.file_size) }}</td>
-            <td class="muted">{{ formatTime(file.created_at) }}</td>
-            <td>
+            <td class="muted col-size">{{ formatSize(file.file_size) }}</td>
+            <td class="muted col-time">{{ formatTime(file.created_at) }}</td>
+            <td class="col-actions">
               <button class="icon-btn danger" title="删除" @click="askDelete(file)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="3 6 5 6 21 6"></polyline>
@@ -366,9 +366,13 @@ onMounted(() => {
   flex-wrap: wrap;
 }
 .title-icon {
-  width: 22px;
-  height: 22px;
+  width: 34px;
+  height: 34px;
+  padding: 7px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, var(--primary-tint), var(--primary-tint-2));
   color: var(--primary);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 .header-actions {
   display: flex;
@@ -422,28 +426,30 @@ onMounted(() => {
 table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 th,
 td {
-  padding: 14px 18px;
+  padding: 13px 16px;
   text-align: left;
   border-bottom: 1px solid var(--border);
+  vertical-align: middle;
 }
 tbody tr:last-child td {
   border-bottom: none;
 }
 tbody tr {
-  transition: background 0.12s ease;
+  transition: background 0.14s ease;
 }
 tbody tr:hover {
-  background: var(--surface-2);
+  background: var(--primary-tint);
 }
 th {
   background: var(--surface-2);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   color: var(--text-3);
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 td {
@@ -451,14 +457,17 @@ td {
   color: var(--text-1);
   white-space: nowrap;
 }
-.col-file { width: 44%; }
-.col-type { width: 12%; }
-.col-size { width: 14%; }
-.col-time { width: 20%; }
-.col-actions { width: 10%; }
+.col-file { width: 42%; }
+.col-type { width: 11%; }
+.col-size { width: 13%; }
+.col-time { width: 22%; }
+.col-actions { width: 12%; text-align: center !important; }
 .muted {
   color: var(--text-2);
   font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .file-cell {
@@ -468,27 +477,28 @@ td {
   min-width: 0;
 }
 .file-ico {
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 .file-ico svg {
   width: 18px;
   height: 18px;
 }
-.file-ico.t-txt { background: #eef4ff; color: #2f6fed; }
-.file-ico.t-md  { background: #f3eaff; color: #7c3aed; }
-.file-ico.t-pdf { background: #fdecec; color: #e5484d; }
-.file-ico.t-doc { background: #e9f7f1; color: #0f9d72; }
+.file-ico.t-txt { background: linear-gradient(145deg, #eef4ff, #e2ebff); color: #2f6fed; }
+.file-ico.t-md  { background: linear-gradient(145deg, #fdf3e3, #fae6cc); color: #b45309; }
+.file-ico.t-pdf { background: linear-gradient(145deg, #fdecec, #fbdedf); color: #e5484d; }
+.file-ico.t-doc { background: linear-gradient(145deg, #e9f7f1, #dcf2e8); color: #0c9d72; }
 .file-name {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: 500;
+  font-weight: 550;
 }
 
 .type-badge {
@@ -496,9 +506,9 @@ td {
   letter-spacing: 0.4px;
 }
 .type-badge.t-txt { background: #eef4ff; color: #2f6fed; }
-.type-badge.t-md  { background: #f3eaff; color: #7c3aed; }
+.type-badge.t-md  { background: #fdf3e3; color: #b45309; }
 .type-badge.t-pdf { background: #fdecec; color: #e5484d; }
-.type-badge.t-doc { background: #e9f7f1; color: #0f9d72; }
+.type-badge.t-doc { background: #e9f7f1; color: #0c9d72; }
 
 .icon-btn {
   width: 32px;

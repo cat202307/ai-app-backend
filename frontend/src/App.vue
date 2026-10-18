@@ -876,14 +876,16 @@ async function confirmDelete() {
 
 /* 侧边栏 */
 .sidebar {
-  width: 248px;
-  background: var(--surface);
+  width: 252px;
+  background:
+    linear-gradient(180deg, #fbfcfe 0%, #ffffff 38%);
   border-right: 1px solid var(--border);
   padding: 0;
   display: flex;
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
+  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.6) inset;
 }
 
 /* 最近对话列表：占满剩余高度、独立滚动，
@@ -921,16 +923,17 @@ async function confirmDelete() {
   letter-spacing: 0.3px;
 }
 .logo-mark {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--primary), #4f8bff);
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: var(--primary-gradient);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px -4px rgba(37, 99, 235, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25),
+              0 6px 16px -5px rgba(37, 99, 235, 0.6);
 }
 .logo-text {
   white-space: nowrap;
@@ -938,24 +941,29 @@ async function confirmDelete() {
 
 .sidebar-new-btn {
   padding: 10px 16px;
-  background: var(--primary);
+  background: var(--primary-gradient);
   color: #fff;
   border: none;
   border-radius: var(--r-md);
   cursor: pointer;
-  margin: 2px 12px 14px;
+  margin: 2px 14px 16px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 550;
+  letter-spacing: 0.2px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
-  transition: background 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18),
+              0 3px 10px -3px rgba(37, 99, 235, 0.5);
+  transition: box-shadow 0.18s, filter 0.18s, transform 0.06s;
 }
 .sidebar-new-btn:hover {
-  background: var(--primary-hover);
-  box-shadow: 0 4px 12px -4px rgba(37, 99, 235, 0.5);
+  filter: brightness(1.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+              var(--shadow-primary);
 }
+.sidebar-new-btn:active { transform: translateY(1px); }
 
 .sidebar-section {
   font-size: 12px;
@@ -993,16 +1001,17 @@ async function confirmDelete() {
 }
 
 .sidebar-item {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
+  gap: 11px;
+  padding: 9px 13px;
   border-radius: var(--r-md);
   cursor: pointer;
   font-size: 14px;
   margin: 1px 12px;
   color: var(--text-2);
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.16s ease, color 0.16s ease;
 }
 
 .sidebar-item:hover {
@@ -1014,6 +1023,18 @@ async function confirmDelete() {
   background: var(--primary-tint);
   color: var(--primary);
   font-weight: 600;
+}
+/* 选中态左侧的强调条 */
+.sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 18px;
+  border-radius: 0 3px 3px 0;
+  background: var(--primary-gradient);
 }
 
 .conv-icon {
@@ -1079,8 +1100,15 @@ async function confirmDelete() {
 .chat-container {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
+  padding: 26px 20px 8px;
   min-height: 0;
+}
+
+/* 消息列居中、限制行宽，提升阅读质感 */
+.message {
+  max-width: 880px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* 回到底部按钮 */
@@ -1088,29 +1116,28 @@ async function confirmDelete() {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 92px;
-  width: 38px;
-  height: 38px;
+  bottom: 96px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: #fff;
-  border: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
   cursor: pointer;
   font-size: 17px;
-  color: #666;
+  color: var(--text-2);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
-  opacity: 0.92;
   transition: all 0.2s;
 }
 
 .scroll-down-btn:hover {
-  background: #f5f5f5;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  color: var(--primary);
+  border-color: var(--primary-tint-2);
+  box-shadow: var(--shadow-card-hover);
   transform: translateX(-50%) translateY(-2px);
-  opacity: 1;
 }
 
 /* 消息样式 */
@@ -1132,26 +1159,32 @@ async function confirmDelete() {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12.5px;
+  font-weight: 650;
+  letter-spacing: 0.3px;
   flex-shrink: 0;
-  background: #2a3346;
   color: #fff;
+  background: linear-gradient(145deg, #38415c 0%, #20293c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12),
+              var(--shadow-sm);
 }
 
 .message.user .avatar {
-  background: var(--primary);
+  background: var(--primary-gradient);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+              0 3px 10px -3px rgba(37, 99, 235, 0.5);
 }
 
 .bubble {
   max-width: 75%;
   padding: 14px 18px;
-  border-radius: 16px;
-  line-height: 1.7;
-  font-size: 14px;
+  border-radius: 18px;
+  border-top-left-radius: 7px;
+  line-height: 1.75;
+  font-size: 14.5px;
   background: var(--surface);
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-sm);
   text-align: left;
 }
 
@@ -1216,25 +1249,30 @@ async function confirmDelete() {
 }
 
 .message.user .bubble {
-  background: var(--primary);
+  background: var(--primary-gradient);
   color: #fff;
   border-color: transparent;
-  border-top-right-radius: 6px;
+  border-radius: 18px;
+  border-top-right-radius: 7px;
+  border-top-left-radius: 18px;
   max-width: 70%;
   flex-shrink: 1;
   word-break: break-word;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16),
+              0 4px 14px -5px rgba(37, 99, 235, 0.55);
 }
 .tool-tag {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 4px 10px;
-  background: var(--primary-tint);
+  padding: 4px 11px;
+  background: linear-gradient(135deg, var(--primary-tint), var(--primary-tint-2));
   color: var(--primary);
-  border-radius: 12px;
+  border: 1px solid var(--primary-tint-2);
+  border-radius: 999px;
   font-size: 12px;
-  font-weight: 500;
-  margin-bottom: 8px;
+  font-weight: 550;
+  margin-bottom: 9px;
 }
 
 .loading-dots { display: flex; gap: 5px; padding: 4px 0; }
@@ -1249,11 +1287,11 @@ async function confirmDelete() {
   40% { transform: translateY(-5px); opacity: 1; }
 }
 .chat-meta {
-  margin-top: 10px;
-  padding-top: 8px;
-  border-top: 1px solid #f0f0f0;
+  margin-top: 12px;
+  padding-top: 9px;
+  border-top: 1px solid var(--border);
   font-size: 12px;
-  color: #999;
+  color: var(--text-3);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -1331,39 +1369,46 @@ async function confirmDelete() {
 }
 
 .quick-btn {
-  padding: 7px 14px;
-  border: 1px solid var(--border-strong);
+  padding: 8px 15px;
+  border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text-2);
   border-radius: 999px;
   cursor: pointer;
   font-size: 13px;
-  margin: 4px 4px 0 0;
-  transition: all 0.15s;
+  font-weight: 500;
+  box-shadow: var(--shadow-xs);
+  margin: 4px 6px 0 0;
+  transition: all 0.16s;
 }
 .quick-btn:hover {
   border-color: var(--primary);
   color: var(--primary);
   background: var(--primary-tint);
+  box-shadow: 0 4px 12px -6px rgba(37, 99, 235, 0.5);
+  transform: translateY(-1px);
 }
 
-/* 输入区 */
+/* 输入区：底部向上淡出，与消息列同宽居中 */
 .input-area {
-  padding: 16px 20px;
-  background: var(--bg);
+  padding: 10px 20px 22px;
+  background: linear-gradient(to top,
+    var(--bg) 58%,
+    rgba(245, 247, 251, 0));
 }
-
 .input-box {
+  max-width: 880px;
+  margin: 0 auto;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 12px 16px;
-  box-shadow: var(--shadow-sm);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: var(--shadow-md);
+  transition: border-color 0.18s, box-shadow 0.18s;
 }
 .input-box:focus-within {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: var(--ring), var(--shadow-md);
 }
 
 .input-top {
@@ -1441,7 +1486,7 @@ async function confirmDelete() {
 .send-btn {
   width: 36px;
   height: 36px;
-  background: var(--primary);
+  background: var(--primary-gradient);
   color: #fff;
   border: none;
   border-radius: 50%;
@@ -1452,15 +1497,19 @@ async function confirmDelete() {
   justify-content: center;
   flex-shrink: 0;
   margin-top: 4px;
-  transition: background 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+              0 3px 10px -3px rgba(37, 99, 235, 0.55);
+  transition: box-shadow 0.18s, filter 0.18s, transform 0.06s;
 }
 .send-btn:hover {
-  background: var(--primary-hover);
-  box-shadow: 0 4px 12px -4px rgba(37, 99, 235, 0.6);
+  filter: brightness(1.06);
+  box-shadow: var(--shadow-primary);
 }
+.send-btn:active { transform: translateY(1px); }
 
 .send-btn.loading {
-  background: var(--danger);
+  background: linear-gradient(135deg, #f0565a, #d6383d);
+  box-shadow: 0 3px 10px -3px rgba(229, 72, 77, 0.55);
 }
 
 .status-bar {
@@ -1494,9 +1543,14 @@ async function confirmDelete() {
 .citation-item {
   background: var(--surface-2);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  padding: 9px 11px;
   margin-bottom: 6px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.citation-item:hover {
+  border-color: var(--primary-tint-2);
+  background: var(--primary-tint);
 }
 .citation-head {
   display: flex;

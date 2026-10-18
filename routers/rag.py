@@ -1,4 +1,5 @@
 import json
+import time
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
@@ -382,6 +383,10 @@ def get_rag_logs(
             "answer": item.answer,
             "best_distance": item.best_distance,
             "max_distance": item.max_distance,
+            "best_rerank_score": item.best_rerank_score,
+            "query_count": item.query_count,
+            "retrieval_latency_ms": item.retrieval_latency_ms,
+            "retrieval_mode": item.retrieval_mode,
             "retrieval_status": item.retrieval_status,
             "created_at": item.created_at
         })
@@ -420,7 +425,9 @@ def get_rag_log_stats(db: Session = Depends(get_db)):
                 "not_matched_count": 0,
                 "matched_rate": 0,
                 "not_matched_rate": 0,
-                "avg_best_distance": None
+                "avg_best_distance": None,
+                "avg_best_rerank_score": None,
+                "avg_latency_ms": None,
             }
         }
 
@@ -428,6 +435,10 @@ def get_rag_log_stats(db: Session = Depends(get_db)):
     not_matched_count = 0
     distance_sum = 0
     distance_count = 0
+    rerank_sum = 0.0
+    rerank_count = 0
+    latency_sum = 0
+    latency_count = 0
 
     for item in records:
         if item.retrieval_status == "matched":
@@ -440,6 +451,14 @@ def get_rag_log_stats(db: Session = Depends(get_db)):
             distance_sum += item.best_distance
             distance_count += 1
 
+        if item.best_rerank_score is not None:
+            rerank_sum += item.best_rerank_score
+            rerank_count += 1
+
+        if item.retrieval_latency_ms is not None:
+            latency_sum += item.retrieval_latency_ms
+            latency_count += 1
+
     matched_rate = matched_count / total_count
     not_matched_rate = not_matched_count / total_count
 
@@ -447,6 +466,17 @@ def get_rag_log_stats(db: Session = Depends(get_db)):
 
     if distance_count > 0:
         avg_best_distance = distance_sum / distance_count
+
+    avg_best_rerank_score = (
+        round(rerank_sum / rerank_count, 2)
+        if rerank_count > 0
+        else None
+    )
+    avg_latency_ms = (
+        round(latency_sum / latency_count)
+        if latency_count > 0
+        else None
+    )
 
     return {
         "code": 200,
@@ -457,7 +487,9 @@ def get_rag_log_stats(db: Session = Depends(get_db)):
             "not_matched_count": not_matched_count,
             "matched_rate": matched_rate,
             "not_matched_rate": not_matched_rate,
-            "avg_best_distance": avg_best_distance
+            "avg_best_distance": avg_best_distance,
+            "avg_best_rerank_score": avg_best_rerank_score,
+            "avg_latency_ms": avg_latency_ms,
         }
     }
 
@@ -683,8 +715,10 @@ def advanced_rag_ask(
         )
 
     # ============================================================
-    # 2. Advanced RAG
+    # 2. Advanced RAG（含 Hybrid + Rerank + 阈值 + 引用 + 生成）
     # ============================================================
+
+    retrieval_started = time.perf_counter()
 
     result = (
         answer_with_advanced_rag(
@@ -693,6 +727,46 @@ def advanced_rag_ask(
             filename=uploaded_file.filename,
         )
     )
+
+    retrieval_latency_ms = int(
+        (time.perf_counter() - retrieval_started) * 1000
+    )
+
+    # 统一记录一次生产检索日志（rerank 分 / 命中状态 /
+    # 查询数 / 耗时），作为阈值与检索参数迭代依据。
+    reranked_items = result.get("reranked_results", []) or []
+    rerank_scores = [
+        item.get("rerank_score")
+        for item in reranked_items
+        if item.get("rerank_score") is not None
+    ]
+    queries = result.get("queries", []) or []
+
+    rag_log = RagQueryLog(
+        file_id=uploaded_file.id,
+        filename=uploaded_file.filename,
+        question=req.question,
+        answer=result.get("answer", ""),
+        retrieval_status=result.get(
+            "retrieval_status", "unknown"
+        ),
+        best_rerank_score=result.get("best_rerank_score"),
+        rerank_scores_json=json.dumps(
+            rerank_scores, ensure_ascii=False
+        ),
+        query_count=len(queries),
+        retrieval_latency_ms=retrieval_latency_ms,
+        retrieval_mode=result.get(
+            "retrieval_mode", "advanced_rag"
+        ),
+    )
+
+    try:
+        db.add(rag_log)
+        db.commit()
+    except Exception:
+        # 日志写入失败不影响问答主流程
+        db.rollback()
 
     # ============================================================
     # 3. 返回
@@ -741,6 +815,10 @@ def advanced_rag_ask(
                         "best_rerank_score"
                     ]
                 ),
+
+                "query_count": len(queries),
+
+                "latency_ms": retrieval_latency_ms,
             },
 
             "citations": (

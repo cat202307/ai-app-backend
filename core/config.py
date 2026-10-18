@@ -101,6 +101,26 @@ class Settings:
         )
     )
 
+    # 全局检索（跨多文档）命中改写门控时，保证的改写数量。
+    # 生产与评测共用，作为唯一事实来源，避免参数漂移。
+    rag_global_rewrite_count: int = int(
+        os.getenv("RAG_GLOBAL_REWRITE_COUNT", "2")
+    )
+
+    # ---- Hybrid + Rerank 检索管线统一参数（生产 / 评测共用）----
+    # 每个 Query 在每个 Retriever（向量 / 关键词）上各召回多少。
+    rag_per_retriever_top_k: int = int(
+        os.getenv("RAG_PER_RETRIEVER_TOP_K", "5")
+    )
+    # RRF 融合后保留多少候选送进 Rerank。
+    rag_fusion_top_k: int = int(
+        os.getenv("RAG_FUSION_TOP_K", "6")
+    )
+    # Rerank 后最终保留多少片段进上下文。
+    rag_final_top_k: int = int(
+        os.getenv("RAG_FINAL_TOP_K", "8")
+    )
+
     # 父子块切分参数（Parent-Child / Small-to-Big）。
     # 子块按段落边界切、主题聚焦，负责精准检索；
     # 父块由若干子块聚合，命中后提供完整上下文。
@@ -159,6 +179,38 @@ class Settings:
             "AGENT_TOOL_RESULT_MAX_CHARS",
             "6000",
         )
+    )
+
+    # ============================================================
+    # 进程内缓存配置（LRU + TTL）
+    # ============================================================
+
+    # Embedding 向量缓存：容量上限与过期秒数（0=不过期）。
+    # 防止随语料/查询增多内存只增不减。
+    embedding_cache_maxsize: int = int(
+        os.getenv("EMBEDDING_CACHE_MAXSIZE", "4096")
+    )
+    embedding_cache_ttl: int = int(
+        os.getenv("EMBEDDING_CACHE_TTL", "3600")
+    )
+
+    # 查询改写（LLM Rewrite）结果缓存：相同问题不重复调 LLM。
+    rewrite_cache_maxsize: int = int(
+        os.getenv("REWRITE_CACHE_MAXSIZE", "512")
+    )
+    rewrite_cache_ttl: int = int(
+        os.getenv("REWRITE_CACHE_TTL", "86400")
+    )
+
+    # ============================================================
+    # 数据库配置
+    # ============================================================
+
+    # SQLAlchemy 数据库连接地址。
+    # 默认单机 SQLite；生产可通过环境变量切换到 Postgres 等。
+    database_url: str = os.getenv(
+        "DATABASE_URL",
+        "sqlite:///./ai_app.db",
     )
 
     # ============================================================

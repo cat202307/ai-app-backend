@@ -7,12 +7,23 @@ import jieba
 from rank_bm25 import BM25Okapi
 from sentence_transformers import SentenceTransformer
 
+from core.cache import TTLCache
+from core.config import settings
+from core.metrics import metrics
+
 
 # ============================================================
 # 缓存
 # ============================================================
 
-_embedding_cache: dict[str, list[float]] = {}
+# Embedding 向量缓存：带 LRU 容量上限和 TTL 过期，
+# 避免文档/查询累积时内存无限增长。
+_embedding_cache = TTLCache(
+    maxsize=settings.embedding_cache_maxsize,
+    ttl=settings.embedding_cache_ttl or None,
+    name="embedding",
+)
+metrics.register_cache("embedding", _embedding_cache)
 
 # BM25 关键词索引缓存：
 # 语料（全部 chunk）只在「建索引 / 删除文件」时发生变化。
@@ -28,8 +39,9 @@ _bm25_state: dict[str, Any] = {
 
 
 def get_embedding(text: str) -> list[float]:
-    if text in _embedding_cache:
-        return _embedding_cache[text]
+    cached = _embedding_cache.get(text)
+    if cached is not None:
+        return cached
     embedding = embedding_model.encode(text).tolist()
     _embedding_cache[text] = embedding
     return embedding

@@ -6,6 +6,8 @@ from typing import Any
 import numpy as np
 from sentence_transformers import CrossEncoder
 
+from core.cache import TTLCache
+from core.config import settings
 from core.metrics import metrics
 from services.llm_service import call_llm
 
@@ -70,8 +72,14 @@ _REWRITE_COMPARISON_PATTERN = re.compile(
     r"区别|差别|差异|对比|相比|比较|不同|异同|哪个好"
 )
 
-# 改写结果缓存：key = 归一化原问题，value = queries
-_rewrite_cache: dict[str, list[str]] = {}
+# 改写结果缓存：key = 归一化原问题，value = queries。
+# 带 LRU 上限和 TTL，避免不同问题无限堆积。
+_rewrite_cache = TTLCache(
+    maxsize=settings.rewrite_cache_maxsize,
+    ttl=settings.rewrite_cache_ttl or None,
+    name="rewrite",
+)
+metrics.register_cache("rewrite", _rewrite_cache)
 
 
 def _should_skip_rewrite(question: str) -> bool:

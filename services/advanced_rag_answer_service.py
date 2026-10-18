@@ -1,9 +1,58 @@
+import functools
 import os
 import re
+import time
 from typing import Any
 
 from core.config import settings
 from core.metrics import metrics
+
+
+def _record_retrieval_run(mode: str):
+    """
+    装饰器：统一记录一次生产检索运行的命中状态、查询数、
+    耗时与 top1 rerank 分，避免在每个 return 处散落埋点。
+
+    被装饰函数返回的结果字典里通常包含：
+    retrieval_status / best_rerank_score / queries /
+    reranked_results / retrieval_mode。
+    """
+
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            started = time.perf_counter()
+            result = func(*args, **kwargs)
+            try:
+                if isinstance(result, dict):
+                    reranked = result.get("reranked_results") or []
+                    best_score = result.get("best_rerank_score")
+                    if best_score is None and reranked:
+                        best_score = reranked[0].get(
+                            "rerank_score"
+                        )
+                    queries = result.get("queries") or []
+                    metrics.record_retrieval_run(
+                        mode=result.get("retrieval_mode", mode),
+                        status=result.get(
+                            "retrieval_status", "unknown"
+                        ),
+                        query_count=len(queries),
+                        result_count=len(reranked),
+                        best_rerank_score=best_score,
+                        latency_ms=(
+                            time.perf_counter() - started
+                        )
+                        * 1000.0,
+                    )
+            except Exception:
+                # 指标埋点失败不影响主流程
+                pass
+            return result
+
+        return wrapper
+
+    return decorator
 
 from services.advanced_rag_service import (
     hybrid_rerank_retrieve,
@@ -30,14 +79,15 @@ from services.prompt_service import (
 )
 
 
+@_record_retrieval_run(mode="advanced_rag")
 def answer_with_advanced_rag(
     question: str,
     file_id: int | None = None,
     filename: str | None = None,
     rewrite_count: int = 0,
-    per_retriever_top_k: int = 5,
-    fusion_top_k: int = 6,
-    final_top_k: int = 8,
+    per_retriever_top_k: int | None = None,
+    fusion_top_k: int | None = None,
+    final_top_k: int | None = None,
 ) -> dict[str, Any]:
     """
     完整 Advanced RAG 问答流程。
@@ -77,6 +127,24 @@ def answer_with_advanced_rag(
         LLM Answer
         最终回答
     """
+
+    # 检索参数统一来自配置（生产/评测共用同一画像），
+    # 显式传入时以传入值为准。
+    per_retriever_top_k = (
+        per_retriever_top_k
+        if per_retriever_top_k is not None
+        else settings.rag_per_retriever_top_k
+    )
+    fusion_top_k = (
+        fusion_top_k
+        if fusion_top_k is not None
+        else settings.rag_fusion_top_k
+    )
+    final_top_k = (
+        final_top_k
+        if final_top_k is not None
+        else settings.rag_final_top_k
+    )
 
     # ============================================================
     # 1. Hybrid + Rerank
@@ -369,14 +437,15 @@ def promote_children_to_parents(
     return parent_results
 
 
+@_record_retrieval_run(mode="agent_retrieval")
 def retrieve_with_advanced_rag(
     question: str,
     file_id: int | None = None,
     filename: str | None = None,
     rewrite_count: int = 0,
-    per_retriever_top_k: int = 5,
-    fusion_top_k: int = 6,
-    final_top_k: int = 8,
+    per_retriever_top_k: int | None = None,
+    fusion_top_k: int | None = None,
+    final_top_k: int | None = None,
     force_overview: bool = False,
 ) -> dict[str, Any]:
     """
@@ -393,6 +462,24 @@ def retrieve_with_advanced_rag(
             retrieval_status="not_matched"，citations=[]、
             best_rerank_score、rerank_threshold、message
     """
+
+    # 检索参数统一来自配置（生产/评测共用同一画像），
+    # 显式传入时以传入值为准。
+    per_retriever_top_k = (
+        per_retriever_top_k
+        if per_retriever_top_k is not None
+        else settings.rag_per_retriever_top_k
+    )
+    fusion_top_k = (
+        fusion_top_k
+        if fusion_top_k is not None
+        else settings.rag_fusion_top_k
+    )
+    final_top_k = (
+        final_top_k
+        if final_top_k is not None
+        else settings.rag_final_top_k
+    )
 
     # ----------------------------------------------------
     # 概述类问题：直接取文档开头 Chunk（摘要 / 引言），
@@ -443,7 +530,10 @@ def retrieve_with_advanced_rag(
     # 明确问题的 LLM 开销。
     # ----------------------------------------------------
     if file_id is None and not _should_skip_rewrite(question):
-        rewrite_count = max(rewrite_count, 2)
+        rewrite_count = max(
+            rewrite_count,
+            settings.rag_global_rewrite_count,
+        )
 
     retrieval_result = hybrid_rerank_retrieve(
         question=question,

@@ -87,3 +87,65 @@ class TestSummaryShape:
         assert metrics is not None
         summary = metrics.get_summary()
         assert "llm_usage" in summary
+
+
+class TestRetrievalRuns:
+    """生产检索运行记录（命中状态 / 查询数 / 耗时 / rerank 分）。"""
+
+    def test_match_rate_and_aggregates(self):
+        mc = MetricsCollector()
+        mc.record_retrieval_run(
+            status="matched",
+            query_count=3,
+            result_count=8,
+            best_rerank_score=70.0,
+            latency_ms=100.0,
+        )
+        mc.record_retrieval_run(
+            status="not_matched",
+            query_count=1,
+            result_count=8,
+            best_rerank_score=45.0,
+            latency_ms=300.0,
+        )
+        mc.record_retrieval_run(
+            status="matched",
+            query_count=3,
+            result_count=6,
+            best_rerank_score=65.0,
+            latency_ms=200.0,
+        )
+
+        summary = mc.get_summary()["retrieval"]
+        assert summary["runs"] == 3
+        assert summary["matched"] == 2
+        assert summary["not_matched"] == 1
+        assert summary["match_rate"] == round(2 / 3, 4)
+        assert summary["avg_query_count"] == round(7 / 3, 2)
+        assert summary["avg_latency_ms"] == 200.0
+        assert summary["max_latency_ms"] == 300.0
+        assert summary["rerank_score_min"] == 45.0
+        assert summary["rerank_score_max"] == 70.0
+        assert summary["rerank_score_avg"] == 60.0
+
+    def test_empty_retrieval_summary(self):
+        mc = MetricsCollector()
+        summary = mc.get_summary()["retrieval"]
+        assert summary["runs"] == 0
+        assert summary["match_rate"] == 0.0
+        assert summary["rerank_score_min"] is None
+        assert summary["recent_runs"] == []
+
+
+class TestCacheRegistration:
+    def test_registered_caches_in_summary(self):
+        from core.cache import TTLCache
+
+        mc = MetricsCollector()
+        c = TTLCache(maxsize=4)
+        c["k"] = "v"
+        mc.register_cache("demo", c)
+        caches = mc.get_summary()["caches"]
+        assert "demo" in caches
+        assert caches["demo"]["size"] == 1
+        assert caches["demo"]["maxsize"] == 4

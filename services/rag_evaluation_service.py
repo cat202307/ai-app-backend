@@ -177,12 +177,16 @@ def evaluate_case(
     # 1. 跑 Hybrid + Rerank
     # ============================================================
 
+    # 召回侧参数（改写数 / 每路召回 / RRF 融合）与生产共用同一份
+    # 配置，保证评测结论反映生产行为；final_top_k 固定为评测指标
+    # 截断（Hit@3 / Recall@3 / MRR@3），它是生产 final_top_k 的
+    # 子集，相当于更严格的口径。
     result = hybrid_rerank_retrieve(
         question=question,
         file_id=file_id,
-        rewrite_count=2,
-        per_retriever_top_k=5,
-        fusion_top_k=10,
+        rewrite_count=settings.rag_global_rewrite_count,
+        per_retriever_top_k=settings.rag_per_retriever_top_k,
+        fusion_top_k=settings.rag_fusion_top_k,
         final_top_k=3,
     )
 
@@ -539,18 +543,14 @@ def run_retrieval_variant(
 
     if variant == "hybrid_rerank":
 
+        # 旗舰管线：召回侧参数与生产共用同一份配置，
+        # 只把最终截断换成评测的 top_k（指标口径）。
         result = hybrid_rerank_retrieve(
             question=question,
             file_id=file_id,
-            rewrite_count=2,
-
-            # Retriever 多召回一点
-            per_retriever_top_k=5,
-
-            # RRF 保留更多候选
-            fusion_top_k=10,
-
-            # Rerank 最终 Top K
+            rewrite_count=settings.rag_global_rewrite_count,
+            per_retriever_top_k=settings.rag_per_retriever_top_k,
+            fusion_top_k=settings.rag_fusion_top_k,
             final_top_k=top_k,
         )
 

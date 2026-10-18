@@ -19,7 +19,7 @@ from core.config import settings
 from core.exceptions import AppError
 from core.logging_config import setup_logging, get_logger
 from core.metrics import metrics
-from database import Base, engine
+from database import init_db
 from routers import chat, history, rag, upload, agent
 
 
@@ -30,23 +30,19 @@ logger = get_logger(__name__)
 logger.info("Starting AI App Backend...")
 
 
-# 创建当前项目中尚不存在的数据库表
-#
-# 注意：
-# create_all() 只能创建新表，
-# 不能自动修改已有表的字段。
-Base.metadata.create_all(bind=engine)
-logger.info("Database tables initialized")
-
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
     启动 / 关闭生命周期管理。
 
-    启动时预热本地 Embedding / Cross-Encoder，
+    启动时先执行 Alembic 迁移（生产 schema 演进入口），
+    再预热本地 Embedding / Cross-Encoder，
     把第一次推理的冷启动开销移到启动阶段。
     """
+    # 应用启动时统一执行数据库迁移；新库建表、老库增量升级
+    init_db()
+    logger.info("Database schema up to date")
+
     try:
         from services.vector_service import embedding_model
         from services.advanced_rag_service import reranker_model

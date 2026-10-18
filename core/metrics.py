@@ -45,8 +45,41 @@ class MetricsCollector:
         self.llm_completion_tokens: int = 0
         self.llm_estimated_cost: float = 0.0
 
+        # ---- Advanced RAG 检索运行 ----
+        # 命中 / 未命中计数、查询数、耗时、rerank 分聚合，
+        # 用于阈值与检索参数的迭代。
+        self._retrieval_runs: int = 0
+        self._retrieval_matched: int = 0
+        self._retrieval_not_matched: int = 0
+        self._retrieval_query_count: int = 0
+        self._retrieval_latency_total_ms: float = 0.0
+        self._retrieval_latency_max_ms: float = 0.0
+        # 每次 top1 rerank 分（用于观察分数分布与阈值余量），
+        # 有界保留，避免内存只增不减。
+        self._rerank_scores: list[float] = []
+        self._recent_retrieval_runs: list[dict] = []
+        self._recent_runs_limit = 100
+
         # 启动时间
         self.start_time: float = time.time()
+
+        # 已注册的进程内缓存（name -> 缓存对象，提供 stats()）
+        self._caches: dict = {}
+
+    # --------------------------------------------------------
+    # 缓存
+    # --------------------------------------------------------
+
+    def register_cache(self, name: str, cache) -> None:
+        """注册一个本地缓存，供 /metrics 汇总命中率与淘汰量。"""
+        self._caches[name] = cache
+
+    def cache_stats(self) -> dict:
+        """返回所有已注册缓存的统计。"""
+        return {
+            name: (c.stats() if hasattr(c, "stats") else {})
+            for name, c in self._caches.items()
+        }
 
     # --------------------------------------------------------
     # HTTP
@@ -108,6 +141,65 @@ class MetricsCollector:
                 time.perf_counter() - started
             ) * 1000.0
             self.record_retrieval_stage(stage, elapsed_ms)
+
+    # --------------------------------------------------------
+    # Advanced RAG 检索运行
+    # --------------------------------------------------------
+
+    def record_retrieval_run(
+        self,
+        *,
+        status: str,
+        query_count: int = 0,
+        result_count: int = 0,
+        best_rerank_score: float | None = None,
+        latency_ms: float = 0.0,
+        mode: str = "advanced_rag",
+    ) -> None:
+        """
+        记录一次生产检索运行的结果，供阈值迭代：
+        - status：matched / not_matched / overview_opening ...
+        - query_count：实际使用的查询数（含改写）
+        - result_count：最终保留片段数
+        - best_rerank_score：top1 rerank 分
+        - latency_ms：端到端检索耗时
+        """
+        with self._lock:
+            self._retrieval_runs += 1
+            if status == "matched":
+                self._retrieval_matched += 1
+            else:
+                self._retrieval_not_matched += 1
+
+            self._retrieval_query_count += int(query_count or 0)
+            self._retrieval_latency_total_ms += latency_ms
+            if latency_ms > self._retrieval_latency_max_ms:
+                self._retrieval_latency_max_ms = latency_ms
+
+            if best_rerank_score is not None:
+                self._rerank_scores.append(
+                    float(best_rerank_score)
+                )
+                if len(self._rerank_scores) > 1000:
+                    self._rerank_scores = self._rerank_scores[-1000:]
+
+            self._recent_retrieval_runs.append({
+                "mode": mode,
+                "status": status,
+                "query_count": int(query_count or 0),
+                "result_count": int(result_count or 0),
+                "best_rerank_score": best_rerank_score,
+                "latency_ms": round(latency_ms, 2),
+                "ts": round(time.time(), 1),
+            })
+            if len(self._recent_retrieval_runs) > (
+                self._recent_runs_limit
+            ):
+                self._recent_retrieval_runs = (
+                    self._recent_retrieval_runs[
+                        -self._recent_runs_limit:
+                    ]
+                )
 
     # --------------------------------------------------------
     # LLM 用量
@@ -206,6 +298,38 @@ class MetricsCollector:
                 + self.llm_completion_tokens
             )
 
+            # 检索运行汇总
+            runs = self._retrieval_runs
+            scores = list(self._rerank_scores)
+            scores_sorted = sorted(scores)
+            retrieval_summary = {
+                "runs": runs,
+                "matched": self._retrieval_matched,
+                "not_matched": self._retrieval_not_matched,
+                "match_rate": round(
+                    self._retrieval_matched / runs, 4
+                ) if runs else 0.0,
+                "avg_query_count": round(
+                    self._retrieval_query_count / runs, 2
+                ) if runs else 0.0,
+                "avg_latency_ms": round(
+                    self._retrieval_latency_total_ms / runs, 2
+                ) if runs else 0.0,
+                "max_latency_ms": round(
+                    self._retrieval_latency_max_ms, 2
+                ),
+                "rerank_score_min": round(
+                    scores_sorted[0], 2
+                ) if scores_sorted else None,
+                "rerank_score_avg": round(
+                    sum(scores) / len(scores), 2
+                ) if scores else None,
+                "rerank_score_max": round(
+                    scores_sorted[-1], 2
+                ) if scores_sorted else None,
+                "recent_runs": list(self._recent_retrieval_runs[-10:]),
+            }
+
             return {
                 "uptime_seconds": round(uptime_seconds, 1),
                 "total_requests": self.total_requests,
@@ -227,6 +351,8 @@ class MetricsCollector:
                         self.llm_estimated_cost, 6
                     ),
                 },
+                "retrieval": retrieval_summary,
+                "caches": self.cache_stats(),
             }
 
 

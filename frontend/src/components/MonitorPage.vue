@@ -1,18 +1,19 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { apiFetch } from '../api.js'
 
-// 状态
 const metrics = ref({})
 const isLoading = ref(false)
+const lastUpdated = ref('')
+const autoRefresh = ref(true)
 let timer = null
 
-// 加载系统指标
 async function loadMetrics() {
   isLoading.value = true
   try {
-    const response = await fetch('/metrics')
-    const result = await response.json()
+    const result = await apiFetch('/metrics')
     metrics.value = result.data || {}
+    lastUpdated.value = new Date().toLocaleTimeString('zh-CN', { hour12: false })
   } catch (error) {
     console.error('加载指标失败：', error)
   } finally {
@@ -20,25 +21,50 @@ async function loadMetrics() {
   }
 }
 
-// 格式化运行时间
+function refresh() {
+  loadMetrics()
+}
+
+function toggleAuto() {
+  autoRefresh.value = !autoRefresh.value
+  if (autoRefresh.value) {
+    timer = setInterval(loadMetrics, 10000)
+  } else if (timer) {
+    clearInterval(timer)
+    timer = null
+  }
+}
+
 function formatUptime(seconds) {
   if (!seconds) return '-'
-  const hours = Math.floor(seconds / 3600)
+  const days = Math.floor(seconds / 86400)
+  const hours = Math.floor((seconds % 86400) / 3600)
   const minutes = Math.floor((seconds % 3600) / 60)
   const secs = Math.floor(seconds % 60)
+  if (days > 0) return `${days}天 ${hours}小时`
   if (hours > 0) return `${hours}小时 ${minutes}分`
   if (minutes > 0) return `${minutes}分 ${secs}秒`
   return `${secs}秒`
 }
 
-// 刷新
-function refresh() {
-  loadMetrics()
+function num(v) {
+  return (v || 0).toLocaleString('en-US')
+}
+
+function successRate() {
+  const m = metrics.value
+  if (!m.total_requests) return '0.0'
+  return ((m.success_requests / m.total_requests) * 100).toFixed(1)
+}
+
+function cost(c) {
+  const v = Number(c || 0)
+  if (v === 0) return '¥0.00'
+  return '¥' + v.toFixed(4)
 }
 
 onMounted(() => {
   loadMetrics()
-  // 每 10 秒自动刷新
   timer = setInterval(loadMetrics, 10000)
 })
 
@@ -49,192 +75,325 @@ onUnmounted(() => {
 
 <template>
   <div class="monitor-page">
-    <div class="page-header">
-      <h2>📊 系统监控</h2>
-      <button class="refresh-btn" @click="refresh()">🔄 刷新</button>
+    <header class="page-header">
+      <div class="page-title">
+        <svg class="title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 3v18h18"></path>
+          <path d="M7 14l4-4 4 4 5-6"></path>
+        </svg>
+        系统监控
+        <span class="page-sub" v-if="lastUpdated">更新于 {{ lastUpdated }}</span>
+      </div>
+      <div class="header-actions">
+        <button
+          class="btn"
+          :class="autoRefresh ? 'btn-primary' : 'btn-ghost'"
+          @click="toggleAuto"
+        >
+          <span class="dot" :class="{ on: autoRefresh }"></span>
+          {{ autoRefresh ? '自动刷新中' : '已暂停' }}
+        </button>
+        <button class="btn btn-ghost" @click="refresh" :disabled="isLoading">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" :class="{ spin: isLoading }">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+          </svg>
+          刷新
+        </button>
+      </div>
+    </header>
+
+    <div v-if="isLoading && !metrics.uptime_seconds" class="state-card">
+      <div class="spinner"></div>
+      <div class="state-text">加载中…</div>
     </div>
 
-    <div v-if="isLoading && !metrics.uptime_seconds" class="loading">加载中...</div>
+    <div v-else>
+      <!-- 顶部 KPI -->
+      <div class="kpi-grid">
+        <div class="card kpi">
+          <div class="kpi-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"></circle>
+              <polyline points="12 7 12 12 15 14"></polyline>
+            </svg>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-label">运行时间</div>
+            <div class="kpi-value">{{ formatUptime(metrics.uptime_seconds) }}</div>
+          </div>
+        </div>
 
-    <div v-else class="metrics-grid">
-      <!-- 系统信息 -->
-      <div class="metric-card">
-        <h3>系统信息</h3>
-        <div class="metric-item">
-          <span class="label">运行时间</span>
-          <span class="value">{{ formatUptime(metrics.uptime_seconds) }}</span>
+        <div class="card kpi">
+          <div class="kpi-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+            </svg>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-label">总请求数</div>
+            <div class="kpi-value">{{ num(metrics.total_requests) }}</div>
+          </div>
         </div>
-        <div class="metric-item">
-          <span class="label">总请求数</span>
-          <span class="value">{{ metrics.total_requests || 0 }}</span>
+
+        <div class="card kpi">
+          <div class="kpi-icon ok">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-label">成功率</div>
+            <div class="kpi-value">{{ successRate() }}%</div>
+            <div class="kpi-foot">
+              <span class="ok">{{ num(metrics.success_requests) }} 成功</span>
+              <span class="err" v-if="metrics.error_requests">· {{ num(metrics.error_requests) }} 失败</span>
+            </div>
+          </div>
         </div>
-        <div class="metric-item">
-          <span class="label">每秒请求数</span>
-          <span class="value">{{ metrics.avg_request_per_second || 0 }}</span>
+
+        <div class="card kpi">
+          <div class="kpi-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2L3 14h7l-1 8 10-12h-7z"></path>
+            </svg>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-label">每秒请求数</div>
+            <div class="kpi-value">{{ metrics.avg_request_per_second || 0 }}</div>
+          </div>
         </div>
       </div>
 
-      <!-- 请求统计 -->
-      <div class="metric-card">
-        <h3>请求统计</h3>
-        <div class="metric-item">
-          <span class="label">成功请求</span>
-          <span class="value success">{{ metrics.success_requests || 0 }}</span>
+      <!-- LLM 用量 -->
+      <div class="card section">
+        <div class="section-head">
+          <h3>LLM 用量</h3>
+          <span class="badge badge-neutral">自服务启动累计</span>
         </div>
-        <div class="metric-item">
-          <span class="label">失败请求</span>
-          <span class="value error">{{ metrics.error_requests || 0 }}</span>
-        </div>
-        <div class="metric-item">
-          <span class="label">成功率</span>
-          <span class="value">
-            {{ metrics.total_requests ? ((metrics.success_requests / metrics.total_requests) * 100).toFixed(1) : 0 }}%
-          </span>
+        <div class="llm-grid">
+          <div class="llm-item">
+            <div class="llm-label">调用次数</div>
+            <div class="llm-value">{{ num(metrics.llm_usage && metrics.llm_usage.calls) }}</div>
+          </div>
+          <div class="llm-item">
+            <div class="llm-label">Prompt Tokens</div>
+            <div class="llm-value">{{ num(metrics.llm_usage && metrics.llm_usage.prompt_tokens) }}</div>
+          </div>
+          <div class="llm-item">
+            <div class="llm-label">Completion Tokens</div>
+            <div class="llm-value">{{ num(metrics.llm_usage && metrics.llm_usage.completion_tokens) }}</div>
+          </div>
+          <div class="llm-item">
+            <div class="llm-label">总 Tokens</div>
+            <div class="llm-value">{{ num(metrics.llm_usage && metrics.llm_usage.total_tokens) }}</div>
+          </div>
+          <div class="llm-item highlight">
+            <div class="llm-label">估算成本</div>
+            <div class="llm-value cost">{{ cost(metrics.llm_usage && metrics.llm_usage.estimated_cost) }}</div>
+          </div>
         </div>
       </div>
 
-      <!-- 最慢接口 Top 5 -->
-      <div class="metric-card full-width">
-        <h3>🐢 最慢接口 Top 5</h3>
-        <table v-if="metrics.top_slow_paths && metrics.top_slow_paths.length > 0">
-          <thead>
-            <tr>
-              <th>路径</th>
-              <th>调用次数</th>
-              <th>平均耗时</th>
-              <th>最大耗时</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(path, index) in metrics.top_slow_paths.slice(0, 5)" :key="index">
-              <td>{{ path.path }}</td>
-              <td>{{ path.count }}</td>
-              <td>{{ path.avg_ms }} ms</td>
-              <td>{{ path.max_ms }} ms</td>
-            </tr>
-          </tbody>
-        </table>
-        <p v-else class="empty-hint">暂无数据</p>
-      </div>
-    </div>
+      <div class="two-col">
+        <!-- 检索阶段耗时 -->
+        <div class="card section">
+          <div class="section-head"><h3>检索阶段耗时</h3></div>
+          <table v-if="metrics.retrieval_stages && metrics.retrieval_stages.length">
+            <thead>
+              <tr><th>阶段</th><th>次数</th><th>平均</th><th>最大</th></tr>
+            </thead>
+            <tbody>
+              <tr v-for="(s, i) in metrics.retrieval_stages" :key="i">
+                <td>{{ s.stage }}</td>
+                <td class="num">{{ s.count }}</td>
+                <td class="num">{{ s.avg_ms }} ms</td>
+                <td class="num">{{ s.max_ms }} ms</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else class="empty-hint">暂无检索数据</div>
+        </div>
 
-    <div class="auto-refresh-hint">
-      💡 每 10 秒自动刷新一次
+        <!-- 最慢接口 -->
+        <div class="card section">
+          <div class="section-head"><h3>最慢接口 Top 5</h3></div>
+          <table v-if="metrics.top_slow_paths && metrics.top_slow_paths.length">
+            <thead>
+              <tr><th>路径</th><th>调用</th><th>平均</th><th>最大</th></tr>
+            </thead>
+            <tbody>
+              <tr v-for="(p, i) in metrics.top_slow_paths.slice(0, 5)" :key="i">
+                <td class="path" :title="p.path">{{ p.path }}</td>
+                <td class="num">{{ p.count }}</td>
+                <td class="num">{{ p.avg_ms }} ms</td>
+                <td class="num">{{ p.max_ms }} ms</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else class="empty-hint">暂无数据</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .monitor-page {
-  padding: 20px;
+  padding: 26px 30px;
   height: 100%;
   overflow-y: auto;
+  animation: fadeIn 0.2s ease;
 }
-
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
+  gap: 16px;
+  flex-wrap: wrap;
 }
-
-.page-header h2 {
-  font-size: 20px;
-  font-weight: 600;
+.title-icon { width: 22px; height: 22px; color: var(--primary); }
+.header-actions { display: flex; gap: 10px; }
+.dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--text-3); display: inline-block;
 }
+.dot.on { background: #34d399; box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.18); }
 
-.refresh-btn {
-  padding: 10px 16px;
-  background: #f5f5f5;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.loading {
+.state-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 70px 20px;
   text-align: center;
-  padding: 60px;
-  color: #999;
-}
-
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
-.metric-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-}
-
-.metric-card.full-width {
-  grid-column: span 2;
-}
-
-.metric-card h3 {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.metric-item {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.spinner {
+  width: 28px; height: 28px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 12px;
+}
+.state-text { color: var(--text-3); font-size: 13px; }
+
+/* KPI */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.kpi {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+}
+.kpi-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: var(--primary-tint);
+  color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.kpi-icon svg { width: 22px; height: 22px; }
+.kpi-icon.ok { background: rgba(15, 157, 114, 0.12); color: var(--success); }
+.kpi-label { font-size: 12.5px; color: var(--text-2); margin-bottom: 3px; }
+.kpi-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+.kpi-foot { font-size: 12px; margin-top: 3px; color: var(--text-3); }
+.kpi-foot .ok { color: var(--success); }
+.kpi-foot .err { color: var(--danger); }
+
+/* 区块 */
+.section { padding: 20px 22px; margin-bottom: 18px; }
+.section-head {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding: 8px 0;
-  font-size: 14px;
+  margin-bottom: 16px;
+}
+.section-head h3 {
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--text-1);
+}
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
-.metric-item .label {
-  color: #666;
+/* LLM */
+.llm-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
 }
-
-.metric-item .value {
-  font-weight: 500;
-  color: #333;
+.llm-item {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
 }
-
-.metric-item .value.success {
-  color: #10b981;
+.llm-item.highlight {
+  background: var(--primary-tint);
+  border-color: var(--primary-tint-2);
 }
-
-.metric-item .value.error {
-  color: #ff4d4f;
+.llm-label { font-size: 12px; color: var(--text-2); margin-bottom: 6px; }
+.llm-value {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-1);
+  font-variant-numeric: tabular-nums;
 }
+.llm-value.cost { color: var(--primary); }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
+/* 表格 */
+table { width: 100%; border-collapse: collapse; }
 th, td {
   padding: 10px 12px;
   text-align: left;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--border);
   font-size: 13px;
 }
-
+tbody tr:last-child td { border-bottom: none; }
 th {
-  background: #fafafa;
-  font-weight: 600;
-  color: #666;
-}
-
-.empty-hint {
-  text-align: center;
-  color: #999;
-  padding: 20px;
-}
-
-.auto-refresh-hint {
-  margin-top: 20px;
-  text-align: center;
   font-size: 12px;
-  color: #999;
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+td { color: var(--text-1); }
+td.num { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-2); }
+th.num { text-align: right; }
+td.path {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-2);
+}
+.empty-hint { text-align: center; color: var(--text-3); padding: 24px; font-size: 13px; }
+
+@media (max-width: 1100px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .llm-grid { grid-template-columns: repeat(2, 1fr); }
+  .llm-item.highlight { grid-column: span 2; }
+  .two-col { grid-template-columns: 1fr; }
 }
 </style>

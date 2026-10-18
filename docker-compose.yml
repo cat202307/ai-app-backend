@@ -4,7 +4,8 @@ services:
     image: ai-app-backend:latest
     container_name: ai-app-backend
     ports:
-      - "8000:8000"
+      # 宿主机 8001 -> 容器内 8000（本机 8000 被 multi-agent-platform 容器占用）
+      - "8001:8000"
     volumes:
       # 持久化 SQLite 数据库
       - ./ai_app.db:/app/ai_app.db

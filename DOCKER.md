@@ -1,7 +1,11 @@
 # Docker 部署指南
 
 本项目采用 **多阶段构建**：镜像内自动完成 Vue 3 前端构建并整合进 FastAPI，
-最终只需 **一个容器、一个端口（8000）** 即可访问完整应用，无需在宿主机安装 Node.js。
+最终只需 **一个容器、一个端口** 即可访问完整应用，无需在宿主机安装 Node.js。
+
+> 容器内部监听 **8000**；`docker-compose.yml` 把宿主机映射到 **8001**
+> （本机 8000 被 multi-agent-platform 项目的容器占用）。若 8000 空闲，
+> 把 compose 里的 `8001:8000` 改回 `8000:8000` 即可。
 
 ## 前置要求
 
@@ -60,10 +64,10 @@ docker-compose logs -f
 
 ### 5. 访问服务（单端口）
 
-- **应用首页（Vue SPA）**：http://localhost:8000/
-- **Swagger 文档**：http://localhost:8000/docs
-- **ReDoc 文档**：http://localhost:8000/redoc
-- **健康检查**：http://localhost:8000/health
+- **应用首页（Vue SPA）**：http://localhost:8001/
+- **Swagger 文档**：http://localhost:8001/docs
+- **ReDoc 文档**：http://localhost:8001/redoc
+- **健康检查**：http://localhost:8001/health
 
 ## 数据持久化
 

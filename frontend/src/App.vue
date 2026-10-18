@@ -525,13 +525,53 @@ async function confirmDelete() {
   <div class="app">
     <!-- 左侧边栏 -->
     <aside class="sidebar">
-      <div class="sidebar-logo">🤖 AI 知识库</div>
-      <button class="sidebar-new-btn" @click="clearChat()">+ 新对话</button>
-      
-      <div class="sidebar-item" :class="{ active: activePage === 'chat' }" @click="switchPage('chat')">💬 对话</div>
-      <div class="sidebar-item" :class="{ active: activePage === 'files' }" @click="switchPage('files')">📁 文件管理</div>
-      <div class="sidebar-item" :class="{ active: activePage === 'monitor' }" @click="switchPage('monitor')">📊 系统监控</div>
-      <div class="sidebar-item" @click="exportChat()">📥 导出对话</div>
+      <div class="sidebar-logo">
+        <span class="logo-mark">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a4 4 0 0 1 4 4c1.7 0 3 1.3 3 3s-1.3 3-3 3H8c-1.7 0-3-1.3-3-3s1.3-3 3-3a4 4 0 0 1 4-4z"/>
+            <path d="M9 15v3a3 3 0 0 0 6 0v-3"/>
+            <circle cx="10" cy="8" r="0.6" fill="currentColor"/>
+            <circle cx="14" cy="8" r="0.6" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="logo-text">AI 知识库</span>
+      </div>
+
+      <button class="sidebar-new-btn" @click="clearChat()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        新对话
+      </button>
+
+      <div class="sidebar-item" :class="{ active: activePage === 'chat' }" @click="switchPage('chat')">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        对话
+      </div>
+      <div class="sidebar-item" :class="{ active: activePage === 'files' }" @click="switchPage('files')">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+        </svg>
+        文件管理
+      </div>
+      <div class="sidebar-item" :class="{ active: activePage === 'monitor' }" @click="switchPage('monitor')">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 3v18h18"></path>
+          <path d="M7 14l4-4 4 4 5-6"></path>
+        </svg>
+        系统监控
+      </div>
+      <div class="sidebar-item" @click="exportChat()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        导出对话
+      </div>
 
       <div class="sidebar-section collapsible" @click="historyCollapsed = !historyCollapsed">
         <span>最近</span>
@@ -547,8 +587,16 @@ async function confirmDelete() {
           :class="{ active: currentSessionId === conv.session_id }"
           @click="loadConversation(conv.session_id)"
         >
-          <span class="conv-title">💬 {{ conv.title }}</span>
-          <button class="conv-delete" title="删除对话" @click.stop="deleteConversation(conv.session_id)">×</button>
+          <svg class="conv-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span class="conv-title">{{ conv.title }}</span>
+          <button class="conv-delete" title="删除对话" @click.stop="deleteConversation(conv.session_id)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
       </div>
     </aside>
@@ -564,8 +612,8 @@ async function confirmDelete() {
             <div class="bubble">
               请问有什么可以帮您？
               <br><br>
-              <button @click="quickAsk('系统里有哪些文件？')" class="quick-btn">📋 列出所有文件</button>
-              <button @click="quickAsk('test02.txt 的主要内容是什么？')" class="quick-btn">📖 查看文档内容</button>
+              <button @click="quickAsk('系统里有哪些文件？')" class="quick-btn">列出所有文件</button>
+              <button @click="quickAsk('test02.txt 的主要内容是什么？')" class="quick-btn">查看文档内容</button>
             </div>
           </div>
 
@@ -575,15 +623,20 @@ async function confirmDelete() {
             
             <!-- AI 消息：内容 + 操作栏都在气泡里 -->
             <div v-if="msg.role === 'assistant'" class="bubble">
-              <div v-if="msg.toolName" class="tool-tag">🔧 {{ msg.toolName }}</div>
+              <div v-if="msg.toolName" class="tool-tag">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                </svg>
+                {{ msg.toolName }}
+              </div>
               <div v-if="!msg.html" class="loading-dots"><span></span><span></span><span></span></div>
               <div v-html="msg.html" v-else></div>
               <div v-if="msg.citations && msg.citations.length" class="citations">
-                <div class="citations-title">📚 参考来源 · {{ msg.citations.length }}</div>
+                <div class="citations-title">参考来源 · {{ msg.citations.length }}</div>
                 <div v-for="cit in msg.citations" :key="cit.citation_id" class="citation-item">
                   <div class="citation-head">
                     <span class="citation-num">[{{ cit.citation_id }}]</span>
-                    <span class="citation-file">📄 {{ cit.filename }}<template v-if="cit.chunk_id !== null && cit.chunk_id !== undefined"> · 块 {{ cit.chunk_id }}</template></span>
+                    <span class="citation-file">{{ cit.filename }}<template v-if="cit.chunk_id !== null && cit.chunk_id !== undefined"> · 块 {{ cit.chunk_id }}</template></span>
                   </div>
                   <div class="citation-text">{{ cit.content }}</div>
                 </div>
@@ -735,10 +788,10 @@ async function confirmDelete() {
 .confirm-dialog {
   width: 360px;
   max-width: calc(100vw - 40px);
-  background: #ffffff;
-  border-radius: 14px;
+  background: var(--surface);
+  border-radius: 16px;
   padding: 28px 26px 22px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--shadow-md);
   text-align: center;
   animation: confirmPop 0.18s ease;
 }
@@ -748,7 +801,8 @@ async function confirmDelete() {
   height: 52px;
   margin: 0 auto 14px;
   border-radius: 50%;
-  background: #fdecec;
+  background: var(--danger-tint);
+  color: var(--danger);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -756,14 +810,14 @@ async function confirmDelete() {
 
 .confirm-title {
   font-size: 17px;
-  font-weight: 600;
-  color: #1f2329;
+  font-weight: 650;
+  color: var(--text-1);
   margin-bottom: 8px;
 }
 
 .confirm-text {
   font-size: 14px;
-  color: #8a8f99;
+  color: var(--text-2);
   line-height: 1.6;
   margin-bottom: 22px;
 }
@@ -779,17 +833,17 @@ async function confirmDelete() {
   border-radius: 10px;
   font-size: 14px;
   cursor: pointer;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border);
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .confirm-btn.cancel {
-  background: #ffffff;
-  color: #4e5969;
+  background: var(--surface);
+  color: var(--text-2);
 }
 
 .confirm-btn.cancel:hover {
-  background: #f5f6f7;
+  background: var(--surface-2);
 }
 
 .confirm-btn.danger {
@@ -812,16 +866,7 @@ async function confirmDelete() {
   from { opacity: 0; transform: scale(0.94); }
   to { opacity: 1; transform: scale(1); }
 }
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background: #f5f5f5;
-}
+/* 全局重置与设计令牌见 src/style.css */
 
 .app {
   display: flex;
@@ -831,10 +876,10 @@ body {
 
 /* 侧边栏 */
 .sidebar {
-  width: 240px;
-  background: #fff;
-  border-right: 1px solid #e0e0e0;
-  padding: 16px;
+  width: 248px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 0;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -866,28 +911,59 @@ body {
 }
 
 .sidebar-logo {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 12px 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-1);
+  letter-spacing: 0.3px;
+}
+.logo-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), #4f8bff);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px -4px rgba(37, 99, 235, 0.55);
+}
+.logo-text {
+  white-space: nowrap;
 }
 
 .sidebar-new-btn {
   padding: 10px 16px;
-  background: #409eff;
+  background: var(--primary);
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--r-md);
   cursor: pointer;
-  margin-bottom: 20px;
+  margin: 2px 12px 14px;
   font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.sidebar-new-btn:hover {
+  background: var(--primary-hover);
+  box-shadow: 0 4px 12px -4px rgba(37, 99, 235, 0.5);
 }
 
 .sidebar-section {
   font-size: 12px;
-  color: #999;
-  margin: 12px 0 8px;
-  padding: 0 8px;
+  color: var(--text-3);
+  margin: 12px 12px 8px;
+  padding: 0 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 /* 可折叠的“最近对话”标题 */
@@ -899,38 +975,50 @@ body {
   user-select: none;
 }
 .sidebar-section.collapsible:hover {
-  color: #666;
+  color: var(--text-2);
 }
 .collapse-arrow {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #b0b0b0;
+  color: var(--text-3);
   line-height: 1;
   transition: transform 0.2s ease;
 }
 .sidebar-section.collapsible:hover .collapse-arrow {
-  color: #888;
+  color: var(--text-2);
 }
 .collapse-arrow.collapsed {
   transform: rotate(-90deg);
 }
 
 .sidebar-item {
-  padding: 10px 12px;
-  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--r-md);
   cursor: pointer;
   font-size: 14px;
-  margin-bottom: 4px;
+  margin: 1px 12px;
+  color: var(--text-2);
+  transition: background 0.15s, color 0.15s;
 }
 
 .sidebar-item:hover {
-  background: #f5f5f5;
+  background: var(--surface-2);
+  color: var(--text-1);
 }
 
 .sidebar-item.active {
-  background: #ecf5ff;
-  color: #409eff;
+  background: var(--primary-tint);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.conv-icon {
+  flex-shrink: 0;
+  opacity: 0.65;
 }
 
 /* 对话列表项 */
@@ -938,6 +1026,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 6px;
   padding-right: 8px;
 }
 
@@ -1046,12 +1135,12 @@ body {
   font-size: 13px;
   font-weight: 600;
   flex-shrink: 0;
-  background: #10b981;
+  background: #2a3346;
   color: #fff;
 }
 
 .message.user .avatar {
-  background: #409eff;
+  background: var(--primary);
 }
 
 .bubble {
@@ -1060,8 +1149,9 @@ body {
   border-radius: 16px;
   line-height: 1.7;
   font-size: 14px;
-  background: #fff;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
   text-align: left;
 }
 
@@ -1090,14 +1180,15 @@ body {
   margin: 4px 0;
 }
 .bubble code {
-  background: #f5f5f5;
+  background: var(--surface-2);
   padding: 2px 6px;
   border-radius: 4px;
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 0.9em;
 }
 .bubble pre {
-  background: #f5f5f5;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
   padding: 12px;
   border-radius: 8px;
   overflow-x: auto;
@@ -1113,29 +1204,36 @@ body {
   margin: 8px 0;
 }
 .bubble th, .bubble td {
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border);
   padding: 8px;
   text-align: left;
+}
+.bubble th {
+  background: var(--surface-2);
 }
 .bubble strong {
   font-weight: 600;
 }
 
 .message.user .bubble {
-  background: #f0f0f0;
-  color: #333;
+  background: var(--primary);
+  color: #fff;
+  border-color: transparent;
   border-top-right-radius: 6px;
   max-width: 70%;
   flex-shrink: 1;
   word-break: break-word;
 }
 .tool-tag {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   padding: 4px 10px;
-  background: #f0f5ff;
-  color: #409eff;
+  background: var(--primary-tint);
+  color: var(--primary);
   border-radius: 12px;
   font-size: 12px;
+  font-weight: 500;
   margin-bottom: 8px;
 }
 
@@ -1233,26 +1331,39 @@ body {
 }
 
 .quick-btn {
-  padding: 6px 12px;
-  border: 1px solid #e0e0e0;
-  background: #fff;
-  border-radius: 6px;
+  padding: 7px 14px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-2);
+  border-radius: 999px;
   cursor: pointer;
   font-size: 13px;
-  margin: 4px;
+  margin: 4px 4px 0 0;
+  transition: all 0.15s;
+}
+.quick-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-tint);
 }
 
 /* 输入区 */
 .input-area {
   padding: 16px 20px;
-  background: #f5f5f5;
+  background: var(--bg);
 }
 
 .input-box {
-  background: #fff;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 12px 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.input-box:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .input-top {
@@ -1264,8 +1375,9 @@ body {
 .plus-btn {
   width: 32px;
   height: 32px;
-  border: 1px solid #e0e0e0;
-  background: #fff;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-2);
   border-radius: 50%;
   cursor: pointer;
   font-size: 18px;
@@ -1274,6 +1386,11 @@ body {
   justify-content: center;
   flex-shrink: 0;
   margin-top: 4px;
+  transition: all 0.15s;
+}
+.plus-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 .input-top textarea {
@@ -1303,10 +1420,11 @@ body {
 
 .tag {
   padding: 4px 10px;
-  background: #f5f5f5;
-  border-radius: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
   font-size: 12px;
-  color: #666;
+  color: var(--text-2);
 }
 
 .input-right-bar {
@@ -1323,7 +1441,7 @@ body {
 .send-btn {
   width: 36px;
   height: 36px;
-  background: #409eff;
+  background: var(--primary);
   color: #fff;
   border: none;
   border-radius: 50%;
@@ -1334,17 +1452,23 @@ body {
   justify-content: center;
   flex-shrink: 0;
   margin-top: 4px;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.send-btn:hover {
+  background: var(--primary-hover);
+  box-shadow: 0 4px 12px -4px rgba(37, 99, 235, 0.6);
 }
 
 .send-btn.loading {
-  background: #ff4d4f;
+  background: var(--danger);
 }
 
 .status-bar {
   padding: 8px 20px;
   font-size: 12px;
-  color: #999;
-  background: #fff;
+  color: var(--text-3);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
 }
 
 /* Toast 动画 */
@@ -1359,17 +1483,17 @@ body {
 .citations {
   margin-top: 12px;
   padding-top: 10px;
-  border-top: 1px dashed #e5e7eb;
+  border-top: 1px dashed var(--border-strong);
 }
 .citations-title {
   font-size: 12px;
-  color: #8a8f99;
+  color: var(--text-3);
   margin-bottom: 8px;
-  font-weight: 500;
+  font-weight: 600;
 }
 .citation-item {
-  background: #f8f9fb;
-  border: 1px solid #eef0f3;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 10px;
   margin-bottom: 6px;
@@ -1382,15 +1506,15 @@ body {
   margin-bottom: 4px;
 }
 .citation-num {
-  color: #3b82f6;
+  color: var(--primary);
   font-weight: 600;
 }
 .citation-file {
-  color: #8a8f99;
+  color: var(--text-2);
 }
 .citation-text {
   font-size: 12.5px;
-  color: #6b7280;
+  color: var(--text-2);
   line-height: 1.6;
   display: -webkit-box;
   -webkit-line-clamp: 3;

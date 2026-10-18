@@ -63,6 +63,38 @@ function cost(c) {
   return '¥' + v.toFixed(4)
 }
 
+// ---- 检索质量 ----
+function retrieval() {
+  return metrics.value.retrieval || {}
+}
+function matchPct() {
+  const r = retrieval()
+  return ((r.match_rate || 0) * 100).toFixed(1)
+}
+function modeLabel(m) {
+  return ({
+    advanced_rag: '高级问答',
+    agent_retrieval: 'Agent 检索',
+    overview_opening: '概述取文',
+  })[m] || m || '-'
+}
+function recentRuns() {
+  return (retrieval().recent_runs || []).slice().reverse()
+}
+
+// ---- 缓存 ----
+function cachesList() {
+  const c = metrics.value.caches || {}
+  return Object.keys(c).map((k) => ({ name: k, ...c[k] }))
+}
+function cacheLabel(name) {
+  return ({ embedding: '向量 Embedding', rewrite: '查询改写' })[name] || name
+}
+function cacheHitRate(c) {
+  const total = (c.hits || 0) + (c.misses || 0)
+  return total ? ((c.hits / total) * 100).toFixed(1) : '0.0'
+}
+
 onMounted(() => {
   loadMetrics()
   timer = setInterval(loadMetrics, 10000)
@@ -191,6 +223,99 @@ onUnmounted(() => {
           <div class="llm-item highlight">
             <div class="llm-label">估算成本</div>
             <div class="llm-value cost">{{ cost(metrics.llm_usage && metrics.llm_usage.estimated_cost) }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 检索质量（Advanced RAG） -->
+      <div class="card section">
+        <div class="section-head">
+          <h3>检索质量</h3>
+          <span class="badge badge-neutral">Advanced RAG · 自启动累计</span>
+        </div>
+        <div class="ret-grid">
+          <div class="ret-item">
+            <div class="llm-label">检索次数</div>
+            <div class="llm-value">{{ num(retrieval().runs) }}</div>
+          </div>
+          <div class="ret-item highlight">
+            <div class="llm-label">命中率</div>
+            <div class="llm-value">{{ matchPct() }}%</div>
+          </div>
+          <div class="ret-item">
+            <div class="llm-label">命中 / 未命中</div>
+            <div class="llm-value dual">
+              <span class="ok">{{ num(retrieval().matched) }}</span>
+              <span class="sep">/</span>
+              <span class="err">{{ num(retrieval().not_matched) }}</span>
+            </div>
+          </div>
+          <div class="ret-item">
+            <div class="llm-label">平均查询数</div>
+            <div class="llm-value">{{ retrieval().avg_query_count || 0 }}</div>
+          </div>
+          <div class="ret-item">
+            <div class="llm-label">平均耗时</div>
+            <div class="llm-value">{{ retrieval().avg_latency_ms || 0 }} <small>ms</small></div>
+          </div>
+          <div class="ret-item">
+            <div class="llm-label">最大耗时</div>
+            <div class="llm-value">{{ retrieval().max_latency_ms || 0 }} <small>ms</small></div>
+          </div>
+          <div class="ret-item">
+            <div class="llm-label">top1 相关分（最小/平均/最大）</div>
+            <div class="llm-value score-line">
+              <span>{{ retrieval().rerank_score_min ?? '—' }}</span>
+              <span class="sep">/</span>
+              <span>{{ retrieval().rerank_score_avg ?? '—' }}</span>
+              <span class="sep">/</span>
+              <span>{{ retrieval().rerank_score_max ?? '—' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <table v-if="recentRuns().length" class="recent-table">
+          <thead>
+            <tr><th>模式</th><th>状态</th><th class="num">查询数</th><th class="num">片段</th><th class="num">top1 分</th><th class="num">耗时</th></tr>
+          </thead>
+          <tbody>
+            <tr v-for="(r, i) in recentRuns().slice(0, 6)" :key="i">
+              <td>{{ modeLabel(r.mode) }}</td>
+              <td>
+                <span class="pill" :class="r.status === 'matched' ? 'pill-ok' : 'pill-warn'">
+                  {{ r.status === 'matched' ? '命中' : '未命中' }}
+                </span>
+              </td>
+              <td class="num">{{ r.query_count }}</td>
+              <td class="num">{{ r.result_count }}</td>
+              <td class="num">{{ r.best_rerank_score ?? '—' }}</td>
+              <td class="num">{{ Math.round(r.latency_ms) }} ms</td>
+            </tr>
+          </tbody>
+        </table>
+        <div v-else class="empty-hint">暂无检索数据</div>
+      </div>
+
+      <!-- 缓存命中 -->
+      <div class="card section">
+        <div class="section-head">
+          <h3>缓存命中</h3>
+          <span class="badge badge-neutral">LRU + TTL · 有界</span>
+        </div>
+        <div class="cache-grid">
+          <div class="cache-item" v-for="c in cachesList()" :key="c.name">
+            <div class="cache-top">
+              <span class="cache-name">{{ cacheLabel(c.name) }}</span>
+              <span class="cache-rate">{{ cacheHitRate(c) }}%</span>
+            </div>
+            <div class="cache-bar">
+              <div class="cache-bar-fill" :style="{ width: cacheHitRate(c) + '%' }"></div>
+            </div>
+            <div class="cache-meta">
+              <span>命中 {{ num(c.hits) }} · 未命中 {{ num(c.misses) }}</span>
+              <span>淘汰 {{ num(c.evictions) }} · 过期 {{ num(c.expired) }}</span>
+              <span>占用 {{ c.size }}/{{ c.maxsize }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -360,6 +485,91 @@ onUnmounted(() => {
 }
 .llm-value.cost { color: var(--primary); }
 
+/* 检索质量 */
+.ret-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.ret-item {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+}
+.ret-item.highlight {
+  background: var(--primary-tint);
+  border-color: var(--primary-tint-2);
+}
+.ret-item .llm-value { font-size: 18px; }
+.ret-item .llm-value small { font-size: 12px; font-weight: 500; color: var(--text-3); }
+.llm-value.dual .ok { color: var(--success); }
+.llm-value.dual .err { color: var(--danger); }
+.llm-value.dual .sep,
+.score-line .sep { color: var(--text-3); margin: 0 2px; }
+.score-line { font-size: 16px; }
+
+.recent-table { margin-top: 4px; }
+.pill {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.pill-ok { background: rgba(15, 157, 114, 0.12); color: var(--success); }
+.pill-warn { background: rgba(229, 72, 77, 0.1); color: var(--danger); }
+
+/* 缓存 */
+.cache-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.cache-item {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 16px 18px;
+}
+.cache-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+.cache-name { font-size: 13.5px; font-weight: 600; color: var(--text-1); }
+.cache-rate {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+}
+.cache-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.cache-bar-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+  min-width: 2px;
+}
+.cache-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
 /* 表格 */
 table { width: 100%; border-collapse: collapse; }
 th, td {
@@ -394,6 +604,9 @@ td.path {
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
   .llm-grid { grid-template-columns: repeat(2, 1fr); }
   .llm-item.highlight { grid-column: span 2; }
+  .ret-grid { grid-template-columns: repeat(2, 1fr); }
+  .ret-item.highlight { grid-column: span 2; }
+  .cache-grid { grid-template-columns: 1fr; }
   .two-col { grid-template-columns: 1fr; }
 }
 </style>

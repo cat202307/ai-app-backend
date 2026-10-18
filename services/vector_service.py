@@ -143,10 +143,10 @@ def build_vector_index(
         # 子块唯一 ID
         ids.append(child["child_id"])
 
-        # 子块文本转向量（子块主题聚焦，向量更精准）
-        embeddings.append(
-            embedding_model.encode(content).tolist()
-        )
+        # 子块文本转向量（子块主题聚焦，向量更精准）。
+        # 走 get_embedding 复用带 TTL 的 LRU 缓存，
+        # 重建索引 / 重复子块时避免重复向量化。
+        embeddings.append(get_embedding(content))
 
         documents.append(content)
 
@@ -325,9 +325,9 @@ def search_similar_chunks(
     # 1. 把用户问题转换成 Embedding
     # ============================================================
 
-    query_embedding = embedding_model.encode(
-        question
-    ).tolist()
+    # 走带 TTL 的 LRU 缓存：相同问题 / 改写后的重复子查询
+    # 不再重复调用 embedding 模型。
+    query_embedding = get_embedding(question)
 
     # ============================================================
     # 2. 在 ChromaDB 中进行向量检索

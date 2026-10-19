@@ -606,14 +606,32 @@ async function confirmDelete() {
       <!-- 聊天页面 -->
       <div v-if="activePage === 'chat'" class="chat-page" style="position: relative;">
         <div class="chat-container" :class="{ 'show-scrollbar': showScrollbar }" ref="chatContainer" @scroll="handleScroll">
-          <!-- 欢迎消息 -->
-          <div v-if="messages.length === 0" class="message assistant">
-            <div class="avatar">AI</div>
-            <div class="bubble">
-              请问有什么可以帮您？
-              <br><br>
-              <button @click="quickAsk('系统里有哪些文件？')" class="quick-btn">列出所有文件</button>
-              <button @click="quickAsk('test02.txt 的主要内容是什么？')" class="quick-btn">查看文档内容</button>
+          <!-- 欢迎主视觉 -->
+          <div v-if="messages.length === 0" class="welcome-hero">
+            <div class="welcome-orb">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a4 4 0 0 1 4 4c1.7 0 3 1.3 3 3s-1.3 3-3 3H8c-1.7 0-3-1.3-3-3s1.3-3 3-3a4 4 0 0 1 4-4z"/>
+                <path d="M9 15v3a3 3 0 0 0 6 0v-3"/>
+                <circle cx="10" cy="8" r="0.6" fill="currentColor"/>
+                <circle cx="14" cy="8" r="0.6" fill="currentColor"/>
+              </svg>
+            </div>
+            <h2 class="welcome-title">你好，我是你的 AI 知识库助手</h2>
+            <p class="welcome-sub">文档已就绪，可直接提问，或试试下面的问题</p>
+            <div class="welcome-suggestions">
+              <button @click="quickAsk('系统里有哪些文件？')" class="quick-btn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                列出所有文件
+              </button>
+              <button @click="quickAsk('test02.txt 的主要内容是什么？')" class="quick-btn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                查看文档内容
+              </button>
             </div>
           </div>
 
@@ -878,14 +896,16 @@ async function confirmDelete() {
 .sidebar {
   width: 252px;
   background:
-    linear-gradient(180deg, #ffffff 0%, #f4f9fc 58%);
+    radial-gradient(130% 220px at 50% 100%, rgba(34, 211, 238, 0.18), transparent 72%),
+    linear-gradient(180deg, #ffffff 0%, #f6fafc 54%, #ecf7fa 100%);
   border-right: 1px solid var(--border);
   padding: 0;
   display: flex;
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.8) inset;
+  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.8) inset,
+              12px 0 34px -26px rgba(14, 140, 190, 0.4);
 }
 
 /* 最近对话列表：占满剩余高度、独立滚动，
@@ -923,20 +943,25 @@ async function confirmDelete() {
   letter-spacing: 0.3px;
 }
 .logo-mark {
-  width: 36px;
-  height: 36px;
-  border-radius: 11px;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
   background: var(--primary-gradient);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25),
-              0 6px 16px -5px rgba(37, 99, 235, 0.6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35),
+              inset 0 -3px 8px rgba(2, 120, 170, 0.30),
+              0 8px 18px -6px rgba(8, 160, 210, 0.65);
 }
 .logo-text {
   white-space: nowrap;
+  background: linear-gradient(118deg, #0e7490 0%, #0891b2 55%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .sidebar-new-btn {
@@ -954,13 +979,14 @@ async function confirmDelete() {
   align-items: center;
   justify-content: center;
   gap: 7px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18),
-              0 3px 10px -3px rgba(37, 99, 235, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
+              inset 0 -2px 6px rgba(2, 120, 170, 0.22),
+              0 6px 16px -6px rgba(8, 160, 210, 0.55);
   transition: box-shadow 0.18s, filter 0.18s, transform 0.06s;
 }
 .sidebar-new-btn:hover {
-  filter: brightness(1.05);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+  filter: brightness(1.04);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32),
               var(--shadow-primary);
 }
 .sidebar-new-btn:active { transform: translateY(1px); }
@@ -1020,21 +1046,16 @@ async function confirmDelete() {
 }
 
 .sidebar-item.active {
-  background: var(--primary-tint);
-  color: var(--primary);
-  font-weight: 600;
-}
-/* 选中态左侧的强调条 */
-.sidebar-item.active::before {
-  content: '';
-  position: absolute;
-  left: -12px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 18px;
-  border-radius: 0 3px 3px 0;
   background: var(--primary-gradient);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
+              inset 0 -2px 6px rgba(2, 120, 170, 0.20),
+              0 8px 18px -8px rgba(8, 160, 210, 0.65);
+}
+/* 填充胶囊选中态：不再需要外部强调条 */
+.sidebar-item.active::before {
+  content: none;
 }
 
 .conv-icon {
@@ -1140,6 +1161,74 @@ async function confirmDelete() {
   transform: translateX(-50%) translateY(-2px);
 }
 
+/* 欢迎主视觉 */
+.welcome-hero {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 11vh 24px 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: heroIn 0.45s ease both;
+}
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.welcome-orb {
+  width: 76px;
+  height: 76px;
+  border-radius: 24px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-gradient);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.36),
+              inset 0 -6px 14px rgba(2, 120, 170, 0.28),
+              0 18px 40px -12px rgba(8, 160, 210, 0.6);
+  margin-bottom: 24px;
+  position: relative;
+}
+.welcome-orb::after {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border-radius: 32px;
+  background: radial-gradient(60% 60% at 50% 50%, rgba(34, 211, 238, 0.30), transparent 70%);
+  z-index: -1;
+}
+.welcome-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  margin-bottom: 10px;
+  background: linear-gradient(118deg, #155e75 0%, #0891b2 60%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.welcome-sub {
+  font-size: 14.5px;
+  color: var(--text-2);
+  margin-bottom: 28px;
+}
+.welcome-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.welcome-suggestions .quick-btn {
+  padding: 11px 19px;
+  font-size: 13.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
 /* 消息样式 */
 .message {
   display: flex;
@@ -1171,8 +1260,8 @@ async function confirmDelete() {
 
 .message.user .avatar {
   background: var(--primary-gradient);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22),
-              0 3px 10px -3px rgba(37, 99, 235, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
+              0 4px 12px -4px rgba(8, 160, 210, 0.55);
 }
 
 .bubble {
@@ -1182,9 +1271,10 @@ async function confirmDelete() {
   border-top-left-radius: 7px;
   line-height: 1.75;
   font-size: 14.5px;
-  background: var(--surface);
+  background: linear-gradient(180deg, #ffffff 0%, #f4fcfd 100%);
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-sm),
+              inset 0 1px 0 rgba(255, 255, 255, 0.9);
   text-align: left;
 }
 
@@ -1258,8 +1348,9 @@ async function confirmDelete() {
   max-width: 70%;
   flex-shrink: 1;
   word-break: break-word;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16),
-              0 4px 14px -5px rgba(37, 99, 235, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
+              inset 0 -3px 8px rgba(2, 120, 170, 0.20),
+              0 6px 18px -7px rgba(8, 160, 210, 0.6);
 }
 .tool-tag {
   display: inline-flex;
@@ -1386,7 +1477,7 @@ async function confirmDelete() {
   border-color: var(--primary);
   color: var(--primary);
   background: var(--primary-tint);
-  box-shadow: 0 4px 12px -6px rgba(37, 99, 235, 0.5);
+  box-shadow: 0 6px 16px -8px rgba(8, 160, 210, 0.6);
   transform: translateY(-1px);
 }
 
@@ -1400,16 +1491,21 @@ async function confirmDelete() {
 .input-box {
   max-width: 880px;
   margin: 0 auto;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
   padding: 12px 16px;
-  box-shadow: var(--shadow-md);
-  transition: border-color 0.18s, box-shadow 0.18s;
+  box-shadow: var(--shadow-md),
+              inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s;
 }
 .input-box:focus-within {
-  border-color: var(--primary);
-  box-shadow: var(--ring), var(--shadow-md);
+  border-color: var(--aqua);
+  box-shadow: 0 0 0 4px var(--brand-glow),
+              var(--shadow-md),
+              0 0 30px -6px rgba(34, 211, 238, 0.35);
 }
 
 .input-top {
@@ -1502,13 +1598,15 @@ async function confirmDelete() {
   justify-content: center;
   flex-shrink: 0;
   margin-top: 4px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
-              0 3px 10px -3px rgba(37, 99, 235, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
+              inset 0 -2px 6px rgba(2, 120, 170, 0.22),
+              0 5px 14px -4px rgba(8, 160, 210, 0.6);
   transition: box-shadow 0.18s, filter 0.18s, transform 0.06s;
 }
 .send-btn:hover {
-  filter: brightness(1.06);
-  box-shadow: var(--shadow-primary);
+  filter: brightness(1.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32),
+              var(--shadow-primary);
 }
 .send-btn:active { transform: translateY(1px); }
 

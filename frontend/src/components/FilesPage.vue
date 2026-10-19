@@ -246,7 +246,7 @@ onMounted(() => {
       </button>
     </div>
 
-    <div v-else class="card table-card">
+    <div v-else class="card table-card card-accent">
       <table>
         <thead>
           <tr>
@@ -422,6 +422,7 @@ onMounted(() => {
 /* 表格 */
 .table-card {
   overflow: hidden;
+  padding-top: 3px;
 }
 table {
   width: 100%;
@@ -561,7 +562,7 @@ td {
   justify-content: center;
 }
 .modal-icon.danger { background: var(--danger-tint); color: var(--danger); }
-.modal-icon.success { background: rgba(15, 157, 114, 0.12); color: var(--success); }
+.modal-icon.success { background: var(--success-tint); color: var(--success); }
 .modal-title {
   font-size: 16.5px;
   font-weight: 650;

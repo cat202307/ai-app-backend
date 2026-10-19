@@ -14,15 +14,19 @@
   --border: #e1ebf3;        /* 常规发丝描边 */
   --border-strong: #cddce8; /* 强描边 */
 
-  /* 主色（清新天空蓝 → 青） */
-  --primary: #12a4e0;
-  --primary-hover: #38b6ec;
+  /* 主色（清新天空蓝 → 青，层次更丰富） */
+  --primary: #08a8d8;
+  --primary-hover: #33b9e6;
   --primary-deep: #0284c7;
   --primary-ink: #0369a1;
-  --primary-tint: rgba(18, 164, 224, 0.11);
-  --primary-tint-2: rgba(6, 182, 212, 0.18);
-  --primary-gradient: linear-gradient(135deg, #38bdf8 0%, #06b6d4 100%);
-  --ring: 0 0 0 4px rgba(18, 164, 224, 0.18);
+  --aqua: #22d3ee;
+  --mint: #2dd4bf;
+  --primary-tint: rgba(14, 180, 220, 0.12);
+  --primary-tint-2: rgba(34, 211, 238, 0.22);
+  --primary-tint-strong: rgba(14, 180, 220, 0.20);
+  --primary-gradient: linear-gradient(135deg, #4cc9f8 0%, #22d3ee 52%, #06b6d4 100%);
+  --brand-glow: rgba(14, 180, 220, 0.18);
+  --ring: 0 0 0 4px rgba(14, 180, 220, 0.20);
 
   /* 语义色 */
   --success: #10b981;
@@ -74,10 +78,11 @@ body,
 
 body {
   font-family: var(--font-sans);
-  /* 清新环境下顶部柔和的天空青氛围光 */
+  /* 主题感强化：天空青 / 薄荷 / 水光的多层柔和渐变 */
   background:
-    radial-gradient(1200px 620px at 78% -16%, rgba(56, 189, 248, 0.14), transparent 60%),
-    radial-gradient(900px 480px at 6% -12%, rgba(45, 212, 191, 0.08), transparent 55%),
+    radial-gradient(1150px 680px at 84% -14%, rgba(56, 189, 248, 0.24), transparent 62%),
+    radial-gradient(950px 560px at -6% 6%, rgba(45, 212, 191, 0.16), transparent 58%),
+    radial-gradient(820px 720px at 48% 118%, rgba(125, 211, 252, 0.20), transparent 62%),
     var(--bg);
   background-attachment: fixed;
   color: var(--text-1);
@@ -236,6 +241,34 @@ button {
   background: var(--surface-2);
   color: var(--text-2);
   border: 1px solid var(--border);
+}
+
+/* 渐变文字（主题强调） */
+.gradient-text {
+  background: linear-gradient(118deg, #0ea5e9 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* 卡片顶部主题强调线 */
+.card-accent {
+  position: relative;
+  overflow: hidden;
+}
+.card-accent::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, #38bdf8, #22d3ee, #2dd4bf);
+}
+
+/* 轻玻璃（半透明白 + 模糊，谨慎使用） */
+.glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
 }
 
 /* 旋转 */

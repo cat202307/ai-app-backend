@@ -896,8 +896,8 @@ async function confirmDelete() {
 .sidebar {
   width: 252px;
   background:
-    radial-gradient(130% 240px at 50% 100%, rgba(124, 193, 247, 0.30), transparent 72%),
-    linear-gradient(180deg, #ffffff 0%, #f6fafe 54%, #eef5fd 100%);
+    radial-gradient(130% 240px at 50% 100%, rgba(96, 165, 250, 0.20), transparent 72%),
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 54%, #f1f3f6 100%);
   border-right: 1px solid var(--border);
   padding: 0;
   display: flex;
@@ -905,7 +905,7 @@ async function confirmDelete() {
   min-height: 0;
   overflow: hidden;
   box-shadow: 1px 0 0 rgba(255, 255, 255, 0.8) inset,
-              12px 0 34px -26px rgba(40, 110, 180, 0.4);
+              12px 0 34px -26px rgba(29, 78, 216, 0.4);
 }
 
 /* 最近对话列表：占满剩余高度、独立滚动，
@@ -953,12 +953,12 @@ async function confirmDelete() {
   justify-content: center;
   flex-shrink: 0;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35),
-              inset 0 -3px 8px rgba(47, 143, 224, 0.30),
-              0 8px 18px -6px rgba(92, 180, 247, 0.65);
+              inset 0 -3px 8px rgba(37, 99, 235, 0.30),
+              0 8px 18px -6px rgba(96, 165, 250, 0.65);
 }
 .logo-text {
   white-space: nowrap;
-  background: linear-gradient(118deg, #2f8fe0 0%, #3b93f0 55%, #5aa5f4 100%);
+  background: linear-gradient(118deg, #2563eb 0%, #3b82f6 55%, #60a5fa 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -980,8 +980,8 @@ async function confirmDelete() {
   justify-content: center;
   gap: 7px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
-              inset 0 -2px 6px rgba(47, 143, 224, 0.22),
-              0 6px 16px -6px rgba(92, 180, 247, 0.55);
+              inset 0 -2px 6px rgba(37, 99, 235, 0.22),
+              0 6px 16px -6px rgba(96, 165, 250, 0.55);
   transition: box-shadow 0.18s, filter 0.18s, transform 0.06s;
 }
 .sidebar-new-btn:hover {
@@ -1050,8 +1050,8 @@ async function confirmDelete() {
   color: #ffffff;
   font-weight: 600;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
-              inset 0 -2px 6px rgba(47, 143, 224, 0.20),
-              0 8px 18px -8px rgba(92, 180, 247, 0.65);
+              inset 0 -2px 6px rgba(37, 99, 235, 0.20),
+              0 8px 18px -8px rgba(96, 165, 250, 0.65);
 }
 /* 填充胶囊选中态：不再需要外部强调条 */
 .sidebar-item.active::before {
@@ -1186,8 +1186,8 @@ async function confirmDelete() {
   justify-content: center;
   background: var(--primary-gradient);
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.36),
-              inset 0 -6px 14px rgba(47, 143, 224, 0.28),
-              0 18px 40px -12px rgba(92, 180, 247, 0.6);
+              inset 0 -6px 14px rgba(37, 99, 235, 0.28),
+              0 18px 40px -12px rgba(96, 165, 250, 0.6);
   margin-bottom: 24px;
   position: relative;
 }
@@ -1196,7 +1196,7 @@ async function confirmDelete() {
   position: absolute;
   inset: -14px;
   border-radius: 32px;
-  background: radial-gradient(60% 60% at 50% 50%, rgba(124, 193, 247, 0.30), transparent 70%);
+  background: radial-gradient(60% 60% at 50% 50%, rgba(110, 168, 251, 0.30), transparent 70%);
   z-index: -1;
 }
 .welcome-title {
@@ -1204,7 +1204,7 @@ async function confirmDelete() {
   font-weight: 700;
   letter-spacing: 0.2px;
   margin-bottom: 10px;
-  background: linear-gradient(118deg, #1d63b0 0%, #2f8fe0 55%, #4aa2f0 100%);
+  background: linear-gradient(118deg, #1d4ed8 0%, #2563eb 55%, #3b82f6 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1253,15 +1253,15 @@ async function confirmDelete() {
   letter-spacing: 0.3px;
   flex-shrink: 0;
   color: #fff;
-  background: linear-gradient(145deg, #7cc1f7 0%, #2f8fe0 100%);
+  background: linear-gradient(145deg, #6ea8fb 0%, #2563eb 100%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4),
-              0 3px 10px -3px rgba(92, 180, 247, 0.55);
+              0 3px 10px -3px rgba(96, 165, 250, 0.55);
 }
 
 .message.user .avatar {
   background: var(--primary-gradient);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
-              0 4px 12px -4px rgba(92, 180, 247, 0.55);
+              0 4px 12px -4px rgba(96, 165, 250, 0.55);
 }
 
 .bubble {
@@ -1349,8 +1349,8 @@ async function confirmDelete() {
   flex-shrink: 1;
   word-break: break-word;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
-              inset 0 -3px 8px rgba(47, 143, 224, 0.20),
-              0 6px 18px -7px rgba(92, 180, 247, 0.6);
+              inset 0 -3px 8px rgba(37, 99, 235, 0.20),
+              0 6px 18px -7px rgba(96, 165, 250, 0.6);
 }
 .tool-tag {
   display: inline-flex;
@@ -1477,7 +1477,7 @@ async function confirmDelete() {
   border-color: var(--primary);
   color: var(--primary);
   background: var(--primary-tint);
-  box-shadow: 0 6px 16px -8px rgba(92, 180, 247, 0.6);
+  box-shadow: 0 6px 16px -8px rgba(96, 165, 250, 0.6);
   transform: translateY(-1px);
 }
 
@@ -1599,8 +1599,8 @@ async function confirmDelete() {
   flex-shrink: 0;
   margin-top: 4px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
-              inset 0 -2px 6px rgba(47, 143, 224, 0.22),
-              0 5px 14px -4px rgba(92, 180, 247, 0.6);
+              inset 0 -2px 6px rgba(37, 99, 235, 0.22),
+              0 5px 14px -4px rgba(96, 165, 250, 0.6);
   transition: box-shadow 0.18s, filter 0.18s, transform 0.06s;
 }
 .send-btn:hover {

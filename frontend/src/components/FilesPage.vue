@@ -491,7 +491,7 @@ td {
   width: 18px;
   height: 18px;
 }
-.file-ico.t-txt { background: linear-gradient(145deg, #e8f2fe, #d9eafb); color: #2f8fe0; }
+.file-ico.t-txt { background: linear-gradient(145deg, #e9f1fe, #dae7fb); color: #2563eb; }
 .file-ico.t-md  { background: linear-gradient(145deg, #fdf4e3, #fbe9cc); color: #d97706; }
 .file-ico.t-pdf { background: linear-gradient(145deg, #fdeef0, #fbdde1); color: #e11d48; }
 .file-ico.t-doc { background: linear-gradient(145deg, #e7f7f0, #d8f2e6); color: #059669; }
@@ -506,7 +506,7 @@ td {
   font-weight: 600;
   letter-spacing: 0.4px;
 }
-.type-badge.t-txt { background: #e3f0fd; color: #2f8fe0; }
+.type-badge.t-txt { background: #e5edfd; color: #2563eb; }
 .type-badge.t-md  { background: #fdf0d9; color: #d97706; }
 .type-badge.t-pdf { background: #fde4e7; color: #e11d48; }
 .type-badge.t-doc { background: #dcf4ea; color: #059669; }

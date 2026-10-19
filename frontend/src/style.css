@@ -1,54 +1,54 @@
 /* ============================================================
-   全局设计令牌 · 浅蓝色主题（通透浅蓝底 + 清透天蓝）
+   全局设计令牌 · 白色主题（纯白卡片 + 极简中性底 + 净蓝点缀）
    ============================================================ */
 :root {
   /* 文本 / 背景 */
-  --text-1: #1c2b40;        /* 主文字（深蓝黑） */
-  --text-2: #55697f;        /* 次要文字（蓝灰） */
-  --text-3: #94a6bb;        /* 弱化文字 / 占位 */
-  --bg: #eef5fd;            /* 页面底色（浅蓝） */
-  --bg-soft: #e4effa;
-  --surface: #ffffff;       /* 卡片 / 气泡（白） */
-  --surface-2: #f5f9fe;     /* 次级面板（淡蓝白） */
-  --surface-3: #e8f1fb;     /* 内嵌面板 */
-  --border: #dce9f5;        /* 常规发丝描边 */
-  --border-strong: #c2d5ea; /* 强描边 */
+  --text-1: #1e2633;        /* 主文字（近黑） */
+  --text-2: #56606e;        /* 次要文字（中性灰） */
+  --text-3: #98a1ad;        /* 弱化文字 / 占位 */
+  --bg: #f5f6f8;            /* 页面底色（极浅中性灰） */
+  --bg-soft: #eceef1;
+  --surface: #ffffff;       /* 卡片 / 气泡（纯白） */
+  --surface-2: #f7f8fa;     /* 次级面板 */
+  --surface-3: #edf0f3;     /* 内嵌面板 */
+  --border: #e5e8ec;        /* 常规发丝描边 */
+  --border-strong: #d1d6dd; /* 强描边 */
 
-  /* 主色（浅蓝 → 天蓝 → 蔚蓝） */
-  --primary: #3b93f0;
-  --primary-hover: #5aa5f4;
-  --primary-deep: #2a7fd6;
-  --primary-ink: #1d63b0;
-  --aqua: #5cb4f7;          /* 浅天蓝（副色） */
-  --mint: #8ec8fa;          /* 淡蓝（副色） */
-  --primary-tint: rgba(59, 147, 240, 0.10);
-  --primary-tint-2: rgba(92, 180, 247, 0.18);
-  --primary-tint-strong: rgba(59, 147, 240, 0.16);
-  --primary-gradient: linear-gradient(135deg, #7cc1f7 0%, #4aa2f0 50%, #2f8fe0 100%);
-  --brand-glow: rgba(74, 162, 240, 0.18);
-  --ring: 0 0 0 4px rgba(74, 162, 240, 0.20);
+  /* 主色（净蓝） */
+  --primary: #3b82f6;
+  --primary-hover: #5292f7;
+  --primary-deep: #2563eb;
+  --primary-ink: #1d4ed8;
+  --aqua: #60a5fa;          /* 亮蓝（副色） */
+  --mint: #93bdfb;          /* 淡蓝（副色） */
+  --primary-tint: rgba(59, 130, 246, 0.10);
+  --primary-tint-2: rgba(96, 165, 250, 0.18);
+  --primary-tint-strong: rgba(59, 130, 246, 0.15);
+  --primary-gradient: linear-gradient(135deg, #6ea8fb 0%, #3b82f6 50%, #2563eb 100%);
+  --brand-glow: rgba(59, 130, 246, 0.16);
+  --ring: 0 0 0 4px rgba(59, 130, 246, 0.18);
 
   /* 语义色 */
-  --success: #38a169;
-  --success-deep: #2f855a;
-  --success-tint: rgba(56, 161, 105, 0.12);
+  --success: #22a06b;
+  --success-deep: #1a855a;
+  --success-tint: rgba(34, 160, 107, 0.12);
   --danger: #e5484d;
-  --danger-deep: #c9353a;
+  --danger-deep: #cc353a;
   --danger-tint: rgba(229, 72, 77, 0.10);
   --warning: #e8920e;
   --warning-tint: rgba(232, 146, 14, 0.12);
 
-  /* 阴影：柔和浅蓝 */
-  --shadow-xs: 0 1px 2px rgba(40, 80, 130, 0.07);
-  --shadow-sm: 0 1px 2px rgba(40, 80, 130, 0.05),
-               0 6px 16px -6px rgba(50, 100, 160, 0.11);
-  --shadow-md: 0 8px 22px -6px rgba(50, 100, 160, 0.12),
-               0 22px 46px -16px rgba(50, 100, 160, 0.15);
-  --shadow-lg: 0 12px 30px -10px rgba(50, 100, 160, 0.14),
-               0 36px 74px -20px rgba(50, 100, 160, 0.18);
-  --shadow-primary: 0 8px 22px -6px rgba(47, 143, 224, 0.45);
-  --shadow-card-hover: 0 10px 24px -12px rgba(50, 100, 160, 0.16),
-                       0 24px 54px -22px rgba(50, 100, 160, 0.20);
+  /* 阴影：中性灰，干净利落 */
+  --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05),
+               0 6px 16px -6px rgba(16, 24, 40, 0.09);
+  --shadow-md: 0 8px 22px -6px rgba(16, 24, 40, 0.10),
+               0 22px 46px -16px rgba(16, 24, 40, 0.13);
+  --shadow-lg: 0 12px 30px -10px rgba(16, 24, 40, 0.13),
+               0 36px 74px -20px rgba(16, 24, 40, 0.16);
+  --shadow-primary: 0 8px 22px -6px rgba(37, 99, 235, 0.42);
+  --shadow-card-hover: 0 10px 24px -12px rgba(16, 24, 40, 0.14),
+                       0 24px 54px -22px rgba(16, 24, 40, 0.18);
 
   /* 圆角 */
   --r-sm: 8px;
@@ -78,11 +78,11 @@ body,
 
 body {
   font-family: var(--font-sans);
-  /* 浅蓝通透：柔和的天光蓝渐变 */
+  /* 极简白色：极浅中性底，顶部仅一点净蓝光 */
   background:
-    radial-gradient(1200px 620px at 82% -12%, rgba(124, 193, 247, 0.42), transparent 60%),
-    radial-gradient(1000px 580px at 6% -6%, rgba(158, 210, 250, 0.34), transparent 56%),
-    linear-gradient(180deg, #f0f7fd 0%, #e8f2fc 100%);
+    radial-gradient(1200px 600px at 82% -12%, rgba(96, 165, 250, 0.14), transparent 60%),
+    radial-gradient(1000px 560px at 6% -6%, rgba(120, 170, 250, 0.08), transparent 56%),
+    linear-gradient(180deg, #fafbfc 0%, #f3f4f6 100%);
   background-attachment: fixed;
   color: var(--text-1);
   font-size: 14px;
@@ -94,10 +94,10 @@ body {
 }
 
 ::selection {
-  background: rgba(92, 180, 247, 0.32);
+  background: rgba(96, 165, 250, 0.30);
 }
 
-/* 统一滚动条（浅蓝） */
+/* 统一滚动条（中性） */
 ::-webkit-scrollbar {
   width: 9px;
   height: 9px;
@@ -106,13 +106,13 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(120, 165, 210, 0.5);
+  background: rgba(140, 148, 160, 0.5);
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(90, 140, 195, 0.7);
+  background: rgba(110, 118, 132, 0.7);
   background-clip: content-box;
   border: 2px solid transparent;
 }
@@ -157,7 +157,7 @@ button {
   background: var(--primary-gradient);
   color: #fff;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35),
-              0 6px 18px -6px rgba(47, 143, 224, 0.5);
+              0 6px 18px -6px rgba(37, 99, 235, 0.45);
 }
 .btn-primary:hover {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32),
@@ -244,7 +244,7 @@ button {
 
 /* 渐变文字（主题强调） */
 .gradient-text {
-  background: linear-gradient(118deg, #2f8fe0 0%, #3b93f0 100%);
+  background: linear-gradient(118deg, #2563eb 0%, #3b82f6 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -260,7 +260,7 @@ button {
   position: absolute;
   inset: 0 0 auto 0;
   height: 3px;
-  background: linear-gradient(90deg, #7cc1f7, #4aa2f0, #2f8fe0);
+  background: linear-gradient(90deg, #6ea8fb, #3b82f6, #2563eb);
 }
 
 /* 轻玻璃（半透明白 + 模糊，谨慎使用） */

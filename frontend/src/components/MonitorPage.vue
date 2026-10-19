@@ -385,14 +385,14 @@ onUnmounted(() => {
   border-radius: 10px;
   background: linear-gradient(145deg, var(--primary-tint), var(--primary-tint-2));
   color: var(--primary);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 .header-actions { display: flex; gap: 10px; }
 .dot {
   width: 7px; height: 7px; border-radius: 50%;
   background: var(--text-3); display: inline-block;
 }
-.dot.on { background: var(--success); box-shadow: 0 0 0 3px rgba(12, 157, 114, 0.18); }
+.dot.on { background: var(--success); box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.2); }
 
 .state-card {
   background: var(--surface);
@@ -439,11 +439,11 @@ onUnmounted(() => {
   color: var(--primary);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 .kpi-icon svg { width: 22px; height: 22px; }
 .kpi-icon.ok {
-  background: linear-gradient(145deg, rgba(12, 157, 114, 0.16), rgba(12, 157, 114, 0.08));
+  background: linear-gradient(145deg, rgba(52, 211, 153, 0.22), rgba(52, 211, 153, 0.1));
   color: var(--success);
 }
 .kpi-label { font-size: 12.5px; color: var(--text-2); margin-bottom: 3px; }
@@ -502,7 +502,7 @@ onUnmounted(() => {
 .llm-item.highlight {
   background: linear-gradient(145deg, var(--primary-tint), var(--primary-tint-2));
   border-color: var(--primary-tint-2);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 .llm-label { font-size: 12px; color: var(--text-2); margin-bottom: 6px; }
 .llm-value {
@@ -534,7 +534,7 @@ onUnmounted(() => {
 .ret-item.highlight {
   background: linear-gradient(145deg, var(--primary-tint), var(--primary-tint-2));
   border-color: var(--primary-tint-2);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 .ret-item .llm-value { font-size: 18px; }
 .ret-item .llm-value small { font-size: 12px; font-weight: 500; color: var(--text-3); }
@@ -552,8 +552,8 @@ onUnmounted(() => {
   font-size: 12px;
   font-weight: 500;
 }
-.pill-ok { background: rgba(15, 157, 114, 0.12); color: var(--success); }
-.pill-warn { background: rgba(229, 72, 77, 0.1); color: var(--danger); }
+.pill-ok { background: var(--success-tint); color: var(--success); }
+.pill-warn { background: var(--danger-tint); color: var(--danger); }
 
 /* 缓存 */
 .cache-grid {

@@ -878,14 +878,14 @@ async function confirmDelete() {
 .sidebar {
   width: 252px;
   background:
-    linear-gradient(180deg, #fbfcfe 0%, #ffffff 38%);
+    linear-gradient(180deg, #161c2c 0%, #111522 42%);
   border-right: 1px solid var(--border);
   padding: 0;
   display: flex;
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.6) inset;
+  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.04) inset;
 }
 
 /* 最近对话列表：占满剩余高度、独立滚动，
@@ -1064,7 +1064,7 @@ async function confirmDelete() {
   background: transparent;
   cursor: pointer;
   font-size: 16px;
-  color: #999;
+  color: var(--text-3);
   padding: 2px 6px;
   border-radius: 4px;
   opacity: 0;
@@ -1076,8 +1076,8 @@ async function confirmDelete() {
 }
 
 .conv-delete:hover {
-  background: #fde2e2;
-  color: #e5484d;
+  background: var(--danger-tint);
+  color: var(--danger);
 }
 
 /* 主内容区 */
@@ -1164,9 +1164,9 @@ async function confirmDelete() {
   letter-spacing: 0.3px;
   flex-shrink: 0;
   color: #fff;
-  background: linear-gradient(145deg, #38415c 0%, #20293c 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12),
-              var(--shadow-sm);
+  background: linear-gradient(145deg, #4a6a9c 0%, #2c4066 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18),
+              0 3px 10px -3px rgba(56, 100, 180, 0.5);
 }
 
 .message.user .avatar {
@@ -1277,7 +1277,7 @@ async function confirmDelete() {
 
 .loading-dots { display: flex; gap: 5px; padding: 4px 0; }
 .loading-dots span {
-  width: 8px; height: 8px; border-radius: 50%; background: #888;
+  width: 8px; height: 8px; border-radius: 50%; background: var(--text-3);
   animation: ld 1.2s infinite ease-in-out both;
 }
 .loading-dots span:nth-child(1) { animation-delay: -0.24s; }
@@ -1303,7 +1303,7 @@ async function confirmDelete() {
   background: transparent;
   border-radius: 6px;
   cursor: pointer;
-  color: #999;
+  color: var(--text-3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1311,14 +1311,14 @@ async function confirmDelete() {
 }
 
 .meta-icon-btn:hover {
-  background: #f0f0f0;
-  color: #666;
+  background: var(--surface-3);
+  color: var(--text-1);
 }
 
 .meta-time {
   margin-left: auto;
   font-size: 12px;
-  color: #999;
+  color: var(--text-3);
 }
 
 /* 用户消息内容容器 */
@@ -1334,7 +1334,7 @@ async function confirmDelete() {
 .user-meta {
   margin-top: 6px;
   font-size: 12px;
-  color: #999;
+  color: var(--text-3);
   opacity: 0;
   transition: opacity 0.2s;
   display: flex;
@@ -1356,13 +1356,14 @@ async function confirmDelete() {
 }
 
 .meta-icon-btn:hover {
-  background: #e0e0e0;
+  background: var(--surface-3);
 }
 
 .meta-btn {
   padding: 2px 8px;
-  border: 1px solid #e0e0e0;
-  background: #fff;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-2);
   border-radius: 4px;
   cursor: pointer;
   font-size: 11px;
@@ -1442,12 +1443,16 @@ async function confirmDelete() {
   flex: 1;
   border: none;
   outline: none;
-  font-size: 14px;
+  font-size: 14.5px;
   resize: none;
   font-family: inherit;
   line-height: 1.5;
   padding: 6px 0;
+  background: transparent;
+  color: var(--text-1);
+  caret-color: var(--primary);
 }
+.input-top textarea::placeholder { color: var(--text-3); }
 
 .input-bottom {
   display: flex;
@@ -1480,7 +1485,7 @@ async function confirmDelete() {
 
 .version-tag {
   font-size: 12px;
-  color: #999;
+  color: var(--text-3);
 }
 
 .send-btn {

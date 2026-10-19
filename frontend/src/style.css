@@ -1,50 +1,50 @@
 /* ============================================================
-   全局设计令牌（克制 · 高级 · 中性冷灰 + 单一专业蓝）
+   全局设计令牌 · 深色高级主题（中性炭灰 + 单一专业蓝）
    ============================================================ */
 :root {
   /* 文本 / 背景 */
-  --text-1: #1a2233;        /* 主文字（深墨，微冷） */
-  --text-2: #56607a;        /* 次要文字 */
-  --text-3: #95a0b5;        /* 弱化文字 / 占位 */
-  --bg: #f5f7fb;            /* 页面底色（冷调浅灰） */
-  --bg-soft: #f8fafc;
-  --surface: #ffffff;       /* 卡片 / 气泡 */
-  --surface-2: #f6f8fc;     /* 次级面板 */
-  --surface-3: #f0f3f9;     /* 更深一档的内嵌面板 */
-  --border: #e8ecf3;        /* 常规发丝描边（偏冷） */
-  --border-strong: #d6dce8; /* 强描边 */
+  --text-1: #e7ebf4;        /* 主文字（近白冷调） */
+  --text-2: #a4aec4;        /* 次要文字 */
+  --text-3: #6c7790;        /* 弱化文字 / 占位 */
+  --bg: #0b0e16;            /* 页面底色（近黑冷灰） */
+  --bg-soft: #0f1320;
+  --surface: #141927;       /* 卡片 / 气泡 */
+  --surface-2: #1a2030;     /* 次级面板 */
+  --surface-3: #232a3c;     /* 更深一档的内嵌面板 */
+  --border: #242b3d;        /* 常规发丝描边 */
+  --border-strong: #343d54; /* 强描边 */
 
-  /* 主色（克制的专业蓝，非高饱和默认蓝） */
-  --primary: #2563eb;
-  --primary-hover: #1e53d6;
-  --primary-deep: #1d4ed8;
-  --primary-ink: #1e40af;
-  --primary-tint: #eef4ff;
-  --primary-tint-2: #dce8ff;
-  --primary-gradient: linear-gradient(135deg, #3a78f2 0%, #1d4ed8 100%);
-  --ring: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  /* 主色（在深色上更通透的蓝） */
+  --primary: #4f8cff;
+  --primary-hover: #6ea1ff;
+  --primary-deep: #2f6bed;
+  --primary-ink: #8fb6ff;
+  --primary-tint: rgba(79, 140, 255, 0.13);
+  --primary-tint-2: rgba(79, 140, 255, 0.23);
+  --primary-gradient: linear-gradient(135deg, #5b97ff 0%, #2f6bed 100%);
+  --ring: 0 0 0 4px rgba(79, 140, 255, 0.22);
 
   /* 语义色 */
-  --success: #0c9d72;
-  --success-deep: #0a7d5b;
-  --success-tint: rgba(12, 157, 114, 0.11);
-  --danger: #e5484d;
-  --danger-deep: #d23b40;
-  --danger-tint: #fdecec;
-  --warning: #d97706;
-  --warning-tint: #fdf3e3;
+  --success: #34d399;
+  --success-deep: #10b981;
+  --success-tint: rgba(52, 211, 153, 0.14);
+  --danger: #f46a72;
+  --danger-deep: #e5484d;
+  --danger-tint: rgba(244, 106, 114, 0.15);
+  --warning: #fbbf24;
+  --warning-tint: rgba(251, 191, 36, 0.15);
 
-  /* 阴影：柔和、弥散、微冷调，层级克制 */
-  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.035),
-               0 2px 8px -2px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 3px 10px -2px rgba(15, 23, 42, 0.07),
-               0 14px 34px -10px rgba(15, 23, 42, 0.16);
-  --shadow-lg: 0 8px 20px -6px rgba(15, 23, 42, 0.12),
-               0 28px 60px -16px rgba(15, 23, 42, 0.28);
-  --shadow-primary: 0 6px 18px -6px rgba(37, 99, 235, 0.5);
-  --shadow-card-hover: 0 6px 16px -6px rgba(15, 23, 42, 0.12),
-                       0 16px 40px -16px rgba(15, 23, 42, 0.2);
+  /* 阴影：深色环境下更内敛，配合发光 */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.32),
+               0 3px 10px -2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 14px -3px rgba(0, 0, 0, 0.55),
+               0 18px 44px -12px rgba(0, 0, 0, 0.75);
+  --shadow-lg: 0 10px 28px -8px rgba(0, 0, 0, 0.66),
+               0 34px 72px -16px rgba(0, 0, 0, 0.85);
+  --shadow-primary: 0 6px 22px -6px rgba(79, 140, 255, 0.6);
+  --shadow-card-hover: 0 8px 22px -10px rgba(0, 0, 0, 0.6),
+                       0 22px 54px -20px rgba(0, 0, 0, 0.85);
 
   /* 圆角 */
   --r-sm: 8px;
@@ -74,10 +74,10 @@ body,
 
 body {
   font-family: var(--font-sans);
-  /* 主内容区顶部的极淡氛围光晕，增加高级感而不喧宾夺主 */
+  /* 深色环境下顶部的蓝色氛围光晕 */
   background:
-    radial-gradient(1100px 560px at 72% -12%, rgba(37, 99, 235, 0.055), transparent 60%),
-    radial-gradient(820px 460px at 6% -10%, rgba(56, 120, 240, 0.035), transparent 55%),
+    radial-gradient(1200px 620px at 75% -16%, rgba(79, 140, 255, 0.13), transparent 60%),
+    radial-gradient(900px 480px at 8% -12%, rgba(56, 189, 248, 0.07), transparent 55%),
     var(--bg);
   background-attachment: fixed;
   color: var(--text-1);
@@ -90,10 +90,10 @@ body {
 }
 
 ::selection {
-  background: rgba(37, 99, 235, 0.16);
+  background: rgba(79, 140, 255, 0.28);
 }
 
-/* 统一滚动条（更细、更克制） */
+/* 统一滚动条（深色、克制） */
 ::-webkit-scrollbar {
   width: 9px;
   height: 9px;
@@ -102,13 +102,13 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(30, 41, 59, 0.16);
+  background: rgba(148, 163, 184, 0.18);
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(30, 41, 59, 0.3);
+  background: rgba(148, 163, 184, 0.32);
   background-clip: content-box;
   border: 2px solid transparent;
 }
@@ -152,19 +152,19 @@ button {
 .btn-primary {
   background: var(--primary-gradient);
   color: #fff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16),
-              0 2px 8px -2px rgba(37, 99, 235, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+              0 3px 12px -3px rgba(79, 140, 255, 0.6);
 }
 .btn-primary:hover {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18),
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24),
               var(--shadow-primary);
-  filter: brightness(1.03);
+  filter: brightness(1.05);
 }
 .btn-primary:active {
-  box-shadow: inset 0 1px 2px rgba(20, 40, 90, 0.3);
+  box-shadow: inset 0 1px 3px rgba(10, 30, 70, 0.4);
 }
 .btn-ghost {
-  background: var(--surface);
+  background: var(--surface-2);
   color: var(--text-2);
   border-color: var(--border);
   box-shadow: var(--shadow-xs);
@@ -172,17 +172,17 @@ button {
 .btn-ghost:hover {
   color: var(--text-1);
   border-color: var(--border-strong);
-  background: var(--surface-2);
+  background: var(--surface-3);
   box-shadow: var(--shadow-sm);
 }
 .btn-danger {
   background: var(--danger);
   color: #fff;
-  box-shadow: 0 2px 8px -2px rgba(229, 72, 77, 0.45);
+  box-shadow: 0 3px 12px -3px rgba(244, 106, 114, 0.55);
 }
 .btn-danger:hover {
   background: var(--danger-deep);
-  box-shadow: 0 4px 14px -4px rgba(229, 72, 77, 0.55);
+  box-shadow: 0 5px 16px -4px rgba(244, 106, 114, 0.65);
 }
 .btn:disabled {
   opacity: 0.5;
@@ -192,10 +192,10 @@ button {
   filter: none;
 }
 
-/* 卡片：白色发丝描边 + 柔和阴影，顶部一道极淡高光 */
+/* 卡片：深色表面 + 顶部极淡高光 */
 .card {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0)) ,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0)),
     var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
@@ -231,7 +231,7 @@ button {
   line-height: 1.55;
   letter-spacing: 0.1px;
 }
-.badge-primary { background: var(--primary-tint); color: var(--primary); }
+.badge-primary { background: var(--primary-tint); color: var(--primary-ink); }
 .badge-success { background: var(--success-tint); color: var(--success); }
 .badge-danger  { background: var(--danger-tint); color: var(--danger); }
 .badge-neutral {

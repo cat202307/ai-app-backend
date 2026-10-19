@@ -1,54 +1,54 @@
 /* ============================================================
-   全局设计令牌 · 清新明亮主题（通透白底 + 天空青蓝）
+   全局设计令牌 · 暖调纸感编辑风（暖米纸 + 陶土橙）
    ============================================================ */
 :root {
   /* 文本 / 背景 */
-  --text-1: #1f3040;        /* 主文字（清透蓝灰） */
-  --text-2: #5a6f82;        /* 次要文字 */
-  --text-3: #98aabc;        /* 弱化文字 / 占位 */
-  --bg: #f2f7fb;            /* 页面底色（极浅冷白） */
-  --bg-soft: #eaf2f8;
-  --surface: #ffffff;       /* 卡片 / 气泡 */
-  --surface-2: #f7fbfd;     /* 次级面板 */
-  --surface-3: #edf4f9;     /* 内嵌面板 */
-  --border: #e1ebf3;        /* 常规发丝描边 */
-  --border-strong: #cddce8; /* 强描边 */
+  --text-1: #2b251e;        /* 主文字（墨褐黑） */
+  --text-2: #6b5e4e;        /* 次要文字（暖灰褐） */
+  --text-3: #aa9d88;        /* 弱化文字 / 占位 */
+  --bg: #f6f1e8;            /* 页面底色（暖米纸） */
+  --bg-soft: #efe7d9;
+  --surface: #fffdf8;       /* 卡片 / 气泡（暖白） */
+  --surface-2: #faf4e9;     /* 次级面板 */
+  --surface-3: #f1e7d8;     /* 内嵌面板 */
+  --border: #e9e0d0;        /* 常规发丝描边 */
+  --border-strong: #d8cbb3; /* 强描边 */
 
-  /* 主色（清新天空蓝 → 青，层次更丰富） */
-  --primary: #08a8d8;
-  --primary-hover: #33b9e6;
-  --primary-deep: #0284c7;
-  --primary-ink: #0369a1;
-  --aqua: #22d3ee;
-  --mint: #2dd4bf;
-  --primary-tint: rgba(14, 180, 220, 0.12);
-  --primary-tint-2: rgba(34, 211, 238, 0.22);
-  --primary-tint-strong: rgba(14, 180, 220, 0.20);
-  --primary-gradient: linear-gradient(135deg, #4cc9f8 0%, #22d3ee 52%, #06b6d4 100%);
-  --brand-glow: rgba(14, 180, 220, 0.18);
-  --ring: 0 0 0 4px rgba(14, 180, 220, 0.20);
+  /* 主色（陶土橙：暖珊瑚 → 陶土 → 焦橙） */
+  --primary: #d95f3a;
+  --primary-hover: #e8744e;
+  --primary-deep: #c24a28;
+  --primary-ink: #9a381c;
+  --aqua: #f2825c;          /* 暖珊瑚（主题副色） */
+  --mint: #e8a04c;          /* 暖琥珀（主题副色） */
+  --primary-tint: rgba(217, 95, 58, 0.10);
+  --primary-tint-2: rgba(242, 130, 92, 0.20);
+  --primary-tint-strong: rgba(217, 95, 58, 0.18);
+  --primary-gradient: linear-gradient(135deg, #f2825c 0%, #e0633f 52%, #c24a28 100%);
+  --brand-glow: rgba(224, 99, 63, 0.18);
+  --ring: 0 0 0 4px rgba(224, 99, 63, 0.20);
 
-  /* 语义色 */
-  --success: #10b981;
-  --success-deep: #059669;
-  --success-tint: rgba(16, 185, 129, 0.13);
-  --danger: #f4506b;
-  --danger-deep: #e11d48;
-  --danger-tint: rgba(244, 80, 107, 0.12);
-  --warning: #f59e0b;
-  --warning-tint: rgba(245, 158, 11, 0.14);
+  /* 语义色（中性，略带暖调） */
+  --success: #4a9d6a;
+  --success-deep: #357a50;
+  --success-tint: rgba(74, 157, 106, 0.13);
+  --danger: #dc4f56;
+  --danger-deep: #c2383f;
+  --danger-tint: rgba(220, 79, 86, 0.12);
+  --warning: #e8930f;
+  --warning-tint: rgba(232, 147, 15, 0.14);
 
-  /* 阴影：明亮环境下轻柔通透 */
-  --shadow-xs: 0 1px 2px rgba(31, 64, 96, 0.06);
-  --shadow-sm: 0 1px 2px rgba(31, 64, 96, 0.05),
-               0 4px 14px -4px rgba(31, 88, 140, 0.10);
-  --shadow-md: 0 6px 18px -6px rgba(31, 88, 140, 0.13),
-               0 20px 48px -16px rgba(31, 88, 140, 0.16);
-  --shadow-lg: 0 12px 32px -10px rgba(31, 88, 140, 0.16),
-               0 36px 80px -20px rgba(31, 88, 140, 0.20);
-  --shadow-primary: 0 8px 22px -6px rgba(14, 165, 233, 0.45);
-  --shadow-card-hover: 0 10px 24px -12px rgba(31, 88, 140, 0.18),
-                       0 24px 56px -22px rgba(31, 88, 140, 0.22);
+  /* 阴影：暖调琥珀棕，柔和 */
+  --shadow-xs: 0 1px 2px rgba(80, 60, 40, 0.07);
+  --shadow-sm: 0 1px 2px rgba(80, 60, 40, 0.05),
+               0 4px 14px -4px rgba(120, 80, 45, 0.10);
+  --shadow-md: 0 6px 18px -6px rgba(120, 80, 45, 0.13),
+               0 20px 48px -16px rgba(120, 80, 45, 0.16);
+  --shadow-lg: 0 12px 32px -10px rgba(120, 80, 45, 0.16),
+               0 36px 80px -20px rgba(120, 80, 45, 0.20);
+  --shadow-primary: 0 8px 22px -6px rgba(224, 99, 63, 0.45);
+  --shadow-card-hover: 0 10px 24px -12px rgba(120, 80, 45, 0.18),
+                       0 24px 56px -22px rgba(120, 80, 45, 0.22);
 
   /* 圆角 */
   --r-sm: 8px;
@@ -78,11 +78,11 @@ body,
 
 body {
   font-family: var(--font-sans);
-  /* 主题感强化：天空青 / 薄荷 / 水光的多层柔和渐变 */
+  /* 暖调纸感：珊瑚 / 琥珀 / 暖光的多层柔和渐变 */
   background:
-    radial-gradient(1150px 680px at 84% -14%, rgba(56, 189, 248, 0.24), transparent 62%),
-    radial-gradient(950px 560px at -6% 6%, rgba(45, 212, 191, 0.16), transparent 58%),
-    radial-gradient(820px 720px at 48% 118%, rgba(125, 211, 252, 0.20), transparent 62%),
+    radial-gradient(1150px 680px at 84% -14%, rgba(242, 130, 92, 0.22), transparent 62%),
+    radial-gradient(950px 560px at -6% 6%, rgba(232, 160, 76, 0.16), transparent 58%),
+    radial-gradient(820px 720px at 48% 118%, rgba(245, 182, 132, 0.18), transparent 62%),
     var(--bg);
   background-attachment: fixed;
   color: var(--text-1);
@@ -95,10 +95,10 @@ body {
 }
 
 ::selection {
-  background: rgba(56, 189, 248, 0.28);
+  background: rgba(242, 130, 92, 0.30);
 }
 
-/* 统一滚动条（浅色、轻柔） */
+/* 统一滚动条（暖调、轻柔） */
 ::-webkit-scrollbar {
   width: 9px;
   height: 9px;
@@ -107,13 +107,13 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(120, 155, 185, 0.32);
+  background: rgba(178, 150, 112, 0.40);
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(120, 155, 185, 0.5);
+  background: rgba(150, 124, 90, 0.6);
   background-clip: content-box;
   border: 2px solid transparent;
 }
@@ -158,7 +158,7 @@ button {
   background: var(--primary-gradient);
   color: #fff;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
-              0 4px 14px -4px rgba(14, 165, 233, 0.55);
+              0 4px 14px -4px rgba(194, 74, 40, 0.5);
 }
 .btn-primary:hover {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32),
@@ -245,7 +245,7 @@ button {
 
 /* 渐变文字（主题强调） */
 .gradient-text {
-  background: linear-gradient(118deg, #0ea5e9 0%, #06b6d4 100%);
+  background: linear-gradient(118deg, #d95f3a 0%, #c24a28 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -261,7 +261,7 @@ button {
   position: absolute;
   inset: 0 0 auto 0;
   height: 3px;
-  background: linear-gradient(90deg, #38bdf8, #22d3ee, #2dd4bf);
+  background: linear-gradient(90deg, #f2825c, #e0633f, #e8a04c);
 }
 
 /* 轻玻璃（半透明白 + 模糊，谨慎使用） */

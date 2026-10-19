@@ -1,54 +1,54 @@
 /* ============================================================
-   全局设计令牌 · 暖调纸感编辑风（暖米纸 + 陶土橙）
+   全局设计令牌 · 深海主题（深蓝海沟 + 海面波光）
    ============================================================ */
 :root {
   /* 文本 / 背景 */
-  --text-1: #2b251e;        /* 主文字（墨褐黑） */
-  --text-2: #6b5e4e;        /* 次要文字（暖灰褐） */
-  --text-3: #aa9d88;        /* 弱化文字 / 占位 */
-  --bg: #f6f1e8;            /* 页面底色（暖米纸） */
-  --bg-soft: #efe7d9;
-  --surface: #fffdf8;       /* 卡片 / 气泡（暖白） */
-  --surface-2: #faf4e9;     /* 次级面板 */
-  --surface-3: #f1e7d8;     /* 内嵌面板 */
-  --border: #e9e0d0;        /* 常规发丝描边 */
-  --border-strong: #d8cbb3; /* 强描边 */
+  --text-1: #e6f2fb;        /* 主文字（海面白） */
+  --text-2: #9fb7cc;        /* 次要文字（海水蓝灰） */
+  --text-3: #5d7891;        /* 弱化文字 / 占位 */
+  --bg: #061525;            /* 页面底色（海沟深蓝） */
+  --bg-soft: #0a1f33;
+  --surface: #0c2236;       /* 卡片 / 气泡（深蓝） */
+  --surface-2: #102a40;     /* 次级面板 */
+  --surface-3: #081b2d;     /* 内嵌面板 */
+  --border: #1c3750;        /* 常规发丝描边 */
+  --border-strong: #2a4a66; /* 强描边 */
 
-  /* 主色（陶土橙：暖珊瑚 → 陶土 → 焦橙） */
-  --primary: #d95f3a;
-  --primary-hover: #e8744e;
-  --primary-deep: #c24a28;
-  --primary-ink: #9a381c;
-  --aqua: #f2825c;          /* 暖珊瑚（主题副色） */
-  --mint: #e8a04c;          /* 暖琥珀（主题副色） */
-  --primary-tint: rgba(217, 95, 58, 0.10);
-  --primary-tint-2: rgba(242, 130, 92, 0.20);
-  --primary-tint-strong: rgba(217, 95, 58, 0.18);
-  --primary-gradient: linear-gradient(135deg, #f2825c 0%, #e0633f 52%, #c24a28 100%);
-  --brand-glow: rgba(224, 99, 63, 0.18);
-  --ring: 0 0 0 4px rgba(224, 99, 63, 0.20);
+  /* 主色（浅海泡沫 → 海青 → 海洋蓝） */
+  --primary: #22d3ee;
+  --primary-hover: #4de0f5;
+  --primary-deep: #06b6d4;
+  --primary-ink: #0e7490;
+  --aqua: #5eead4;          /* 浅海泡沫（副色） */
+  --mint: #2dd4bf;          /* 浅海青绿（副色） */
+  --primary-tint: rgba(34, 211, 238, 0.12);
+  --primary-tint-2: rgba(45, 212, 191, 0.20);
+  --primary-tint-strong: rgba(34, 211, 238, 0.22);
+  --primary-gradient: linear-gradient(135deg, #2dd4bf 0%, #06b6d4 50%, #0284c7 100%);
+  --brand-glow: rgba(34, 211, 238, 0.22);
+  --ring: 0 0 0 4px rgba(34, 211, 238, 0.22);
 
-  /* 语义色（中性，略带暖调） */
-  --success: #4a9d6a;
-  --success-deep: #357a50;
-  --success-tint: rgba(74, 157, 106, 0.13);
-  --danger: #dc4f56;
-  --danger-deep: #c2383f;
-  --danger-tint: rgba(220, 79, 86, 0.12);
-  --warning: #e8930f;
-  --warning-tint: rgba(232, 147, 15, 0.14);
+  /* 语义色（深色下略提亮） */
+  --success: #34d399;
+  --success-deep: #10b981;
+  --success-tint: rgba(52, 211, 153, 0.14);
+  --danger: #fb7185;
+  --danger-deep: #f43f5e;
+  --danger-tint: rgba(251, 113, 133, 0.14);
+  --warning: #fbbf24;
+  --warning-tint: rgba(251, 191, 36, 0.14);
 
-  /* 阴影：暖调琥珀棕，柔和 */
-  --shadow-xs: 0 1px 2px rgba(80, 60, 40, 0.07);
-  --shadow-sm: 0 1px 2px rgba(80, 60, 40, 0.05),
-               0 4px 14px -4px rgba(120, 80, 45, 0.10);
-  --shadow-md: 0 6px 18px -6px rgba(120, 80, 45, 0.13),
-               0 20px 48px -16px rgba(120, 80, 45, 0.16);
-  --shadow-lg: 0 12px 32px -10px rgba(120, 80, 45, 0.16),
-               0 36px 80px -20px rgba(120, 80, 45, 0.20);
-  --shadow-primary: 0 8px 22px -6px rgba(224, 99, 63, 0.45);
-  --shadow-card-hover: 0 10px 24px -12px rgba(120, 80, 45, 0.18),
-                       0 24px 56px -22px rgba(120, 80, 45, 0.22);
+  /* 阴影：深海蓝黑，带纵深感 */
+  --shadow-xs: 0 1px 2px rgba(0, 8, 20, 0.5);
+  --shadow-sm: 0 1px 2px rgba(0, 8, 20, 0.4),
+               0 6px 16px -6px rgba(0, 20, 40, 0.55);
+  --shadow-md: 0 8px 24px -8px rgba(0, 16, 36, 0.6),
+               0 24px 52px -18px rgba(0, 10, 28, 0.7);
+  --shadow-lg: 0 14px 36px -12px rgba(0, 16, 36, 0.65),
+               0 40px 84px -22px rgba(0, 8, 24, 0.75);
+  --shadow-primary: 0 10px 26px -6px rgba(34, 211, 238, 0.5);
+  --shadow-card-hover: 0 12px 28px -12px rgba(0, 20, 44, 0.7),
+                       0 28px 60px -22px rgba(0, 14, 34, 0.75);
 
   /* 圆角 */
   --r-sm: 8px;
@@ -78,12 +78,12 @@ body,
 
 body {
   font-family: var(--font-sans);
-  /* 暖调纸感：珊瑚 / 琥珀 / 暖光的多层柔和渐变 */
+  /* 深海纵深：顶部海面波光 → 中部海青 → 底部海沟暗蓝 */
   background:
-    radial-gradient(1150px 680px at 84% -14%, rgba(242, 130, 92, 0.22), transparent 62%),
-    radial-gradient(950px 560px at -6% 6%, rgba(232, 160, 76, 0.16), transparent 58%),
-    radial-gradient(820px 720px at 48% 118%, rgba(245, 182, 132, 0.18), transparent 62%),
-    var(--bg);
+    radial-gradient(1200px 640px at 80% -12%, rgba(94, 234, 212, 0.18), transparent 60%),
+    radial-gradient(1000px 600px at 8% -6%, rgba(56, 189, 248, 0.16), transparent 56%),
+    radial-gradient(1000px 820px at 50% 122%, rgba(2, 120, 170, 0.26), transparent 62%),
+    linear-gradient(180deg, #0a2033 0%, #061525 58%, #040e1c 100%);
   background-attachment: fixed;
   color: var(--text-1);
   font-size: 14px;
@@ -95,10 +95,10 @@ body {
 }
 
 ::selection {
-  background: rgba(242, 130, 92, 0.30);
+  background: rgba(45, 212, 191, 0.32);
 }
 
-/* 统一滚动条（暖调、轻柔） */
+/* 统一滚动条（深海青） */
 ::-webkit-scrollbar {
   width: 9px;
   height: 9px;
@@ -107,13 +107,13 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(178, 150, 112, 0.40);
+  background: rgba(45, 120, 150, 0.45);
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(150, 124, 90, 0.6);
+  background: rgba(56, 150, 180, 0.65);
   background-clip: content-box;
   border: 2px solid transparent;
 }
@@ -157,8 +157,8 @@ button {
 .btn-primary {
   background: var(--primary-gradient);
   color: #fff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
-              0 4px 14px -4px rgba(194, 74, 40, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+              0 6px 18px -6px rgba(34, 211, 238, 0.5);
 }
 .btn-primary:hover {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32),
@@ -245,7 +245,7 @@ button {
 
 /* 渐变文字（主题强调） */
 .gradient-text {
-  background: linear-gradient(118deg, #d95f3a 0%, #c24a28 100%);
+  background: linear-gradient(118deg, #5eead4 0%, #22d3ee 55%, #0ea5e9 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -261,7 +261,7 @@ button {
   position: absolute;
   inset: 0 0 auto 0;
   height: 3px;
-  background: linear-gradient(90deg, #f2825c, #e0633f, #e8a04c);
+  background: linear-gradient(90deg, #5eead4, #22d3ee, #0ea5e9);
 }
 
 /* 轻玻璃（半透明白 + 模糊，谨慎使用） */

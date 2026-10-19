@@ -500,10 +500,10 @@ onUnmounted(() => {
   box-shadow: var(--shadow-xs);
 }
 .llm-item.highlight {
-  background: linear-gradient(145deg, rgba(45, 212, 191, 0.22), rgba(8, 145, 178, 0.14));
-  border-color: rgba(45, 212, 191, 0.42);
+  background: linear-gradient(145deg, rgba(124, 193, 247, 0.22), rgba(47, 143, 224, 0.14));
+  border-color: rgba(124, 193, 247, 0.42);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6),
-              0 10px 22px -14px rgba(8, 145, 178, 0.55);
+              0 10px 22px -14px rgba(47, 143, 224, 0.55);
 }
 .llm-label { font-size: 12px; color: var(--text-2); margin-bottom: 6px; }
 .llm-value {
@@ -513,7 +513,7 @@ onUnmounted(() => {
   font-variant-numeric: tabular-nums;
 }
 .llm-value.cost {
-  background: linear-gradient(118deg, #5eead4, #22d3ee);
+  background: linear-gradient(118deg, #5aa5f4, #2f8fe0);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -538,10 +538,10 @@ onUnmounted(() => {
   box-shadow: var(--shadow-xs);
 }
 .ret-item.highlight {
-  background: linear-gradient(145deg, rgba(45, 212, 191, 0.22), rgba(8, 145, 178, 0.14));
-  border-color: rgba(45, 212, 191, 0.42);
+  background: linear-gradient(145deg, rgba(124, 193, 247, 0.22), rgba(47, 143, 224, 0.14));
+  border-color: rgba(124, 193, 247, 0.42);
   box-shadow: inset 0 1px 0 rgba(255, 255, 0.6),
-              0 10px 22px -14px rgba(8, 145, 178, 0.55);
+              0 10px 22px -14px rgba(47, 143, 224, 0.55);
 }
 .ret-item .llm-value { font-size: 18px; }
 .ret-item .llm-value small { font-size: 12px; font-weight: 500; color: var(--text-3); }
@@ -604,7 +604,7 @@ onUnmounted(() => {
   height: 100%;
   background: var(--primary-gradient);
   border-radius: 999px;
-  box-shadow: 0 0 10px -2px rgba(45, 212, 191, 0.7);
+  box-shadow: 0 0 10px -2px rgba(124, 193, 247, 0.7);
   transition: width 0.4s ease;
 }
 .cache-meta {

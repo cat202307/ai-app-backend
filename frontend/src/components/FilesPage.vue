@@ -372,7 +372,7 @@ onMounted(() => {
   border-radius: 10px;
   background: linear-gradient(145deg, var(--primary-tint), var(--primary-tint-2));
   color: var(--primary);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 .header-actions {
   display: flex;
@@ -484,16 +484,16 @@ td {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 .file-ico svg {
   width: 18px;
   height: 18px;
 }
-.file-ico.t-txt { background: linear-gradient(145deg, rgba(79,140,255,0.22), rgba(79,140,255,0.10)); color: #7aa5ff; }
-.file-ico.t-md  { background: linear-gradient(145deg, rgba(251,191,36,0.22), rgba(251,191,36,0.10)); color: #fbbf24; }
-.file-ico.t-pdf { background: linear-gradient(145deg, rgba(244,106,114,0.22), rgba(244,106,114,0.10)); color: #f87171; }
-.file-ico.t-doc { background: linear-gradient(145deg, rgba(52,211,153,0.22), rgba(52,211,153,0.10)); color: #34d399; }
+.file-ico.t-txt { background: linear-gradient(145deg, #e9f7fe, #dcf0fb); color: #0284c7; }
+.file-ico.t-md  { background: linear-gradient(145deg, #fdf4e3, #fbe9cc); color: #d97706; }
+.file-ico.t-pdf { background: linear-gradient(145deg, #fdeef0, #fbdde1); color: #e11d48; }
+.file-ico.t-doc { background: linear-gradient(145deg, #e7f7f0, #d8f2e6); color: #059669; }
 .file-name {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -505,10 +505,10 @@ td {
   font-weight: 600;
   letter-spacing: 0.4px;
 }
-.type-badge.t-txt { background: rgba(79,140,255,0.18); color: #7aa5ff; }
-.type-badge.t-md  { background: rgba(251,191,36,0.18); color: #fbbf24; }
-.type-badge.t-pdf { background: rgba(244,106,114,0.18); color: #f87171; }
-.type-badge.t-doc { background: rgba(52,211,153,0.18); color: #34d399; }
+.type-badge.t-txt { background: #e3f4fd; color: #0284c7; }
+.type-badge.t-md  { background: #fdf0d9; color: #d97706; }
+.type-badge.t-pdf { background: #fde4e7; color: #e11d48; }
+.type-badge.t-doc { background: #dcf4ea; color: #059669; }
 
 .icon-btn {
   width: 32px;

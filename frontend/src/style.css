@@ -1,50 +1,50 @@
 /* ============================================================
-   全局设计令牌 · 深色高级主题（中性炭灰 + 单一专业蓝）
+   全局设计令牌 · 清新明亮主题（通透白底 + 天空青蓝）
    ============================================================ */
 :root {
   /* 文本 / 背景 */
-  --text-1: #e7ebf4;        /* 主文字（近白冷调） */
-  --text-2: #a4aec4;        /* 次要文字 */
-  --text-3: #6c7790;        /* 弱化文字 / 占位 */
-  --bg: #0b0e16;            /* 页面底色（近黑冷灰） */
-  --bg-soft: #0f1320;
-  --surface: #141927;       /* 卡片 / 气泡 */
-  --surface-2: #1a2030;     /* 次级面板 */
-  --surface-3: #232a3c;     /* 更深一档的内嵌面板 */
-  --border: #242b3d;        /* 常规发丝描边 */
-  --border-strong: #343d54; /* 强描边 */
+  --text-1: #1f3040;        /* 主文字（清透蓝灰） */
+  --text-2: #5a6f82;        /* 次要文字 */
+  --text-3: #98aabc;        /* 弱化文字 / 占位 */
+  --bg: #f2f7fb;            /* 页面底色（极浅冷白） */
+  --bg-soft: #eaf2f8;
+  --surface: #ffffff;       /* 卡片 / 气泡 */
+  --surface-2: #f7fbfd;     /* 次级面板 */
+  --surface-3: #edf4f9;     /* 内嵌面板 */
+  --border: #e1ebf3;        /* 常规发丝描边 */
+  --border-strong: #cddce8; /* 强描边 */
 
-  /* 主色（在深色上更通透的蓝） */
-  --primary: #4f8cff;
-  --primary-hover: #6ea1ff;
-  --primary-deep: #2f6bed;
-  --primary-ink: #8fb6ff;
-  --primary-tint: rgba(79, 140, 255, 0.13);
-  --primary-tint-2: rgba(79, 140, 255, 0.23);
-  --primary-gradient: linear-gradient(135deg, #5b97ff 0%, #2f6bed 100%);
-  --ring: 0 0 0 4px rgba(79, 140, 255, 0.22);
+  /* 主色（清新天空蓝 → 青） */
+  --primary: #12a4e0;
+  --primary-hover: #38b6ec;
+  --primary-deep: #0284c7;
+  --primary-ink: #0369a1;
+  --primary-tint: rgba(18, 164, 224, 0.11);
+  --primary-tint-2: rgba(6, 182, 212, 0.18);
+  --primary-gradient: linear-gradient(135deg, #38bdf8 0%, #06b6d4 100%);
+  --ring: 0 0 0 4px rgba(18, 164, 224, 0.18);
 
   /* 语义色 */
-  --success: #34d399;
-  --success-deep: #10b981;
-  --success-tint: rgba(52, 211, 153, 0.14);
-  --danger: #f46a72;
-  --danger-deep: #e5484d;
-  --danger-tint: rgba(244, 106, 114, 0.15);
-  --warning: #fbbf24;
-  --warning-tint: rgba(251, 191, 36, 0.15);
+  --success: #10b981;
+  --success-deep: #059669;
+  --success-tint: rgba(16, 185, 129, 0.13);
+  --danger: #f4506b;
+  --danger-deep: #e11d48;
+  --danger-tint: rgba(244, 80, 107, 0.12);
+  --warning: #f59e0b;
+  --warning-tint: rgba(245, 158, 11, 0.14);
 
-  /* 阴影：深色环境下更内敛，配合发光 */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.32),
-               0 3px 10px -2px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 14px -3px rgba(0, 0, 0, 0.55),
-               0 18px 44px -12px rgba(0, 0, 0, 0.75);
-  --shadow-lg: 0 10px 28px -8px rgba(0, 0, 0, 0.66),
-               0 34px 72px -16px rgba(0, 0, 0, 0.85);
-  --shadow-primary: 0 6px 22px -6px rgba(79, 140, 255, 0.6);
-  --shadow-card-hover: 0 8px 22px -10px rgba(0, 0, 0, 0.6),
-                       0 22px 54px -20px rgba(0, 0, 0, 0.85);
+  /* 阴影：明亮环境下轻柔通透 */
+  --shadow-xs: 0 1px 2px rgba(31, 64, 96, 0.06);
+  --shadow-sm: 0 1px 2px rgba(31, 64, 96, 0.05),
+               0 4px 14px -4px rgba(31, 88, 140, 0.10);
+  --shadow-md: 0 6px 18px -6px rgba(31, 88, 140, 0.13),
+               0 20px 48px -16px rgba(31, 88, 140, 0.16);
+  --shadow-lg: 0 12px 32px -10px rgba(31, 88, 140, 0.16),
+               0 36px 80px -20px rgba(31, 88, 140, 0.20);
+  --shadow-primary: 0 8px 22px -6px rgba(14, 165, 233, 0.45);
+  --shadow-card-hover: 0 10px 24px -12px rgba(31, 88, 140, 0.18),
+                       0 24px 56px -22px rgba(31, 88, 140, 0.22);
 
   /* 圆角 */
   --r-sm: 8px;
@@ -74,10 +74,10 @@ body,
 
 body {
   font-family: var(--font-sans);
-  /* 深色环境下顶部的蓝色氛围光晕 */
+  /* 清新环境下顶部柔和的天空青氛围光 */
   background:
-    radial-gradient(1200px 620px at 75% -16%, rgba(79, 140, 255, 0.13), transparent 60%),
-    radial-gradient(900px 480px at 8% -12%, rgba(56, 189, 248, 0.07), transparent 55%),
+    radial-gradient(1200px 620px at 78% -16%, rgba(56, 189, 248, 0.14), transparent 60%),
+    radial-gradient(900px 480px at 6% -12%, rgba(45, 212, 191, 0.08), transparent 55%),
     var(--bg);
   background-attachment: fixed;
   color: var(--text-1);
@@ -90,10 +90,10 @@ body {
 }
 
 ::selection {
-  background: rgba(79, 140, 255, 0.28);
+  background: rgba(56, 189, 248, 0.28);
 }
 
-/* 统一滚动条（深色、克制） */
+/* 统一滚动条（浅色、轻柔） */
 ::-webkit-scrollbar {
   width: 9px;
   height: 9px;
@@ -102,13 +102,13 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.18);
+  background: rgba(120, 155, 185, 0.32);
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.32);
+  background: rgba(120, 155, 185, 0.5);
   background-clip: content-box;
   border: 2px solid transparent;
 }
@@ -152,13 +152,13 @@ button {
 .btn-primary {
   background: var(--primary-gradient);
   color: #fff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
-              0 3px 12px -3px rgba(79, 140, 255, 0.6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
+              0 4px 14px -4px rgba(14, 165, 233, 0.55);
 }
 .btn-primary:hover {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24),
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32),
               var(--shadow-primary);
-  filter: brightness(1.05);
+  filter: brightness(1.04);
 }
 .btn-primary:active {
   box-shadow: inset 0 1px 3px rgba(10, 30, 70, 0.4);
@@ -192,11 +192,9 @@ button {
   filter: none;
 }
 
-/* 卡片：深色表面 + 顶部极淡高光 */
+/* 卡片：纯白表面 + 轻柔阴影 */
 .card {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0)),
-    var(--surface);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-sm);

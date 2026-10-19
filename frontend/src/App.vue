@@ -878,14 +878,14 @@ async function confirmDelete() {
 .sidebar {
   width: 252px;
   background:
-    linear-gradient(180deg, #161c2c 0%, #111522 42%);
+    linear-gradient(180deg, #ffffff 0%, #f4f9fc 58%);
   border-right: 1px solid var(--border);
   padding: 0;
   display: flex;
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.04) inset;
+  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.8) inset;
 }
 
 /* 最近对话列表：占满剩余高度、独立滚动，
@@ -1164,9 +1164,9 @@ async function confirmDelete() {
   letter-spacing: 0.3px;
   flex-shrink: 0;
   color: #fff;
-  background: linear-gradient(145deg, #4a6a9c 0%, #2c4066 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18),
-              0 3px 10px -3px rgba(56, 100, 180, 0.5);
+  background: linear-gradient(145deg, #38bdf8 0%, #06b6d4 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34),
+              0 3px 10px -3px rgba(14, 165, 233, 0.55);
 }
 
 .message.user .avatar {

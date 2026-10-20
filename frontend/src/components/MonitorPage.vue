@@ -385,14 +385,14 @@ onUnmounted(() => {
   border-radius: 10px;
   background: linear-gradient(145deg, var(--primary-tint), var(--primary-tint-2));
   color: var(--primary);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 1px 0 var(--top-edge);
 }
 .header-actions { display: flex; gap: 10px; }
 .dot {
   width: 7px; height: 7px; border-radius: 50%;
   background: var(--text-3); display: inline-block;
 }
-.dot.on { background: var(--success); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18); }
+.dot.on { background: var(--success); box-shadow: 0 0 0 3px var(--success-tint); }
 
 .state-card {
   background: var(--surface);
@@ -439,11 +439,11 @@ onUnmounted(() => {
   color: var(--primary);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 1px 0 var(--top-edge);
 }
 .kpi-icon svg { width: 22px; height: 22px; }
 .kpi-icon.ok {
-  background: linear-gradient(145deg, var(--success-tint), rgba(16, 185, 129, 0.08));
+  background: linear-gradient(145deg, var(--success-tint), var(--success-tint));
   color: var(--success);
 }
 .kpi-label { font-size: 12.5px; color: var(--text-2); margin-bottom: 3px; }
@@ -500,10 +500,10 @@ onUnmounted(() => {
   box-shadow: var(--shadow-xs);
 }
 .llm-item.highlight {
-  background: linear-gradient(145deg, rgba(110, 168, 251, 0.22), rgba(37, 99, 235, 0.14));
-  border-color: rgba(110, 168, 251, 0.42);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6),
-              0 10px 22px -14px rgba(37, 99, 235, 0.55);
+  background: var(--highlight-bg);
+  border-color: var(--highlight-border);
+  box-shadow: inset 0 1px 0 var(--top-edge),
+              var(--highlight-shadow);
 }
 .llm-label { font-size: 12px; color: var(--text-2); margin-bottom: 6px; }
 .llm-value {
@@ -513,7 +513,7 @@ onUnmounted(() => {
   font-variant-numeric: tabular-nums;
 }
 .llm-value.cost {
-  background: linear-gradient(118deg, #3b82f6, #2563eb);
+  background: var(--primary-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -538,10 +538,10 @@ onUnmounted(() => {
   box-shadow: var(--shadow-xs);
 }
 .ret-item.highlight {
-  background: linear-gradient(145deg, rgba(110, 168, 251, 0.22), rgba(37, 99, 235, 0.14));
-  border-color: rgba(110, 168, 251, 0.42);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 0.6),
-              0 10px 22px -14px rgba(37, 99, 235, 0.55);
+  background: var(--highlight-bg);
+  border-color: var(--highlight-border);
+  box-shadow: inset 0 1px 0 var(--top-edge),
+              var(--highlight-shadow);
 }
 .ret-item .llm-value { font-size: 18px; }
 .ret-item .llm-value small { font-size: 12px; font-weight: 500; color: var(--text-3); }
@@ -604,7 +604,7 @@ onUnmounted(() => {
   height: 100%;
   background: var(--primary-gradient);
   border-radius: 999px;
-  box-shadow: 0 0 10px -2px rgba(110, 168, 251, 0.7);
+  box-shadow: 0 0 10px -2px var(--accent-shadow);
   transition: width 0.4s ease;
 }
 .cache-meta {

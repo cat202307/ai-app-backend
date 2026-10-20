@@ -372,7 +372,7 @@ onMounted(() => {
   border-radius: 10px;
   background: linear-gradient(145deg, var(--primary-tint), var(--primary-tint-2));
   color: var(--primary);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 1px 0 var(--top-edge);
 }
 .header-actions {
   display: flex;
@@ -485,16 +485,16 @@ td {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 1px 0 var(--top-edge);
 }
 .file-ico svg {
   width: 18px;
   height: 18px;
 }
-.file-ico.t-txt { background: linear-gradient(145deg, #e9f1fe, #dae7fb); color: #2563eb; }
-.file-ico.t-md  { background: linear-gradient(145deg, #fdf4e3, #fbe9cc); color: #d97706; }
-.file-ico.t-pdf { background: linear-gradient(145deg, #fdeef0, #fbdde1); color: #e11d48; }
-.file-ico.t-doc { background: linear-gradient(145deg, #e7f7f0, #d8f2e6); color: #059669; }
+.file-ico.t-txt { background: linear-gradient(145deg, var(--primary-tint), var(--primary-tint-2)); color: var(--primary); }
+.file-ico.t-md  { background: var(--warning-tint); color: var(--warning); }
+.file-ico.t-pdf { background: var(--danger-tint); color: var(--danger); }
+.file-ico.t-doc { background: var(--success-tint); color: var(--success); }
 .file-name {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -506,10 +506,10 @@ td {
   font-weight: 600;
   letter-spacing: 0.4px;
 }
-.type-badge.t-txt { background: #e5edfd; color: #2563eb; }
-.type-badge.t-md  { background: #fdf0d9; color: #d97706; }
-.type-badge.t-pdf { background: #fde4e7; color: #e11d48; }
-.type-badge.t-doc { background: #dcf4ea; color: #059669; }
+.type-badge.t-txt { background: var(--primary-tint); color: var(--primary); }
+.type-badge.t-md  { background: var(--warning-tint); color: var(--warning); }
+.type-badge.t-pdf { background: var(--danger-tint); color: var(--danger); }
+.type-badge.t-doc { background: var(--success-tint); color: var(--success); }
 
 .icon-btn {
   width: 32px;
@@ -614,7 +614,7 @@ td {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #1f2737;
+  background: var(--toast-bg);
   color: #fff;
   padding: 11px 18px;
   border-radius: var(--r-pill);
@@ -624,9 +624,9 @@ td {
   animation: toastIn 0.2s ease;
   max-width: 80vw;
 }
-.toast.success { background: #0f7a5c; }
-.toast.danger { background: #d23b40; }
-.toast.warning { background: #b45309; }
+.toast.success { background: var(--success-deep); }
+.toast.danger { background: var(--danger-deep); }
+.toast.warning { background: var(--warning-deep); }
 @keyframes toastIn {
   from { opacity: 0; transform: translateX(-50%) translateY(8px); }
   to { opacity: 1; transform: translateX(-50%) translateY(0); }

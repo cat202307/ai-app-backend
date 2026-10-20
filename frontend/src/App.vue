@@ -28,6 +28,23 @@ const pendingDeleteSessionId = ref(null)
 const historyCollapsed = ref(false)
 let scrollTimer = null
 
+// 主题切换
+const THEMES = [
+  { id: 'white', name: '白色', swatch: 'linear-gradient(135deg,#6ea8fb,#3b82f6 48%,#2563eb)' },
+  { id: 'lightblue', name: '浅蓝', swatch: 'linear-gradient(135deg,#7cc1f7,#4aa2f0 48%,#2f8fe0)' },
+  { id: 'deepsea', name: '深海', swatch: 'linear-gradient(135deg,#2dd4bf,#06b6d4 48%,#0284c7)' },
+  { id: 'dark', name: '暗夜', swatch: 'linear-gradient(135deg,#5b9cf6,#3d82e8 50%,#2f6fd0)' },
+  { id: 'warm', name: '暖调', swatch: 'linear-gradient(135deg,#f2825c,#e0633f 50%,#c24a28)' },
+]
+const currentTheme = ref(localStorage.getItem('app-theme') || 'white')
+const showThemeMenu = ref(false)
+function applyTheme(id) {
+  currentTheme.value = id
+  document.documentElement.setAttribute('data-theme', id)
+  localStorage.setItem('app-theme', id)
+  showThemeMenu.value = false
+}
+
 // DOM 引用
 const chatContainer = ref(null)
 const textareaRef = ref(null)
@@ -66,6 +83,10 @@ function autoResize() {
 
 // 初始化
 onMounted(async () => {
+  document.documentElement.setAttribute('data-theme', currentTheme.value)
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.sidebar-footer')) showThemeMenu.value = false
+  })
   loadChatHistory()
   await loadConversations()
   // 如果有对话，自动加载最近的一段
@@ -241,7 +262,7 @@ async function streamAnswer({ message, history, aiMsg }) {
       aiMsg.time = nowTime()
       statusText.value = '就绪'
     } else if (data.type === 'error') {
-      aiMsg.html = '<span style="color:#ff4d4f">出错了：' + data.message + '</span>'
+      aiMsg.html = '<span style="color:var(--danger)">出错了：' + data.message + '</span>'
       statusText.value = '错误'
     }
   }
@@ -323,7 +344,7 @@ async function sendMessage() {
     if (error.name === 'AbortError') {
       statusText.value = '已停止'
     } else {
-      aiMsg.html = '<span style="color:#ff4d4f">请求失败：' + error.message + '</span>'
+      aiMsg.html = '<span style="color:var(--danger)">请求失败：' + error.message + '</span>'
       statusText.value = '错误'
     }
   } finally {
@@ -380,7 +401,7 @@ async function regenerate(index) {
     if (error.name === 'AbortError') {
       statusText.value = '已停止'
     } else {
-      aiMsg.html = '<span style="color:#ff4d4f">请求失败：' + error.message + '</span>'
+      aiMsg.html = '<span style="color:var(--danger)">请求失败：' + error.message + '</span>'
       statusText.value = '错误'
     }
   } finally {
@@ -599,6 +620,32 @@ async function confirmDelete() {
           </button>
         </div>
       </div>
+
+      <!-- 主题切换器 -->
+      <div class="sidebar-footer">
+        <div class="theme-popover" v-if="showThemeMenu">
+          <div class="theme-pop-title">选择主题</div>
+          <button
+            v-for="t in THEMES"
+            :key="t.id"
+            class="theme-option"
+            :class="{ active: currentTheme === t.id }"
+            @click="applyTheme(t.id)"
+          >
+            <span class="theme-swatch" :style="{ background: t.swatch }"></span>
+            <span class="theme-label">{{ t.name }}</span>
+            <svg v-if="currentTheme === t.id" class="theme-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+        </div>
+        <button class="theme-trigger" @click="showThemeMenu = !showThemeMenu">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/>
+            <path d="M12 2C6.5 2 2 6 2 10.5c0 4 3.5 6.5 7 6.5.7 0 1.2.2 1.5.6l1 1.4c.4.6 1.2.8 1.8.4l.6-.4c.4-.3.8-.4 1.3-.4 3.5 0 6.8-2.5 6.8-6.5C22 5.8 17.5 2 12 2z"/>
+          </svg>
+          <span class="theme-trigger-label">主题外观</span>
+          <span class="theme-trigger-current">{{ THEMES.find(t => t.id === currentTheme)?.name }}</span>
+        </button>
+      </div>
     </aside>
 
     <!-- 主内容区 -->
@@ -758,7 +805,7 @@ async function confirmDelete() {
               height="26"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#e5484d"
+              stroke="currentColor"
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -865,14 +912,14 @@ async function confirmDelete() {
 }
 
 .confirm-btn.danger {
-  background: #e5484d;
-  border-color: #e5484d;
+  background: var(--danger);
+  border-color: var(--danger);
   color: #ffffff;
 }
 
 .confirm-btn.danger:hover {
-  background: #d23b40;
-  border-color: #d23b40;
+  background: var(--danger-deep);
+  border-color: var(--danger-deep);
 }
 
 @keyframes confirmFade {
@@ -895,17 +942,14 @@ async function confirmDelete() {
 /* 侧边栏 */
 .sidebar {
   width: 252px;
-  background:
-    radial-gradient(130% 240px at 50% 100%, rgba(96, 165, 250, 0.20), transparent 72%),
-    linear-gradient(180deg, #ffffff 0%, #f8fafc 54%, #f1f3f6 100%);
+  background: var(--sidebar-bg);
   border-right: 1px solid var(--border);
   padding: 0;
   display: flex;
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.8) inset,
-              12px 0 34px -26px rgba(29, 78, 216, 0.4);
+  box-shadow: var(--sidebar-edge);
 }
 
 /* 最近对话列表：占满剩余高度、独立滚动，
@@ -916,7 +960,7 @@ async function confirmDelete() {
   min-height: 0;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 .sidebar-history::-webkit-scrollbar {
   width: 6px;
@@ -925,12 +969,100 @@ async function confirmDelete() {
   background: transparent;
 }
 .sidebar-history::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
+  border: none;
 }
 .sidebar-history::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.32);
+  background: var(--scrollbar-thumb-hover);
 }
+
+/* 主题切换器 */
+.sidebar-footer {
+  position: relative;
+  margin-top: auto;
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--border);
+}
+.theme-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-2);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  transition: all 0.16s;
+}
+.theme-trigger:hover {
+  border-color: var(--border-strong);
+  color: var(--text-1);
+  background: var(--surface-3);
+}
+.theme-trigger-label { font-weight: 500; }
+.theme-trigger-current {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.theme-popover {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(100% + 6px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 8px;
+  z-index: 100;
+  animation: popIn 0.16s ease;
+}
+@keyframes popIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.theme-pop-title {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-3);
+  padding: 5px 8px 7px;
+  letter-spacing: 0.3px;
+}
+.theme-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 9px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  transition: background 0.14s, color 0.14s;
+}
+.theme-option:hover { background: var(--surface-2); }
+.theme-option.active {
+  background: var(--primary-tint);
+  color: var(--primary);
+}
+.theme-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.4), var(--shadow-xs);
+}
+.theme-label { flex: 1; text-align: left; font-weight: 500; }
+.theme-check { color: var(--primary); flex-shrink: 0; }
 
 .sidebar-logo {
   display: flex;
@@ -952,13 +1084,13 @@ async function confirmDelete() {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35),
-              inset 0 -3px 8px rgba(37, 99, 235, 0.30),
-              0 8px 18px -6px rgba(96, 165, 250, 0.65);
+  box-shadow: inset 0 1px 0 var(--top-edge),
+              inset 0 -3px 8px rgba(0, 0, 0, 0.18),
+              0 8px 18px -6px var(--accent-shadow);
 }
 .logo-text {
   white-space: nowrap;
-  background: linear-gradient(118deg, #2563eb 0%, #3b82f6 55%, #60a5fa 100%);
+  background: var(--text-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -979,14 +1111,14 @@ async function confirmDelete() {
   align-items: center;
   justify-content: center;
   gap: 7px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
-              inset 0 -2px 6px rgba(37, 99, 235, 0.22),
-              0 6px 16px -6px rgba(96, 165, 250, 0.55);
+  box-shadow: inset 0 1px 0 var(--top-edge),
+              inset 0 -2px 6px rgba(0, 0, 0, 0.14),
+              0 6px 16px -6px var(--accent-shadow);
   transition: box-shadow 0.18s, filter 0.18s, transform 0.06s;
 }
 .sidebar-new-btn:hover {
   filter: brightness(1.04);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32),
+  box-shadow: inset 0 1px 0 var(--top-edge),
               var(--shadow-primary);
 }
 .sidebar-new-btn:active { transform: translateY(1px); }
@@ -1049,9 +1181,9 @@ async function confirmDelete() {
   background: var(--primary-gradient);
   color: #ffffff;
   font-weight: 600;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
-              inset 0 -2px 6px rgba(37, 99, 235, 0.20),
-              0 8px 18px -8px rgba(96, 165, 250, 0.65);
+  box-shadow: inset 0 1px 0 var(--top-edge),
+              inset 0 -2px 6px rgba(0, 0, 0, 0.14),
+              0 8px 18px -8px var(--accent-shadow);
 }
 /* 填充胶囊选中态：不再需要外部强调条 */
 .sidebar-item.active::before {
@@ -1185,9 +1317,9 @@ async function confirmDelete() {
   align-items: center;
   justify-content: center;
   background: var(--primary-gradient);
-  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.36),
-              inset 0 -6px 14px rgba(37, 99, 235, 0.28),
-              0 18px 40px -12px rgba(96, 165, 250, 0.6);
+  box-shadow: inset 0 2px 0 var(--top-edge),
+              inset 0 -6px 14px rgba(0, 0, 0, 0.16),
+              0 18px 40px -12px var(--accent-shadow);
   margin-bottom: 24px;
   position: relative;
 }
@@ -1196,7 +1328,7 @@ async function confirmDelete() {
   position: absolute;
   inset: -14px;
   border-radius: 32px;
-  background: radial-gradient(60% 60% at 50% 50%, rgba(110, 168, 251, 0.30), transparent 70%);
+  background: var(--brand-glow);
   z-index: -1;
 }
 .welcome-title {
@@ -1204,7 +1336,7 @@ async function confirmDelete() {
   font-weight: 700;
   letter-spacing: 0.2px;
   margin-bottom: 10px;
-  background: linear-gradient(118deg, #1d4ed8 0%, #2563eb 55%, #3b82f6 100%);
+  background: var(--text-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1253,15 +1385,15 @@ async function confirmDelete() {
   letter-spacing: 0.3px;
   flex-shrink: 0;
   color: #fff;
-  background: linear-gradient(145deg, #6ea8fb 0%, #2563eb 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4),
-              0 3px 10px -3px rgba(96, 165, 250, 0.55);
+  background: var(--primary-gradient);
+  box-shadow: inset 0 1px 0 var(--top-edge),
+              0 3px 10px -3px var(--accent-shadow);
 }
 
 .message.user .avatar {
   background: var(--primary-gradient);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
-              0 4px 12px -4px rgba(96, 165, 250, 0.55);
+  box-shadow: inset 0 1px 0 var(--top-edge),
+              0 4px 12px -4px var(--accent-shadow);
 }
 
 .bubble {
@@ -1271,10 +1403,9 @@ async function confirmDelete() {
   border-top-left-radius: 7px;
   line-height: 1.75;
   font-size: 14.5px;
-  background: linear-gradient(180deg, #ffffff 0%, #f5f9fe 100%);
+  background: var(--surface);
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm),
-              inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-sm);
   text-align: left;
 }
 
@@ -1348,9 +1479,9 @@ async function confirmDelete() {
   max-width: 70%;
   flex-shrink: 1;
   word-break: break-word;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
-              inset 0 -3px 8px rgba(37, 99, 235, 0.20),
-              0 6px 18px -7px rgba(96, 165, 250, 0.6);
+  box-shadow: inset 0 1px 0 var(--top-edge),
+              inset 0 -3px 8px rgba(0, 0, 0, 0.14),
+              0 6px 18px -7px var(--accent-shadow);
 }
 .tool-tag {
   display: inline-flex;
@@ -1477,7 +1608,7 @@ async function confirmDelete() {
   border-color: var(--primary);
   color: var(--primary);
   background: var(--primary-tint);
-  box-shadow: 0 6px 16px -8px rgba(96, 165, 250, 0.6);
+  box-shadow: 0 6px 16px -8px var(--accent-shadow);
   transform: translateY(-1px);
 }
 
@@ -1486,26 +1617,24 @@ async function confirmDelete() {
   padding: 10px 20px 22px;
   background: linear-gradient(to top,
     var(--bg) 58%,
-    rgba(245, 247, 251, 0));
+    transparent);
 }
 .input-box {
   max-width: 880px;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.88);
+  background: var(--input-bg);
   backdrop-filter: blur(16px) saturate(150%);
   -webkit-backdrop-filter: blur(16px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--border);
   border-radius: 20px;
   padding: 12px 16px;
-  box-shadow: var(--shadow-md),
-              inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  box-shadow: var(--shadow-md);
   transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s;
 }
 .input-box:focus-within {
-  border-color: var(--aqua);
-  box-shadow: 0 0 0 4px var(--brand-glow),
-              var(--shadow-md),
-              0 0 30px -6px rgba(74, 162, 240, 0.38);
+  border-color: var(--primary);
+  box-shadow: var(--ring),
+              var(--shadow-md);
 }
 
 .input-top {
@@ -1598,21 +1727,21 @@ async function confirmDelete() {
   justify-content: center;
   flex-shrink: 0;
   margin-top: 4px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
-              inset 0 -2px 6px rgba(37, 99, 235, 0.22),
-              0 5px 14px -4px rgba(96, 165, 250, 0.6);
+  box-shadow: inset 0 1px 0 var(--top-edge),
+              inset 0 -2px 6px rgba(0, 0, 0, 0.14),
+              0 5px 14px -4px var(--accent-shadow);
   transition: box-shadow 0.18s, filter 0.18s, transform 0.06s;
 }
 .send-btn:hover {
   filter: brightness(1.05);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32),
+  box-shadow: inset 0 1px 0 var(--top-edge),
               var(--shadow-primary);
 }
 .send-btn:active { transform: translateY(1px); }
 
 .send-btn.loading {
-  background: linear-gradient(135deg, #f0565a, #d6383d);
-  box-shadow: 0 3px 10px -3px rgba(229, 72, 77, 0.55);
+  background: linear-gradient(135deg, var(--danger), var(--danger-deep));
+  box-shadow: 0 3px 10px -3px var(--danger-tint);
 }
 
 .status-bar {

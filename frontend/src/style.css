@@ -1,26 +1,29 @@
 /* ============================================================
-   全局设计令牌 · 白色主题（纯白卡片 + 极简中性底 + 净蓝点缀）
+   全局设计令牌 · 多主题
+   主题：white（默认）/ lightblue / deepsea / dark / warm
+   切换：在 <html> 上设置 data-theme，所有颜色均由令牌驱动
    ============================================================ */
-:root {
-  /* 文本 / 背景 */
-  --text-1: #1e2633;        /* 主文字（近黑） */
-  --text-2: #56606e;        /* 次要文字（中性灰） */
-  --text-3: #98a1ad;        /* 弱化文字 / 占位 */
-  --bg: #f5f6f8;            /* 页面底色（极浅中性灰） */
-  --bg-soft: #eceef1;
-  --surface: #ffffff;       /* 卡片 / 气泡（纯白） */
-  --surface-2: #f7f8fa;     /* 次级面板 */
-  --surface-3: #edf0f3;     /* 内嵌面板 */
-  --border: #e5e8ec;        /* 常规发丝描边 */
-  --border-strong: #d1d6dd; /* 强描边 */
 
-  /* 主色（净蓝） */
+/* ---------- 白色主题（默认）：纯白卡片 + 净蓝点缀 ---------- */
+:root,
+:root[data-theme="white"] {
+  --text-1: #1e2633;
+  --text-2: #56606e;
+  --text-3: #98a1ad;
+  --bg: #f5f6f8;
+  --bg-soft: #eceef1;
+  --surface: #ffffff;
+  --surface-2: #f7f8fa;
+  --surface-3: #edf0f3;
+  --border: #e5e8ec;
+  --border-strong: #d1d6dd;
+
   --primary: #3b82f6;
   --primary-hover: #5292f7;
   --primary-deep: #2563eb;
   --primary-ink: #1d4ed8;
-  --aqua: #60a5fa;          /* 亮蓝（副色） */
-  --mint: #93bdfb;          /* 淡蓝（副色） */
+  --aqua: #60a5fa;
+  --mint: #93bdfb;
   --primary-tint: rgba(59, 130, 246, 0.10);
   --primary-tint-2: rgba(96, 165, 250, 0.18);
   --primary-tint-strong: rgba(59, 130, 246, 0.15);
@@ -28,7 +31,6 @@
   --brand-glow: rgba(59, 130, 246, 0.16);
   --ring: 0 0 0 4px rgba(59, 130, 246, 0.18);
 
-  /* 语义色 */
   --success: #22a06b;
   --success-deep: #1a855a;
   --success-tint: rgba(34, 160, 107, 0.12);
@@ -37,26 +39,307 @@
   --danger-tint: rgba(229, 72, 77, 0.10);
   --warning: #e8920e;
   --warning-tint: rgba(232, 146, 14, 0.12);
+  --warning-deep: #b45309;
+  --toast-bg: #1f2737;
 
-  /* 阴影：中性灰，干净利落 */
   --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.06);
-  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05),
-               0 6px 16px -6px rgba(16, 24, 40, 0.09);
-  --shadow-md: 0 8px 22px -6px rgba(16, 24, 40, 0.10),
-               0 22px 46px -16px rgba(16, 24, 40, 0.13);
-  --shadow-lg: 0 12px 30px -10px rgba(16, 24, 40, 0.13),
-               0 36px 74px -20px rgba(16, 24, 40, 0.16);
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05), 0 6px 16px -6px rgba(16, 24, 40, 0.09);
+  --shadow-md: 0 8px 22px -6px rgba(16, 24, 40, 0.10), 0 22px 46px -16px rgba(16, 24, 40, 0.13);
+  --shadow-lg: 0 12px 30px -10px rgba(16, 24, 40, 0.13), 0 36px 74px -20px rgba(16, 24, 40, 0.16);
   --shadow-primary: 0 8px 22px -6px rgba(37, 99, 235, 0.42);
-  --shadow-card-hover: 0 10px 24px -12px rgba(16, 24, 40, 0.14),
-                       0 24px 54px -22px rgba(16, 24, 40, 0.18);
+  --shadow-card-hover: 0 10px 24px -12px rgba(16, 24, 40, 0.14), 0 24px 54px -22px rgba(16, 24, 40, 0.18);
 
-  /* 圆角 */
+  /* 组件 / 装饰 */
+  --body-bg:
+    radial-gradient(1200px 600px at 82% -12%, rgba(96, 165, 250, 0.14), transparent 60%),
+    radial-gradient(1000px 560px at 6% -6%, rgba(120, 170, 250, 0.08), transparent 56%),
+    linear-gradient(180deg, #fafbfc 0%, #f3f4f6 100%);
+  --selection-bg: rgba(96, 165, 250, 0.30);
+  --scrollbar-thumb: rgba(140, 148, 160, 0.5);
+  --scrollbar-thumb-hover: rgba(110, 118, 132, 0.7);
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --sidebar-bg:
+    radial-gradient(130% 240px at 50% 100%, rgba(96, 165, 250, 0.20), transparent 72%),
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 54%, #f1f3f6 100%);
+  --sidebar-edge: inset -1px 0 0 rgba(229, 232, 236, 0.9), 14px 0 34px -28px rgba(37, 99, 235, 0.35);
+  --text-gradient: linear-gradient(118deg, #1d4ed8 0%, #2563eb 45%, #3b82f6 100%);
+  --input-bg: rgba(255, 255, 255, 0.90);
+  --top-edge: rgba(255, 255, 255, 0.5);
+  --accent-shadow: rgba(37, 99, 235, 0.45);
+  --highlight-bg: linear-gradient(145deg, rgba(96, 165, 250, 0.22), rgba(59, 130, 246, 0.12));
+  --highlight-border: rgba(96, 165, 250, 0.45);
+  --highlight-shadow: 0 10px 22px -14px rgba(37, 99, 235, 0.55);
+}
+
+/* ---------- 浅蓝色主题：通透浅蓝底 + 清透天蓝 ---------- */
+:root[data-theme="lightblue"] {
+  --text-1: #1c2b40;
+  --text-2: #55697f;
+  --text-3: #94a6bb;
+  --bg: #eef5fd;
+  --bg-soft: #e4effa;
+  --surface: #ffffff;
+  --surface-2: #f5f9fe;
+  --surface-3: #e8f1fb;
+  --border: #dce9f5;
+  --border-strong: #c2d5ea;
+
+  --primary: #3b93f0;
+  --primary-hover: #5aa5f4;
+  --primary-deep: #2a7fd6;
+  --primary-ink: #1d63b0;
+  --aqua: #5cb4f7;
+  --mint: #8ec8fa;
+  --primary-tint: rgba(59, 147, 240, 0.10);
+  --primary-tint-2: rgba(92, 180, 247, 0.18);
+  --primary-tint-strong: rgba(59, 147, 240, 0.16);
+  --primary-gradient: linear-gradient(135deg, #7cc1f7 0%, #4aa2f0 50%, #2f8fe0 100%);
+  --brand-glow: rgba(74, 162, 240, 0.18);
+  --ring: 0 0 0 4px rgba(74, 162, 240, 0.20);
+
+  --success: #38a169;
+  --success-deep: #2f855a;
+  --success-tint: rgba(56, 161, 105, 0.12);
+  --danger: #e5484d;
+  --danger-deep: #c9353a;
+  --danger-tint: rgba(229, 72, 77, 0.10);
+  --warning: #e8920e;
+  --warning-tint: rgba(232, 146, 14, 0.12);
+  --warning-deep: #b45309;
+  --toast-bg: #1f2737;
+
+  --shadow-xs: 0 1px 2px rgba(40, 80, 130, 0.07);
+  --shadow-sm: 0 1px 2px rgba(40, 80, 130, 0.05), 0 6px 16px -6px rgba(50, 100, 160, 0.11);
+  --shadow-md: 0 8px 22px -6px rgba(50, 100, 160, 0.12), 0 22px 46px -16px rgba(50, 100, 160, 0.15);
+  --shadow-lg: 0 12px 30px -10px rgba(50, 100, 160, 0.14), 0 36px 74px -20px rgba(50, 100, 160, 0.18);
+  --shadow-primary: 0 8px 22px -6px rgba(47, 143, 224, 0.45);
+  --shadow-card-hover: 0 10px 24px -12px rgba(50, 100, 160, 0.16), 0 24px 54px -22px rgba(50, 100, 160, 0.20);
+
+  --body-bg:
+    radial-gradient(1200px 620px at 82% -12%, rgba(124, 193, 247, 0.42), transparent 60%),
+    radial-gradient(1000px 580px at 6% -6%, rgba(158, 210, 250, 0.34), transparent 56%),
+    linear-gradient(180deg, #f0f7fd 0%, #e8f2fc 100%);
+  --selection-bg: rgba(124, 193, 247, 0.32);
+  --scrollbar-thumb: rgba(120, 165, 210, 0.5);
+  --scrollbar-thumb-hover: rgba(90, 140, 195, 0.7);
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --sidebar-bg:
+    radial-gradient(130% 240px at 50% 100%, rgba(124, 193, 247, 0.30), transparent 72%),
+    linear-gradient(180deg, #ffffff 0%, #f6fafe 54%, #eef5fd 100%);
+  --sidebar-edge: inset -1px 0 0 rgba(220, 233, 245, 0.9), 14px 0 34px -28px rgba(47, 143, 224, 0.35);
+  --text-gradient: linear-gradient(118deg, #1d63b0 0%, #2f8fe0 55%, #4aa2f0 100%);
+  --input-bg: rgba(255, 255, 255, 0.88);
+  --top-edge: rgba(255, 255, 255, 0.5);
+  --accent-shadow: rgba(47, 143, 224, 0.45);
+  --highlight-bg: linear-gradient(145deg, rgba(124, 193, 247, 0.26), rgba(74, 162, 240, 0.14));
+  --highlight-border: rgba(124, 193, 247, 0.5);
+  --highlight-shadow: 0 10px 22px -14px rgba(47, 143, 224, 0.55);
+}
+
+/* ---------- 深海主题：海沟深蓝底 + 青蓝主色 ---------- */
+:root[data-theme="deepsea"] {
+  --text-1: #e6f2fb;
+  --text-2: #9fb7cc;
+  --text-3: #5d7891;
+  --bg: #061525;
+  --bg-soft: #0a1f33;
+  --surface: #0c2236;
+  --surface-2: #102a40;
+  --surface-3: #081b2d;
+  --border: #1c3750;
+  --border-strong: #2a4a66;
+
+  --primary: #22d3ee;
+  --primary-hover: #4de0f5;
+  --primary-deep: #06b6d4;
+  --primary-ink: #67e8f9;
+  --aqua: #5eead4;
+  --mint: #2dd4bf;
+  --primary-tint: rgba(34, 211, 238, 0.12);
+  --primary-tint-2: rgba(45, 212, 191, 0.20);
+  --primary-tint-strong: rgba(34, 211, 238, 0.22);
+  --primary-gradient: linear-gradient(135deg, #2dd4bf 0%, #06b6d4 50%, #0284c7 100%);
+  --brand-glow: rgba(34, 211, 238, 0.22);
+  --ring: 0 0 0 4px rgba(34, 211, 238, 0.22);
+
+  --success: #34d399;
+  --success-deep: #10b981;
+  --success-tint: rgba(52, 211, 153, 0.14);
+  --danger: #fb7185;
+  --danger-deep: #f43f5e;
+  --danger-tint: rgba(251, 113, 133, 0.14);
+  --warning: #fbbf24;
+  --warning-tint: rgba(251, 191, 36, 0.14);
+  --warning-deep: #d97706;
+  --toast-bg: #113049;
+
+  --shadow-xs: 0 1px 2px rgba(0, 8, 20, 0.5);
+  --shadow-sm: 0 1px 2px rgba(0, 8, 20, 0.4), 0 6px 16px -6px rgba(0, 20, 40, 0.55);
+  --shadow-md: 0 8px 24px -8px rgba(0, 16, 36, 0.6), 0 24px 52px -18px rgba(0, 10, 28, 0.7);
+  --shadow-lg: 0 14px 36px -12px rgba(0, 16, 36, 0.65), 0 40px 84px -22px rgba(0, 8, 24, 0.75);
+  --shadow-primary: 0 10px 26px -6px rgba(34, 211, 238, 0.5);
+  --shadow-card-hover: 0 12px 28px -12px rgba(0, 20, 44, 0.7), 0 28px 60px -22px rgba(0, 14, 34, 0.75);
+
+  --body-bg:
+    radial-gradient(1200px 640px at 80% -12%, rgba(94, 234, 212, 0.18), transparent 60%),
+    radial-gradient(1000px 600px at 8% -6%, rgba(56, 189, 248, 0.16), transparent 56%),
+    radial-gradient(1000px 820px at 50% 122%, rgba(2, 120, 170, 0.26), transparent 62%),
+    linear-gradient(180deg, #0a2033 0%, #061525 58%, #040e1c 100%);
+  --selection-bg: rgba(45, 212, 191, 0.32);
+  --scrollbar-thumb: rgba(45, 120, 150, 0.45);
+  --scrollbar-thumb-hover: rgba(56, 150, 180, 0.65);
+  --glass-bg: rgba(12, 34, 54, 0.6);
+  --sidebar-bg:
+    radial-gradient(130% 240px at 50% 100%, rgba(34, 211, 238, 0.16), transparent 72%),
+    linear-gradient(180deg, #0f2940 0%, #0c2438 54%, #081b2c 100%);
+  --sidebar-edge: inset -1px 0 0 rgba(28, 55, 80, 0.9), 14px 0 34px -28px rgba(34, 211, 238, 0.3);
+  --text-gradient: linear-gradient(118deg, #a7f3d0 0%, #5eead4 45%, #22d3ee 100%);
+  --input-bg: rgba(12, 36, 56, 0.72);
+  --top-edge: rgba(94, 234, 212, 0.14);
+  --accent-shadow: rgba(34, 211, 238, 0.5);
+  --highlight-bg: linear-gradient(145deg, rgba(45, 212, 191, 0.24), rgba(6, 182, 212, 0.14));
+  --highlight-border: rgba(45, 212, 191, 0.45);
+  --highlight-shadow: 0 10px 22px -14px rgba(34, 211, 238, 0.5);
+}
+
+/* ---------- 暗夜主题：中性炭灰底 + 通透蓝（Linear/Vercel） ---------- */
+:root[data-theme="dark"] {
+  --text-1: #e7eaf0;
+  --text-2: #9aa1af;
+  --text-3: #5d6573;
+  --bg: #0b0d11;
+  --bg-soft: #101318;
+  --surface: #14171d;
+  --surface-2: #1a1e26;
+  --surface-3: #10131a;
+  --border: #232730;
+  --border-strong: #333a47;
+
+  --primary: #5b9cf6;
+  --primary-hover: #73acf8;
+  --primary-deep: #3d82e8;
+  --primary-ink: #8ab6f9;
+  --aqua: #7db5fa;
+  --mint: #6aa0f0;
+  --primary-tint: rgba(91, 156, 246, 0.14);
+  --primary-tint-2: rgba(91, 156, 246, 0.22);
+  --primary-tint-strong: rgba(91, 156, 246, 0.24);
+  --primary-gradient: linear-gradient(135deg, #5b9cf6 0%, #3d82e8 55%, #2f6fd0 100%);
+  --brand-glow: rgba(91, 156, 246, 0.2);
+  --ring: 0 0 0 4px rgba(91, 156,246, 0.22);
+
+  --success: #3ddc97;
+  --success-deep: #22c55e;
+  --success-tint: rgba(61, 220, 151, 0.14);
+  --danger: #f87171;
+  --danger-deep: #ef4444;
+  --danger-tint: rgba(248, 113, 113, 0.14);
+  --warning: #fbbf24;
+  --warning-tint: rgba(251, 191, 36, 0.14);
+  --warning-deep: #d97706;
+  --toast-bg: #262b35;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 16px -6px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 24px -8px rgba(0, 0, 0, 0.55), 0 24px 52px -18px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 14px 36px -12px rgba(0, 0, 0, 0.6), 0 40px 84px -22px rgba(0, 0, 0, 0.7);
+  --shadow-primary: 0 10px 26px -6px rgba(91, 156, 246, 0.45);
+  --shadow-card-hover: 0 12px 28px -12px rgba(0, 0, 0, 0.6), 0 28px 60px -22px rgba(0, 0, 0, 0.65);
+
+  --body-bg:
+    radial-gradient(1200px 600px at 80% -12%, rgba(91, 156, 246, 0.12), transparent 60%),
+    radial-gradient(1000px 600px at 8% -6%, rgba(91, 156, 246, 0.08), transparent 56%),
+    linear-gradient(180deg, #0e1116 0%, #0b0d11 60%, #080a0e 100%);
+  --selection-bg: rgba(91, 156, 246, 0.3);
+  --scrollbar-thumb: rgba(90, 98, 110, 0.5);
+  --scrollbar-thumb-hover: rgba(120, 128, 140, 0.7);
+  --glass-bg: rgba(20, 23, 29, 0.6);
+  --sidebar-bg:
+    radial-gradient(130% 240px at 50% 100%, rgba(91, 156, 246, 0.14), transparent 72%),
+    linear-gradient(180deg, #161920 0%, #13161c 54%, #0e1116 100%);
+  --sidebar-edge: inset -1px 0 0 rgba(35, 39, 48, 0.9), 14px 0 34px -28px rgba(91, 156, 246, 0.28);
+  --text-gradient: linear-gradient(118deg, #cfe0fc 0%, #8ab6f9 50%, #5b9cf6 100%);
+  --input-bg: rgba(20, 23, 29, 0.72);
+  --top-edge: rgba(255, 255, 255, 0.12);
+  --accent-shadow: rgba(91, 156, 246, 0.45);
+  --highlight-bg: linear-gradient(145deg, rgba(91, 156, 246, 0.24), rgba(61, 130, 232, 0.14));
+  --highlight-border: rgba(91, 156, 246, 0.45);
+  --highlight-shadow: 0 10px 22px -14px rgba(91, 156, 246, 0.5);
+}
+
+/* ---------- 暖调主题：暖米纸底 + 陶土橙 ---------- */
+:root[data-theme="warm"] {
+  --text-1: #2b251e;
+  --text-2: #6b5e4e;
+  --text-3: #aa9d88;
+  --bg: #f6f1e8;
+  --bg-soft: #efe7d9;
+  --surface: #fffdf8;
+  --surface-2: #faf4e9;
+  --surface-3: #f1e7d8;
+  --border: #e9e0d0;
+  --border-strong: #d8cbb3;
+
+  --primary: #d95f3a;
+  --primary-hover: #e8744e;
+  --primary-deep: #c24a28;
+  --primary-ink: #9a381c;
+  --aqua: #f2825c;
+  --mint: #e8a04c;
+  --primary-tint: rgba(217, 95, 58, 0.10);
+  --primary-tint-2: rgba(242, 130, 92, 0.20);
+  --primary-tint-strong: rgba(217, 95, 58, 0.18);
+  --primary-gradient: linear-gradient(135deg, #f2825c 0%, #e0633f 52%, #c24a28 100%);
+  --brand-glow: rgba(224, 99, 63, 0.18);
+  --ring: 0 0 0 4px rgba(224, 99, 63, 0.20);
+
+  --success: #4a9d6a;
+  --success-deep: #357a50;
+  --success-tint: rgba(74, 157, 106, 0.13);
+  --danger: #dc4f56;
+  --danger-deep: #c2383f;
+  --danger-tint: rgba(220, 79, 86, 0.12);
+  --warning: #e8930f;
+  --warning-tint: rgba(232, 147, 15, 0.14);
+  --warning-deep: #b45309;
+  --toast-bg: #352d24;
+
+  --shadow-xs: 0 1px 2px rgba(80, 60, 40, 0.07);
+  --shadow-sm: 0 1px 2px rgba(80, 60, 40, 0.05), 0 6px 16px -6px rgba(120, 80, 45, 0.10);
+  --shadow-md: 0 8px 22px -6px rgba(120, 80, 45, 0.13), 0 20px 48px -16px rgba(120, 80, 45, 0.16);
+  --shadow-lg: 0 12px 32px -10px rgba(120, 80, 45, 0.16), 0 36px 80px -20px rgba(120, 80, 45, 0.20);
+  --shadow-primary: 0 8px 22px -6px rgba(224, 99, 63, 0.45);
+  --shadow-card-hover: 0 10px 24px -12px rgba(120, 80, 45, 0.18), 0 24px 56px -22px rgba(120, 80, 45, 0.22);
+
+  --body-bg:
+    radial-gradient(1150px 680px at 84% -14%, rgba(242, 130, 92, 0.22), transparent 62%),
+    radial-gradient(950px 560px at -6% 6%, rgba(232, 160, 76, 0.16), transparent 58%),
+    radial-gradient(820px 720px at 48% 118%, rgba(245, 182, 132, 0.18), transparent 62%),
+    #f6f1e8;
+  --selection-bg: rgba(242, 130, 92, 0.3);
+  --scrollbar-thumb: rgba(178, 150, 112, 0.4);
+  --scrollbar-thumb-hover: rgba(150, 124, 90, 0.6);
+  --glass-bg: rgba(255, 253, 248, 0.72);
+  --sidebar-bg:
+    radial-gradient(130% 240px at 50% 100%, rgba(242, 130, 92, 0.18), transparent 72%),
+    linear-gradient(180deg, #fffdf8 0%, #faf4e9 54%, #f3ebdc 100%);
+  --sidebar-edge: inset -1px 0 0 rgba(233, 224, 208, 0.9), 14px 0 34px -28px rgba(224, 99, 63, 0.3);
+  --text-gradient: linear-gradient(118deg, #9a381c 0%, #c24a28 50%, #d95f3a 100%);
+  --input-bg: rgba(255, 253, 248, 0.9);
+  --top-edge: rgba(255, 255, 255, 0.5);
+  --accent-shadow: rgba(224, 99, 63, 0.45);
+  --highlight-bg: linear-gradient(145deg, rgba(242, 130, 92, 0.22), rgba(194, 74, 40, 0.14));
+  --highlight-border: rgba(242, 130, 92, 0.42);
+  --highlight-shadow: 0 10px 22px -14px rgba(194, 74, 40, 0.55);
+}
+
+/* ---------- 全局：圆角 / 字体（不随主题变化） ---------- */
+:root {
   --r-sm: 8px;
   --r-md: 11px;
   --r-lg: 15px;
   --r-xl: 18px;
   --r-pill: 999px;
-
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
                'Hiragino Sans GB', 'Microsoft YaHei', Roboto, 'Helvetica Neue',
                Arial, sans-serif;
@@ -78,11 +361,7 @@ body,
 
 body {
   font-family: var(--font-sans);
-  /* 极简白色：极浅中性底，顶部仅一点净蓝光 */
-  background:
-    radial-gradient(1200px 600px at 82% -12%, rgba(96, 165, 250, 0.14), transparent 60%),
-    radial-gradient(1000px 560px at 6% -6%, rgba(120, 170, 250, 0.08), transparent 56%),
-    linear-gradient(180deg, #fafbfc 0%, #f3f4f6 100%);
+  background: var(--body-bg);
   background-attachment: fixed;
   color: var(--text-1);
   font-size: 14px;
@@ -91,13 +370,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-feature-settings: "tnum" 1, "cv02" 1;
+  transition: background-color 0.25s ease;
 }
 
 ::selection {
-  background: rgba(96, 165, 250, 0.30);
+  background: var(--selection-bg);
 }
 
-/* 统一滚动条（中性） */
+/* 统一滚动条 */
 ::-webkit-scrollbar {
   width: 9px;
   height: 9px;
@@ -106,13 +386,13 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(140, 148, 160, 0.5);
+  background: var(--scrollbar-thumb);
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(110, 118, 132, 0.7);
+  background: var(--scrollbar-thumb-hover);
   background-clip: content-box;
   border: 2px solid transparent;
 }
@@ -156,16 +436,16 @@ button {
 .btn-primary {
   background: var(--primary-gradient);
   color: #fff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35),
-              0 6px 18px -6px rgba(37, 99, 235, 0.45);
+  box-shadow: inset 0 1px 0 var(--top-edge),
+              0 6px 18px -6px var(--accent-shadow);
 }
 .btn-primary:hover {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32),
+  box-shadow: inset 0 1px 0 var(--top-edge),
               var(--shadow-primary);
   filter: brightness(1.04);
 }
 .btn-primary:active {
-  box-shadow: inset 0 1px 3px rgba(10, 30, 70, 0.4);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 .btn-ghost {
   background: var(--surface-2);
@@ -182,11 +462,10 @@ button {
 .btn-danger {
   background: var(--danger);
   color: #fff;
-  box-shadow: 0 3px 12px -3px rgba(244, 106, 114, 0.55);
+  box-shadow: 0 3px 12px -3px var(--danger-tint);
 }
 .btn-danger:hover {
   background: var(--danger-deep);
-  box-shadow: 0 5px 16px -4px rgba(244, 106, 114, 0.65);
 }
 .btn:disabled {
   opacity: 0.5;
@@ -196,7 +475,7 @@ button {
   filter: none;
 }
 
-/* 卡片：纯白表面 + 轻柔阴影 */
+/* 卡片：表面 + 轻柔阴影 */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -244,7 +523,7 @@ button {
 
 /* 渐变文字（主题强调） */
 .gradient-text {
-  background: linear-gradient(118deg, #2563eb 0%, #3b82f6 100%);
+  background: var(--text-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -260,12 +539,12 @@ button {
   position: absolute;
   inset: 0 0 auto 0;
   height: 3px;
-  background: linear-gradient(90deg, #6ea8fb, #3b82f6, #2563eb);
+  background: var(--primary-gradient);
 }
 
-/* 轻玻璃（半透明白 + 模糊，谨慎使用） */
+/* 轻玻璃（半透明 + 模糊，谨慎使用） */
 .glass {
-  background: rgba(255, 255, 255, 0.72);
+  background: var(--glass-bg);
   backdrop-filter: blur(16px) saturate(150%);
   -webkit-backdrop-filter: blur(16px) saturate(150%);
 }
